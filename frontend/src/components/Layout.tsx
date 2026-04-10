@@ -3,7 +3,6 @@ import {
   ActionIcon, 
   Anchor, 
   AppShell, 
-  Box, 
   Button, 
   Center, 
   Drawer, 
@@ -22,7 +21,7 @@ import {
   IconSearch, 
   IconShoppingCart, 
 } from "@tabler/icons-react";
-import { type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import classes from './Layout.module.css';
 
@@ -72,9 +71,7 @@ function Footer() {
         cols={4}
       >
         <Stack>
-          <Group>
-            <Logo />
-          </Group>
+          <Logo />
           <Text 
             c='dimmed'
             fz='0.875rem'
@@ -99,7 +96,7 @@ function Footer() {
           </Stack>
         </Stack>
         <Stack>
-          <Text>Follow Us</Text>
+          <Text fw='700'>Follow Us</Text>
           <Group gap='1.5rem'>
             <IconBrandFacebook stroke='1.5'/>
             <IconBrandX stroke='1.5'/>
@@ -124,6 +121,17 @@ function Footer() {
 
 export default function Layout() {
   const [opened, {open, close}] = useDisclosure(false);
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
+
+  const openLogin = () => {
+    setAuthMode('login');
+    open();
+  }
+
+  const openSignup = () => {
+    setAuthMode('signup');
+    open();
+  }
 
   return (
     <AppShell
@@ -133,8 +141,9 @@ export default function Layout() {
       navbar={{ width: 260, breakpoint: 'sm' }}
     >
       <Drawer opened={opened} onClose={close} title='Authentication'>
-        <h1>hi</h1>
+        <h1>{authMode == 'login' ? 'login' : 'signup'}</h1>
       </Drawer>
+      
       <AppShell.Header
         bg='dark.9'
         style={{ paddingInline: 'clamp(1rem, 5vw, 77.5px)' }}
@@ -189,12 +198,12 @@ export default function Layout() {
               </ActionIcon>
               <Button
                 p='0.5rem 1rem'
-                onClick={open}
+                onClick={openLogin}
                 variant='subtle'
               >
                 Login
               </Button>
-              <Button onClick={open}>
+              <Button onClick={openSignup}>
                 Sign Up
               </Button>
             </Group>

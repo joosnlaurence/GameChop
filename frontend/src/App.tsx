@@ -3,7 +3,8 @@ import '@mantine/carousel/styles.css'
 
 import { MantineProvider } from '@mantine/core'
 import { theme } from './theme'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
 import Layout from './components/Layout'
 import Browse from './pages/Browse'
@@ -14,10 +15,21 @@ import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
 import OrderConfirmation from './pages/OrderConfirmation'
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 function App() {
   return (
     <MantineProvider theme={theme} defaultColorScheme='dark'>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route element={<Layout />}>
             <Route path='/' element={<Home />} />
