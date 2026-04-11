@@ -138,7 +138,6 @@ export default function Layout() {
       p='0'
       bg='dark.9'
       header={{ height: 65 }}
-      navbar={{ width: 260, breakpoint: 'sm' }}
     >
       <Drawer opened={opened} onClose={close} title='Authentication'>
         <h1>{authMode == 'login' ? 'login' : 'signup'}</h1>
@@ -211,7 +210,7 @@ export default function Layout() {
         </Group>
       </AppShell.Header>
 
-      <AppShell.Main h='100vh'>
+      <AppShell.Main>
         <Outlet />
       </AppShell.Main>
 
