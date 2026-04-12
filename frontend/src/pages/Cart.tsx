@@ -1,4 +1,5 @@
-import { useCart } from "../context/CartContext"
+import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 
 export default function Cart() {
@@ -13,7 +14,7 @@ export default function Cart() {
 
   const tax = subtotal * 0.08;
   const total = subtotal + tax;
-
+  const navigate = useNavigate();
   
   return (
     <div style = {{ padding: "2rem", color: "white"}}>
@@ -87,7 +88,7 @@ export default function Cart() {
             <span style = {{fontWeight: "bold"}}>Total</span>
             <span style = {{color: "#7x6ff7", fontWeight: "bold"}}>${total.toFixed(2)}</span>
           </div>
-          <button onClick = {checkout} style = {{width: "100%", padding: "0.9rem", backgroundColor: "#7c6ff7", color: "white", border: "none", borderRadius: "8px", fontSize: "1rem", cursor: "pointer", fontWeight: "bold"}}>
+          <button onClick = {() => navigate("/checkout")} style = {{width: "100%", padding: "0.9rem", backgroundColor: "#7c6ff7", color: "white", border: "none", borderRadius: "8px", fontSize: "1rem", cursor: "pointer", fontWeight: "bold"}}>
             Checkout
           </button>
         </div>

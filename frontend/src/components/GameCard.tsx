@@ -14,9 +14,9 @@ export interface Game {
 }
 
 export default function GameCard({ game }: { game: Game}) {
-  game.wishlisted = true;
+  /*game.wishlisted = true;
   game.publisher = 'Jason';
-  game.developer = 'Laureano'
+  game.developer = 'Laureano';*/
   const publisherDeveloper = 
     `${game.publisher ?? ''}${(game.developer && game.publisher) ? ' · ' : ''}${game.developer ?? ''}`;
   

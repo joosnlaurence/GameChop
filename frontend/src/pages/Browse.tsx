@@ -72,9 +72,9 @@ export default function Browse() {
       </Stack>
       <Group w='100%' align="flex-start">
         <StickyBox style={{flex: '1'}} offsetTop={offset}>
-          <GenreSidebar 
+          {<GenreSidebar 
             genres={GENRES}
-          />
+          />}
         </StickyBox>
         <SimpleGrid flex='4' cols={{ base: 1, sm: 2, md: 3, lg: 4 }}>
           {testGames.map((game) => 
