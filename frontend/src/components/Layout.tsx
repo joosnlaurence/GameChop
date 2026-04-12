@@ -88,65 +88,67 @@ function CartBadge()
 
 function Footer() {
   return (
-    <Stack 
-      bg='dark.7'
-      px='101px'
-      pt='48px'
-      gap='32px'
-      style={{
-        borderTop: '1px solid var(--mantine-color-dark-5)'
-      }}
-    >
-      <SimpleGrid
-        spacing='2rem'
-        cols={4}
-      >
-        <Stack>
-          <Logo />
-          <Text 
-            c='dimmed'
-            fz='0.875rem'
-          >
-            Your ultimate destination for the best games at unbeatable prices.
-          </Text>
-        </Stack>
-        <Stack gap='1rem' >
-          <Text fw='700'>Company</Text>
-          <Stack gap='0.5rem' c='dimmed' fw='600'>
-            <Text>About</Text>
-            <Text>Contact</Text>
-            <Text>Careers</Text>
-          </Stack>
-        </Stack>
-        <Stack gap='1rem'>
-          <Text fw='700'>Legal</Text>
-          <Stack gap='0.5rem' c='dimmed' fw='600'>
-            <Text>Terms of Service</Text>
-            <Text>Privacy Policy</Text>
-            <Text>Refund Policy</Text>
-          </Stack>
-        </Stack>
-        <Stack>
-          <Text fw='700'>Follow Us</Text>
-          <Group gap='1.5rem'>
-            <IconBrandFacebook stroke='1.5'/>
-            <IconBrandX stroke='1.5'/>
-            <IconBrandInstagram stroke='1.5'/>
-            <IconBrandYoutube stroke='1.5'/>
-          </Group>
-        </Stack>
-      </SimpleGrid>
-      <Center
-        py='2rem'
-        c='dimmed'
-        fz='xs'
+    <footer>
+      <Stack 
+        bg='dark.7'
+        px='101px'
+        pt='48px'
+        gap='32px'
         style={{
           borderTop: '1px solid var(--mantine-color-dark-5)'
         }}
       >
-        © 2026 GameChop. All rights reserved.
-      </Center>
-    </Stack>
+        <SimpleGrid
+          spacing='2rem'
+          cols={4}
+        >
+          <Stack>
+            <Logo />
+            <Text 
+              c='dimmed'
+              fz='0.875rem'
+            >
+              Your ultimate destination for the best games at unbeatable prices.
+            </Text>
+          </Stack>
+          <Stack gap='1rem' >
+            <Text fw='700'>Company</Text>
+            <Stack gap='0.5rem' c='dimmed' fw='600'>
+              <Text>About</Text>
+              <Text>Contact</Text>
+              <Text>Careers</Text>
+            </Stack>
+          </Stack>
+          <Stack gap='1rem'>
+            <Text fw='700'>Legal</Text>
+            <Stack gap='0.5rem' c='dimmed' fw='600'>
+              <Text>Terms of Service</Text>
+              <Text>Privacy Policy</Text>
+              <Text>Refund Policy</Text>
+            </Stack>
+          </Stack>
+          <Stack>
+            <Text fw='700'>Follow Us</Text>
+            <Group gap='1.5rem'>
+              <IconBrandFacebook stroke='1.5'/>
+              <IconBrandX stroke='1.5'/>
+              <IconBrandInstagram stroke='1.5'/>
+              <IconBrandYoutube stroke='1.5'/>
+            </Group>
+          </Stack>
+        </SimpleGrid>
+        <Center
+          py='2rem'
+          c='dimmed'
+          fz='xs'
+          style={{
+            borderTop: '1px solid var(--mantine-color-dark-5)'
+          }}
+        >
+          © 2026 GameChop. All rights reserved.
+        </Center>
+      </Stack>
+    </footer>
   )
 }
 
@@ -166,7 +168,6 @@ export default function Layout() {
 
   return (
     <AppShell
-      p='0'
       bg='dark.9'
       header={{ height: 65 }}
     >
@@ -249,10 +250,9 @@ export default function Layout() {
         </Group>
       </AppShell.Header>
 
-      <AppShell.Main>
+      <AppShell.Main p='97 101.5'>
         <Outlet />
       </AppShell.Main>
-
       <Footer />
     </AppShell>
   )

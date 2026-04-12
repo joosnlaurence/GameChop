@@ -37,5 +37,15 @@ export const theme = createTheme({
       '#0A0E1A',
     ],
   },
-  defaultRadius: '10px'
+  defaultRadius: '10px',
+  components: {
+    Input: {
+      styles: {
+        input: { 
+          background: 'var(--mantine-color-dark-7)', 
+          border: '1px solid var(--mantine-color-dark-5)',
+        }
+      }
+    }
+  }
 });

@@ -33,17 +33,17 @@ const genres: { name: string; image: string; icon: TablerIcon }[] = [
 ];
 
 const newReleases = [
-  { id: 1, title: "Neon Legends", price: "$59.99", image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=400&fit=crop" },
-  { id: 2, title: "Cyber Storm", price: "$49.99", image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=300&h=400&fit=crop" },
-  { id: 3, title: "Cyber Frontiers", price: "$39.99", image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=400&fit=crop" },
-  { id: 4, title: "Galaxy Drift", price: "$29.99", image: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=300&h=400&fit=crop" },
+  { id: 1, title: "Neon Legends", price: 59.99, image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=400&fit=crop" },
+  { id: 2, title: "Cyber Storm", price: 49.99, image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=300&h=400&fit=crop" },
+  { id: 3, title: "Cyber Frontiers", price: 39.99, image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=400&fit=crop" },
+  { id: 4, title: "Galaxy Drift", price: 29.99, image: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=300&h=400&fit=crop" },
 ];
 
 const popularGames = [
-  { id: 5, title: "Apex Warriors", price: "$49.99", image: "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=300&h=400&fit=crop" },
-  { id: 6, title: "Cyber Legacy", price: "$59.99", image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=400&fit=crop" },
-  { id: 7, title: "Infinite Quest", price: "$44.99", image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=300&h=400&fit=crop" },
-  { id: 8, title: "Neon Racer", price: "$34.99", image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=400&fit=crop" },
+  { id: 5, title: "Apex Warriors", price: 49.99, image: "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=300&h=400&fit=crop" },
+  { id: 6, title: "Cyber Legacy", price: 59.99, image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=400&fit=crop" },
+  { id: 7, title: "Infinite Quest", price: 44.99, image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=300&h=400&fit=crop" },
+  { id: 8, title: "Neon Racer", price: 34.99, image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=400&fit=crop" },
 ];
 
 const publishers = [
