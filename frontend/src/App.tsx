@@ -4,6 +4,7 @@ import '@mantine/carousel/styles.css'
 import { MantineProvider } from '@mantine/core'
 import { theme } from './theme'
 import { useEffect } from 'react'
+import { CartProvider } from "./context/CartContext";
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
 import Layout from './components/Layout'
@@ -28,7 +29,8 @@ function ScrollToTop() {
 function App() {
   return (
     <MantineProvider theme={theme} defaultColorScheme='dark'>
-      <BrowserRouter>
+      <CartProvider>
+        <BrowserRouter>
         <ScrollToTop />
         <Routes>
           <Route element={<Layout />}>
@@ -45,6 +47,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      </CartProvider>
     </MantineProvider>
   )
 }
