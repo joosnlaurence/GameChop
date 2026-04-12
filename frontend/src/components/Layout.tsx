@@ -23,6 +23,7 @@ import {
 } from "@tabler/icons-react";
 import { useState, type ReactNode } from 'react';
 import { useDisclosure } from '@mantine/hooks';
+import { useCart } from "../context/CartContext";
 import classes from './Layout.module.css';
 
 function Link( {to, children} : {to: string, children: ReactNode}) {
@@ -53,6 +54,36 @@ function Logo() {
       GameChop
     </Text>
   )
+}
+
+function CartBadge()
+{
+  const { items } = useCart();
+
+  if(items.length === 0)
+  {
+    return null;
+  }
+  return (
+    <span style = {{
+      position: "absolute",
+      top: "-6px",
+      right: "-6px",
+      backgroundColor: "#7c6ff7",
+      color: "white",
+      borderRadius: "50%",
+      width: "16px",
+      height: "16px",
+      fontSize: "0.65rem",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontWeight: "bold",
+      pointerEvents: "none"
+    }}>
+      {items.length}
+    </span>
+  );
 }
 
 function Footer() {
@@ -190,10 +221,12 @@ export default function Layout() {
                 variant='subtle' 
                 size='36'
                 p='4'
+                style = {{overflow: 'visible'}}
               >
                 <IconShoppingCart 
                   stroke='1.25'
                 />
+                <CartBadge/>
               </ActionIcon>
               <Button
                 p='0.5rem 1rem'
