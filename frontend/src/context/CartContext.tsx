@@ -5,6 +5,7 @@ import type { Game } from "../components/GameCard";
 export interface CartItem extends Game
 {
     type: "Digital" | "Physical";
+    price: number;
     quantity?: number;
 }
 
