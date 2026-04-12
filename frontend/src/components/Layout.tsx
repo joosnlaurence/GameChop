@@ -210,6 +210,12 @@ export default function Layout() {
               fz='sm'
               flex='1 0 auto'
               leftSection={<IconSearch size='1rem' />}
+              styles={{ 
+                input: { 
+                  background: 'var(--mantine-color-dark-7)', 
+                  border: '1px solid var(--mantine-color-dark-5)'
+                }
+              }}
               placeholder='Search games...' 
             />
             <Group

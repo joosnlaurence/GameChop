@@ -1,4 +1,7 @@
+import { Group, Stack, Title } from "@mantine/core";
+import GameCard from "../components/GameCard";
 import { useCart, type CartItem } from "../context/CartContext";
+import SelectStore from "../components/SelectStore";
 
 
 const testGames: CartItem[] = 
@@ -29,24 +32,16 @@ const testGames: CartItem[] =
 export default function Browse() {
   const { addItem } = useCart();
   return (
-    <div style = {{ padding: "2rem", color: "white"}}>
-      <h1>Browse Games</h1>
+    <Stack px='101.5' pt='19.5'>
+      <Group justify='space-between'>
+        <Title order={1}>Browse Games</Title>
+        <SelectStore />
+      </Group>
       <div style = {{ display: "flex", gap: "1rem", flexWrap: "wrap"}}>
         {testGames.map((game) => 
-          (
-            <div key = {game.id} style = {{backgroundColor: "#1a1d2e", borderRadius: "12px", padding: "1rem", width: " 200px"}}>
-              <img src = {game.image} alt = {game.title} style = {{width: "100%", borderRadius: "8px"}}/>
-              <h3 style = {{margin: "0.5rem 0"}}>{game.title}</h3>
-              <p style = {{color: "#7c6ff7", margin: "0 0 0.5rem"}}>{game.price}</p>
-              <span style = {{ backgroundColor: "#2a2d3e", padding: "2px 10px", borderRadius: "6px", fontSize: "0.8rem", marginBottom: "0.5rem", display: "inline-block"}}>
-                {game.type}
-              </span>
-              <button onClick = {() => addItem(game)} style = {{width: "100%", marginTop: "0.5rem", padding: "0.5rem", backgroundColor: "#7x6ff7", color: "white", border: "none", borderRadius: "8px", cursor: "pointer"}}>
-                Add to Cart
-              </button>
-            </div>
-          ))}
+          <GameCard game={game} width={220}/>  
+        )}
       </div>
-    </div>
+    </Stack>
   );
 };

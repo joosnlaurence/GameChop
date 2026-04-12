@@ -31,22 +31,22 @@ function App() {
     <MantineProvider theme={theme} defaultColorScheme='dark'>
       <CartProvider>
         <BrowserRouter>
-        <ScrollToTop />
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path='/' element={<Home />} />
-            <Route path='/browse'>
-              <Route index  element={<Browse />} />
-              <Route path=':gameId' element={<GameDetail />}/>
+          <ScrollToTop />
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path='/' element={<Home />} />
+              <Route path='/browse'>
+                <Route index  element={<Browse />} />
+                <Route path=':gameId' element={<GameDetail />}/>
+              </Route>
+              <Route path='/my-games' element={<MyGames />} />
+              <Route path='/orders' element={<Orders />} />
+              <Route path='/cart' element={<Cart />} />
+              <Route path='/checkout' element={<Checkout />} />
+              <Route path='/order-confirmation' element={<OrderConfirmation />} />
             </Route>
-            <Route path='/my-games' element={<MyGames />} />
-            <Route path='/orders' element={<Orders />} />
-            <Route path='/cart' element={<Cart />} />
-            <Route path='/checkout' element={<Checkout />} />
-            <Route path='/order-confirmation' element={<OrderConfirmation />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+          </Routes>
+        </BrowserRouter>
       </CartProvider>
     </MantineProvider>
   )
