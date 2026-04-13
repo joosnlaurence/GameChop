@@ -2,9 +2,6 @@
 	"scripts": {
 		"dev": "nodemon --exec tsx src/index.ts"
 	},
-	"dependencies": {
-		"express": "^5.2.1"
-	},
 	"devDependencies": {
 		"@types/express": "^5.0.6",
 		"@types/node": "^25.6.0",
@@ -13,5 +10,9 @@
 		"tsx": "^4.21.0",
 		"typescript": "^6.0.2"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"express": "^5.2.1",
+		"mysql2": "^3.22.0"
+	}
 }
