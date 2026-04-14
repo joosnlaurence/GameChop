@@ -71,108 +71,82 @@ INSERT INTO stores (address, city, state, open_hour, close_hour, google_map_url)
 ('4400 NW Loop 410',        'San Antonio',   'TX', 10, 21, 'https://www.google.com/maps/search/?api=1&query=GameStop+4400+NW+Loop+410+San+Antonio+TX'),
 ('900 N Michigan Ave',      'Chicago',       'IL',  9, 21, 'https://www.google.com/maps/search/?api=1&query=GameStop+900+N+Michigan+Ave+Chicago+IL');
 
--- GAMES (25 total)
 INSERT INTO games (title, summary, thumbnail, release_date, price) VALUES
--- 1
 ('Elden Ring',
  'A vast open world RPG set in the Lands Between, crafted by FromSoftware and George R.R. Martin.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/library_600x900.jpg',          '2022-02-25', 59.99),
--- 2
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/library_600x900.jpg', '2022-02-25', 59.99),
 ('The Last of Us Part I',
  'A post-apocalyptic survival story following Joel and Ellie across a ruined America.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/1888930/library_600x900.jpg',      '2013-06-14', 39.99),
--- 3
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/1888930/library_600x900.jpg', '2013-06-14', 39.99),
 ('Marvel Spider-Man 2',
  'Swing through New York as both Peter Parker and Miles Morales.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/2651280/library_600x900.jpg',        '2023-10-20', 69.99),
--- 4
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/2651280/library_600x900.jpg', '2023-10-20', 69.99),
 ('Apex Legends',
  'A free-to-play hero battle royale set in the Titanfall universe.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/1172470/library_600x900.jpg',        '2019-02-04',  0.00),
--- 5
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/1172470/library_600x900.jpg', '2019-02-04', 0.00),
 ('Call of Duty MW3',
  'Modern military FPS with an intense campaign and expansive multiplayer.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/3595270/library_600x900.jpg',             '2023-11-10', 69.99),
--- 6
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/3595270/library_600x900.jpg', '2023-11-10', 69.99),
 ('The Legend of Zelda: Tears of the Kingdom',
  'Explore Hyrule from the skies to the depths in this open world sequel.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/990080/library_600x900.jpg',                '2023-05-12', 69.99),
--- 7
+ 'https://cdn.gamechop.com/games/totk/thumbnail.png', '2023-05-12', 69.99),
 ('Hogwarts Legacy',
  'An open world RPG set in the 1800s wizarding world.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/2322010/library_600x900.jpg',     '2023-02-10', 59.99),
--- 8
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/990080/library_600x900.jpg', '2023-02-10', 59.99),
 ('God of War Ragnarok',
  'Kratos and Atreus journey through the Nine Realms to prevent Ragnarok.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/library_600x900.jpg',        '2022-11-09', 69.99),
--- 9
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/2322010/library_600x900.jpg', '2022-11-09', 69.99),
 ('Cyberpunk 2077',
  'An open world action RPG set in the dystopian Night City.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/2515020/library_600x900.jpg',      '2020-12-10', 39.99),
--- 10
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/library_600x900.jpg', '2020-12-10', 39.99),
 ('Final Fantasy XVI',
  'A dark action RPG following Clive Rosfield in the world of Valisthea.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/2050650/library_600x900.jpg',                '2023-06-22', 59.99),
--- 11
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/2515020/library_600x900.jpg', '2023-06-22', 59.99),
 ('Resident Evil 4 Remake',
  'A ground-up remake of the survival horror classic.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/1716740/library_600x900.jpg',                 '2023-03-24', 59.99),
--- 12
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/2050650/library_600x900.jpg', '2023-03-24', 59.99),
 ('Starfield',
  'Bethesdas space exploration RPG set across a thousand planets.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/2679870/library_600x900.jpg',           '2023-09-06', 69.99),
--- 13
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/1716740/library_600x900.jpg', '2023-09-06', 69.99),
 ('Assassins Creed Mirage',
  'Return to the roots of the franchise in ninth century Baghdad.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/1364780/library_600x900.jpg',           '2023-10-05', 49.99),
--- 14
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/2679870/library_600x900.jpg', '2023-10-05', 49.99),
 ('Street Fighter 6',
  'A new era of street fighting with a massive roster and World Tour mode.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/271590/library_600x900.jpg',                 '2023-06-02', 59.99),
--- 15
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/1364780/library_600x900.jpg', '2023-06-02', 59.99),
 ('Grand Theft Auto V',
  'Three criminals pull off heists across the sprawling city of Los Santos.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/library_600x900.jpg',                '2013-09-17', 29.99),
--- 16
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/271590/library_600x900.jpg', '2013-09-17', 29.99),
 ('Red Dead Redemption 2',
  'An epic tale of life in Americas unforgiving heartland.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/library_600x900.jpg',                '2018-10-26', 39.99),
--- 17
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/library_600x900.jpg', '2018-10-26', 39.99),
 ('Baldurs Gate 3',
  'A story-rich RPG with deep choices set in the Dungeons and Dragons universe.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/1237320/library_600x900.jpg',                 '2023-08-03', 59.99),
--- 18
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/library_600x900.jpg', '2023-08-03', 59.99),
 ('Sonic Frontiers',
  'Sonic explores vast open zones in his most ambitious adventure yet.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/292030/library_600x900.jpg',     '2022-11-08', 49.99),
--- 19
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/1237320/library_600x900.jpg', '2022-11-08', 49.99),
 ('The Witcher 3: Wild Hunt',
  'A story-driven open world RPG set in a visually stunning fantasy universe.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/1222690/library_600x900.jpg',           '2015-05-19', 29.99),
--- 20
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/292030/library_600x900.jpg', '2015-05-19', 29.99),
 ('Dragon Age: Inquisition',
  'Lead the Inquisition and save the world from a mysterious tear in the sky.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/582010/library_600x900.jpg',      '2014-11-18', 19.99),
--- 21
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/1222690/library_600x900.jpg', '2014-11-18', 19.99),
 ('Monster Hunter World',
  'Hunt massive monsters across lush ecosystems in this action RPG.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/601150/library_600x900.jpg',                 '2018-01-26', 29.99),
--- 22
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/582010/library_600x900.jpg', '2018-01-26', 29.99),
 ('Devil May Cry 5',
  'Three demon hunters battle the demonic invasion of the human world.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/2195250/library_600x900.jpg',                '2019-03-08', 29.99),
--- 23
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/601150/library_600x900.jpg', '2019-03-08', 29.99),
 ('FIFA 24',
  'The worlds most popular football simulation returns with HyperMotionV.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/1551360/library_600x900.jpg',              '2023-09-29', 69.99),
--- 24
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/2195250/library_600x900.jpg', '2023-09-29', 69.99),
 ('Forza Horizon 5',
  'Race across a gorgeous open world recreation of Mexico.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/1145360/library_600x900.jpg',                 '2021-11-09', 59.99),
--- 25
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/1551360/library_600x900.jpg', '2021-11-09', 59.99),
 ('Hades',
  'Defy the god of the dead as you hack and slash out of the Underworld.',
- 'https://cdn.gamechop.com/games/hades/thumbnail.png',               '2020-09-17', 24.99);
+ 'https://cdn.cloudflare.steamstatic.com/steam/apps/1145360/library_600x900.jpg', '2020-09-17', 24.99);
 
 -- GAME_PREVIEWS
 INSERT INTO game_previews (game_id, preview_id, url) VALUES
@@ -708,7 +682,7 @@ INSERT INTO game_requirements (req_id, game_id, recommended) VALUES
 (45, 23, FALSE), (46, 23, TRUE),   -- FIFA 24
 (47, 24, FALSE), (48, 24, TRUE),   -- Forza Horizon 5
 (49, 25, FALSE), (50, 25, TRUE);   -- Hades
-USE gamechop;
+
 DELETE FROM game_previews;
 INSERT INTO game_previews (game_id, preview_id, url) VALUES
 (1, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/ss_943bf6fe62352757d9070c1d33e50b92fe8539f1.1920x1080.jpg?t=1767883716')
