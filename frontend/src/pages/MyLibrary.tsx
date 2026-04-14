@@ -10,7 +10,8 @@ import {
   Title,
 } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
-import GameCard, { type Game } from "../components/GameCard";
+import { type Game } from "../types";
+import GameCard from "../components/GameCard";
 
 const ownedGames: Game[] = [
   { id: 1, title: "Neon Legends", image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=400&fit=crop", achievements: { earned: 12, total: 20 } },

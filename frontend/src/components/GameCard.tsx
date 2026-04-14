@@ -1,25 +1,9 @@
-import { ActionIcon, Box, Button, Card, Group, Image, Progress, Stack, Text } from "@mantine/core";
+import { ActionIcon, Box, Button, Group, Image, Progress, Stack, Text } from "@mantine/core";
 import { IconHeartFilled, IconShoppingCart, IconX } from "@tabler/icons-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import type { Game } from "../types";
 
-export interface Achievements {
-  earned: number;
-  total: number;
-}
-
-export interface Game {
-  id: number;
-  title: string;
-  price?: number;
-  image: string;
-  publisher?: string;
-  developer?: string;
-  genres?: string[];
-  wishlisted?: boolean;
-  inLibrary?: boolean;
-  achievements?: Achievements;
-}
 
 interface GameCardProps {
   game: Game;
@@ -148,30 +132,24 @@ export default function GameCard({ game, variant = "store", onRemoveFromWishlist
 
   if (isWishlist) {
     return (
-      <Card
-        p={0}
-        bg="transparent"
-        radius={0}
+      <Box
         w="100%"
         style={{ overflow: "visible", cursor: "pointer" }}
         onClick={() => navigate(`/browse/${game.id}`)}
       >
         {cardContent}
-      </Card>
+      </Box>
     );
   }
 
   return (
-    <Card
+    <Box
       component={Link}
       to={`/browse/${game.id}`}
-      p={0}
-      bg="transparent"
-      radius={0}
       w="100%"
       style={{ overflow: "hidden", textDecoration: "none" }}
     >
       {cardContent}
-    </Card>
+    </Box>
   );
 }

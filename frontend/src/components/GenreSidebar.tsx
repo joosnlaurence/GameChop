@@ -16,7 +16,6 @@ export default function GenreSidebar({
 }: GenreSidebarProps) {
   return (
     <Card 
-      bg='dark.7'
       bd='1px solid dark.5'
       mah={CARD_HEIGHT}
       {...rest}
@@ -28,7 +27,7 @@ export default function GenreSidebar({
         <Stack gap='8'>
           {
             genres.map((genre) => 
-              <Button w='100%' variant='subtle'>
+              <Button w='100%' variant='subtle' justify='flex-start' bdrs='4px'>
                 {genre}
               </Button>
             )

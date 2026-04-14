@@ -1,12 +1,20 @@
 import mysql from 'mysql2/promise';
 
 const pool = mysql.createPool({
-    host:     process.env.DB_HOST     || '165.227.82.28',
-    user:     process.env.DB_USER     || 'appuser',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME     || 'gamechop',
+    host:     process.env.DB_HOST,     
+    user:     process.env.DB_USER,     
+    password: process.env.DB_PASSWORD, 
+    database: process.env.DB_NAME,     
     waitForConnections: true,
     connectionLimit:    10
 });
+
+try {
+  const conn = await pool.getConnection();
+  console.log('MySQL Connected Successfully!');
+  conn.release();
+} catch(err) {
+  console.error('MySQL Connection failed:', err);
+}
 
 export default pool;

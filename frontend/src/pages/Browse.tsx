@@ -60,7 +60,6 @@ export default function Browse() {
     setOffset(root.getBoundingClientRect().top + window.scrollY);
   }, []);
 
-  console.log(offset);
   return (
     <Stack gap='32px' ref={rootRef}>
       <Stack gap='24px'>
@@ -78,7 +77,7 @@ export default function Browse() {
         </StickyBox>
         <SimpleGrid flex='4' cols={{ base: 1, sm: 2, md: 3, lg: 4 }}>
           {testGames.map((game) => 
-            <GameCard game={game}/>  
+            <GameCard game={game} variant='store'/>  
           )}
         </SimpleGrid>
       </Group>

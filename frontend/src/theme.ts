@@ -33,7 +33,7 @@ export const theme = createTheme({
       '#353C50',
       '#1E2433',
       '#1A2038',
-      '#0F1322',
+      '#12172A',
       '#0A0E1A',
     ],
   },
@@ -44,6 +44,14 @@ export const theme = createTheme({
         input: { 
           background: 'var(--mantine-color-dark-7)', 
           border: '1px solid var(--mantine-color-dark-5)',
+        }
+      }
+    },
+    Card: {
+      styles: {
+        root: {
+          background: 'var(--mantine-color-dark-8)',
+          border: '1px solid var(--mantine-color-dark-5)'
         }
       }
     }

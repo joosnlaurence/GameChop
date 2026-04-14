@@ -1,8 +1,16 @@
+import 'dotenv/config'
 import express from 'express';
+import gamesRouter from './routes/games';
+import publishersRouter from './routes/publishers';
+import usersRouter from './routes/users';
 
 const app = express();
 
 app.use(express.json());
+
+app.use('/api/games', gamesRouter);
+app.use('/api/publishers', publishersRouter);
+app.use('/api/users', usersRouter);
 
 app.get('/', async (req, res) => {
   res.json({'message': 'Hello, world!'});

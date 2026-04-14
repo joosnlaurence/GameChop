@@ -11,7 +11,7 @@ import Layout from './components/Layout'
 import Browse from './pages/Browse'
 import MyLibrary from './pages/MyLibrary'
 import Orders from './pages/OrderHistory'
-import GameDetail from './pages/GameDetail'
+import GameDetails from './pages/GameDetails'
 import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
 import OrderConfirmation from './pages/OrderConfirmation'
@@ -37,7 +37,7 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/browse'>
               <Route index  element={<Browse />} />
-              <Route path=':gameId' element={<GameDetail />}/>
+              <Route path=':gameId' element={<GameDetails />}/>
             </Route>
             <Route path='/my-games' element={<MyLibrary />} />
             <Route path='/orders' element={<Orders />} />

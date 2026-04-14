@@ -600,3 +600,111 @@ INSERT INTO store_games (store_id, game_id, copies) VALUES
 (11,1,7),(11,5,6),(11,6,5),(11,7,6),(11,15,10),(11,16,8),(11,23,9),(11,24,5),
 -- Chicago store 3 (store 12)
 (12,1,5),(12,2,3),(12,7,4),(12,15,8),(12,16,6),(12,19,3),(12,21,2),(12,23,7);
+
+-- REQUIREMENTS
+-- Odd IDs = minimum, Even IDs = recommended
+INSERT INTO requirements (id, os, cpu, mem, gpu, storage) VALUES
+-- Elden Ring
+(1,  'Windows 10',       'Intel i5-8400 / AMD Ryzen 3 3300X',       '12 GB', 'GTX 1060 3GB / RX 580 4GB',         '60 GB'),
+(2,  'Windows 10/11',    'Intel i7-8700K / AMD Ryzen 5 3600X',      '16 GB', 'GTX 1070 8GB / RX Vega 56 8GB',     '60 GB'),
+-- The Last of Us Part I
+(3,  'Windows 10',       'Intel i7-4770K / AMD Ryzen 5 1500X',      '16 GB', 'GTX 970 / RX 480 4GB',              '100 GB'),
+(4,  'Windows 10/11',    'Intel i7-8700K / AMD Ryzen 5 3600X',      '16 GB', 'RTX 2070 Super / RX 5700 XT',       '100 GB'),
+-- Spider-Man 2
+(5,  'Windows 10',       'Intel i5-8400 / AMD Ryzen 5 3600',        '16 GB', 'GTX 1070 / RX 5700',                '100 GB'),
+(6,  'Windows 10/11',    'Intel i7-12700K / AMD Ryzen 7 5800X',     '32 GB', 'RTX 3070 / RX 6800 XT',             '100 GB'),
+-- Apex Legends
+(7,  'Windows 10',       'Intel i3-6300 / AMD FX-4350',             '6 GB',  'GT 640 / Radeon HD 7730',            '56 GB'),
+(8,  'Windows 10/11',    'Intel i5-3570K / AMD Ryzen 5 1400',       '8 GB',  'GTX 970 / R9 290',                   '56 GB'),
+-- Call of Duty MW3
+(9,  'Windows 10',       'Intel i5-6600 / AMD Ryzen 5 1400',        '8 GB',  'GTX 960 / RX 470',                   '78 GB'),
+(10, 'Windows 10/11',    'Intel i7-8700K / AMD Ryzen 7 3700X',      '16 GB', 'RTX 3060 / RX 6600 XT',             '78 GB'),
+-- Zelda TotK (emulated PC specs estimate)
+(11, 'Windows 10',       'Intel i5-10400 / AMD Ryzen 5 3600',       '8 GB',  'GTX 1060 6GB / RX 580 8GB',         '16 GB'),
+(12, 'Windows 10/11',    'Intel i7-10700 / AMD Ryzen 7 3700X',      '16 GB', 'RTX 2060 / RX 5600 XT',             '16 GB'),
+-- Hogwarts Legacy
+(13, 'Windows 10',       'Intel i5-6600 / AMD Ryzen 5 1400',        '16 GB', 'GTX 960 / RX 470 4GB',              '85 GB'),
+(14, 'Windows 10/11',    'Intel i7-8700 / AMD Ryzen 5 3600',        '16 GB', 'RTX 2080 / RX 5700 XT',             '85 GB'),
+-- God of War Ragnarok
+(15, 'Windows 10',       'Intel i5-8400 / AMD Ryzen 5 2600',        '8 GB',  'GTX 1070 / RX 5600 XT',             '100 GB'),
+(16, 'Windows 10/11',    'Intel i7-10700K / AMD Ryzen 7 5800X',     '16 GB', 'RTX 3070 / RX 6800 XT',             '100 GB'),
+-- Cyberpunk 2077
+(17, 'Windows 10',       'Intel i7-6700 / AMD Ryzen 5 1600',        '12 GB', 'GTX 1060 6GB / RX 580 8GB',         '70 GB'),
+(18, 'Windows 10/11',    'Intel i7-12700 / AMD Ryzen 7 5800X',      '16 GB', 'RTX 2060 Super / RX 5700 XT',       '70 GB'),
+-- Final Fantasy XVI
+(19, 'Windows 10',       'Intel i5-8400 / AMD Ryzen 5 3600',        '16 GB', 'GTX 1070 / RX 5700',                '90 GB'),
+(20, 'Windows 10/11',    'Intel i7-10700 / AMD Ryzen 7 5800X',      '16 GB', 'RTX 2080 / RX 6700 XT',             '90 GB'),
+-- Resident Evil 4 Remake
+(21, 'Windows 10',       'Intel i5-8400 / AMD Ryzen 3 3300X',       '12 GB', 'GTX 1060 3GB / RX 480 4GB',         '60 GB'),
+(22, 'Windows 10/11',    'Intel i7-8700 / AMD Ryzen 5 3600',        '16 GB', 'RTX 2070 / RX 5700',                '60 GB'),
+-- Starfield
+(23, 'Windows 10',       'Intel i7-6800K / AMD Ryzen 5 2600X',      '16 GB', 'GTX 1070 Ti / RX 5700',             '125 GB'),
+(24, 'Windows 10/11',    'Intel i9-12900H / AMD Ryzen 7 7800X3D',   '16 GB', 'RTX 2080 / RX 6800 XT',             '125 GB'),
+-- Assassins Creed Mirage
+(25, 'Windows 10',       'Intel i5-8400 / AMD Ryzen 5 1600',        '8 GB',  'GTX 1060 6GB / RX 570 4GB',         '40 GB'),
+(26, 'Windows 10/11',    'Intel i7-9700K / AMD Ryzen 7 3700X',      '16 GB', 'RTX 2070 / RX 5700 XT',             '40 GB'),
+-- Street Fighter 6
+(27, 'Windows 10',       'Intel i5-7500 / AMD Ryzen 3 1200',        '8 GB',  'GTX 1060 / RX 580',                  '60 GB'),
+(28, 'Windows 10/11',    'Intel i7-8700 / AMD Ryzen 5 3600',        '16 GB', 'RTX 2070 / RX 5700 XT',             '60 GB'),
+-- GTA V
+(29, 'Windows 10',       'Intel i5-3470 / AMD FX-8350',             '8 GB',  'GTX 660 2GB / HD 7870 2GB',          '72 GB'),
+(30, 'Windows 10/11',    'Intel i5-6600K / AMD Ryzen 5 1500X',      '16 GB', 'GTX 1060 / RX 480 4GB',             '72 GB'),
+-- Red Dead Redemption 2
+(31, 'Windows 10',       'Intel i5-2500K / AMD FX-6300',            '8 GB',  'GTX 770 2GB / R9 280 3GB',           '150 GB'),
+(32, 'Windows 10/11',    'Intel i7-4770K / AMD Ryzen 5 1500X',      '12 GB', 'GTX 1060 6GB / RX 480 4GB',         '150 GB'),
+-- Baldurs Gate 3
+(33, 'Windows 10',       'Intel i5-4690 / AMD FX-8350',             '8 GB',  'GTX 970 / RX 480 4GB',               '150 GB'),
+(34, 'Windows 10/11',    'Intel i7-8700K / AMD Ryzen 5 3600',       '16 GB', 'RTX 2060 Super / RX 5700 XT',       '150 GB'),
+-- Sonic Frontiers
+(35, 'Windows 10',       'Intel i5-3470 / AMD Ryzen 5 1400',        '8 GB',  'GTX 660 2GB / RX 470 4GB',           '30 GB'),
+(36, 'Windows 10/11',    'Intel i5-6600 / AMD Ryzen 5 2600',        '12 GB', 'GTX 1060 / RX 580 8GB',             '30 GB'),
+-- The Witcher 3
+(37, 'Windows 10',       'Intel i5-2500K / AMD Phenom II X4 940',   '6 GB',  'GTX 660 / Radeon HD 7870',           '50 GB'),
+(38, 'Windows 10/11',    'Intel i7-3770 / AMD FX-8350',             '8 GB',  'GTX 770 / Radeon R9 290',            '50 GB'),
+-- Dragon Age Inquisition
+(39, 'Windows 10',       'Intel i5-2400 / AMD FX-8150',             '4 GB',  'GTX 660 / Radeon HD 7870',           '26 GB'),
+(40, 'Windows 10/11',    'Intel i7-3770 / AMD FX-8350',             '8 GB',  'GTX 780 / Radeon R9 290X',           '26 GB'),
+-- Monster Hunter World
+(41, 'Windows 10',       'Intel i5-4460 / AMD FX-6300',             '8 GB',  'GTX 760 / R7 260x 2GB',              '48 GB'),
+(42, 'Windows 10/11',    'Intel i7-3770 / AMD Ryzen 5 1500X',       '8 GB',  'GTX 1060 3GB / RX 570 4GB',         '48 GB'),
+-- Devil May Cry 5
+(43, 'Windows 10',       'Intel i5-4460 / AMD FX-6300',             '8 GB',  'GTX 760 / R7 260x',                  '35 GB'),
+(44, 'Windows 10/11',    'Intel i7-3770 / AMD Ryzen 5 2600',        '16 GB', 'GTX 1060 6GB / RX 480 8GB',         '35 GB'),
+-- FIFA 24
+(45, 'Windows 10',       'Intel i5-6600K / AMD Ryzen 5 1600',       '8 GB',  'GTX 1050 Ti / RX 570',               '100 GB'),
+(46, 'Windows 10/11',    'Intel i7-6700 / AMD Ryzen 7 2700X',       '12 GB', 'RTX 2060 / RX 5600 XT',             '100 GB'),
+-- Forza Horizon 5
+(47, 'Windows 10',       'Intel i5-4460 / AMD Ryzen 3 1200',        '8 GB',  'GTX 970 / RX 470',                   '110 GB'),
+(48, 'Windows 10/11',    'Intel i7-10700K / AMD Ryzen 7 3800XT',    '16 GB', 'RTX 3080 / RX 6800 XT',             '110 GB'),
+-- Hades
+(49, 'Windows 10',       'Intel Core 2 Duo / AMD Athlon 64 X2',     '4 GB',  'GTX 460 / Radeon HD 6850',           '15 GB'),
+(50, 'Windows 10/11',    'Intel i5-2400 / AMD FX-4350',             '8 GB',  'GTX 660 / RX 470',                   '15 GB');
+
+-- GAME_REQUIREMENTS
+-- Links each game to its min (odd) and rec (even) requirements
+INSERT INTO game_requirements (req_id, game_id, recommended) VALUES
+(1,  1,  FALSE), (2,  1,  TRUE),   -- Elden Ring
+(3,  2,  FALSE), (4,  2,  TRUE),   -- The Last of Us
+(5,  3,  FALSE), (6,  3,  TRUE),   -- Spider-Man 2
+(7,  4,  FALSE), (8,  4,  TRUE),   -- Apex Legends
+(9,  5,  FALSE), (10, 5,  TRUE),   -- CoD MW3
+(11, 6,  FALSE), (12, 6,  TRUE),   -- Zelda TotK
+(13, 7,  FALSE), (14, 7,  TRUE),   -- Hogwarts Legacy
+(15, 8,  FALSE), (16, 8,  TRUE),   -- God of War Ragnarok
+(17, 9,  FALSE), (18, 9,  TRUE),   -- Cyberpunk 2077
+(19, 10, FALSE), (20, 10, TRUE),   -- Final Fantasy XVI
+(21, 11, FALSE), (22, 11, TRUE),   -- RE4 Remake
+(23, 12, FALSE), (24, 12, TRUE),   -- Starfield
+(25, 13, FALSE), (26, 13, TRUE),   -- AC Mirage
+(27, 14, FALSE), (28, 14, TRUE),   -- Street Fighter 6
+(29, 15, FALSE), (30, 15, TRUE),   -- GTA V
+(31, 16, FALSE), (32, 16, TRUE),   -- RDR2
+(33, 17, FALSE), (34, 17, TRUE),   -- Baldurs Gate 3
+(35, 18, FALSE), (36, 18, TRUE),   -- Sonic Frontiers
+(37, 19, FALSE), (38, 19, TRUE),   -- Witcher 3
+(39, 20, FALSE), (40, 20, TRUE),   -- Dragon Age Inquisition
+(41, 21, FALSE), (42, 21, TRUE),   -- Monster Hunter World
+(43, 22, FALSE), (44, 22, TRUE),   -- Devil May Cry 5
+(45, 23, FALSE), (46, 23, TRUE),   -- FIFA 24
+(47, 24, FALSE), (48, 24, TRUE),   -- Forza Horizon 5
+(49, 25, FALSE), (50, 25, TRUE);   -- Hades

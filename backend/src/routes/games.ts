@@ -34,6 +34,7 @@ router.get('/', async (req: Request, res: Response) => {
         const [rows] = await pool.query(query, params);
         res.json(rows);
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Failed to fetch games' });
     }
 });
@@ -42,6 +43,19 @@ router.get('/', async (req: Request, res: Response) => {
 // Full game details page data.
 /* Returns game info + publisher + developer + achievements + previews + hardware reqs
 all in one response object. */
+
+interface GameDetailsRow {
+  game_id: number;
+  title: string;
+  summary: string;
+  thumbnail: string;
+  release_date: string;
+  price: number;
+  genres: string;
+  publishers: string;
+  developers: string;
+}
+
 router.get('/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
@@ -53,6 +67,16 @@ router.get('/:id', async (req: Request, res: Response) => {
 
         if (!gameRows.length) {
             return res.status(404).json({ error: 'Game not found' });
+        }
+
+        // clean up the game object to send to client
+        const game: GameDetailsRow = {
+          ...gameRows[0],
+          // purchased,
+          id: gameRows[0].game_id,
+          genres: gameRows[0]?.genres.split(', ') ?? [],
+          publishers: gameRows[0]?.publishers.split(', ') ?? [],
+          developers: gameRows[0]?.developers.split(', ') ?? []
         }
 
         // Achievements for this game
@@ -85,7 +109,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 
         // Combine everything into one response object
         res.json({
-            ...gameRows[0],
+            ...game,
             achievements,
             previews,
             requirements: {

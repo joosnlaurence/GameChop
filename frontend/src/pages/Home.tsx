@@ -222,7 +222,7 @@ export default function Home() {
           >
             {popularGames.map((game) => (
               <Carousel.Slide key={game.id}>
-                <GameCard game={game} width={256} />
+                <GameCard game={game}/>
               </Carousel.Slide>
             ))}
           </Carousel>
