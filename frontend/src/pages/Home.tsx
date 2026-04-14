@@ -23,6 +23,9 @@ import {
 import { Link } from "react-router-dom";
 import type { TablerIcon } from "@tabler/icons-react";
 import GameCard from "../components/GameCard";
+import { useQuery } from "@tanstack/react-query";
+import type { GetFeaturedPublishersResult, GetGameListingResult } from "../types";
+import HomeSkeleton from "./skeletons/HomeSkeleton";
 
 const genres: { name: string; image: string; icon: TablerIcon }[] = [
   { name: "RPG", image: "/images/rpg_bg.jpg", icon: IconSparkles },
@@ -30,27 +33,6 @@ const genres: { name: string; image: string; icon: TablerIcon }[] = [
   { name: "Sports", image: "/images/sports_bg.jpg", icon: IconTrophy },
   { name: "Horror", image: "/images/horror_bg.jpg", icon: IconGhost3 },
   { name: "Adventure", image: "/images/adventure_bg.jpg", icon: IconCompass },
-];
-
-const newReleases = [
-  { id: 1, title: "Neon Legends", price: 59.99, image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=400&fit=crop" },
-  { id: 2, title: "Cyber Storm", price: 49.99, image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=300&h=400&fit=crop" },
-  { id: 3, title: "Cyber Frontiers", price: 39.99, image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=400&fit=crop" },
-  { id: 4, title: "Galaxy Drift", price: 29.99, image: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=300&h=400&fit=crop" },
-];
-
-const popularGames = [
-  { id: 5, title: "Apex Warriors", price: 49.99, image: "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=300&h=400&fit=crop" },
-  { id: 6, title: "Cyber Legacy", price: 59.99, image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=400&fit=crop" },
-  { id: 7, title: "Infinite Quest", price: 44.99, image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=300&h=400&fit=crop" },
-  { id: 8, title: "Neon Racer", price: 34.99, image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=400&fit=crop" },
-];
-
-const publishers = [
-  { name: "Activision", image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=200&fit=crop" },
-  { name: "EA Games", image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=300&h=200&fit=crop" },
-  { name: "Ubisoft", image: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=300&h=200&fit=crop" },
-  { name: "Valve", image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=200&fit=crop" },
 ];
 
 const arrowStyles = {
@@ -86,9 +68,57 @@ function SectionHeader({ title }: { title: string }) {
   );
 }
 
-
+const NUM_HOME_PAGE_GAMES = 4;
+const NUM_FEATURED_PUBLISHERS = 4;
 
 export default function Home() {
+  const {data: games, isLoading: gamesIsLoading, error: gamesError} = useQuery({
+    queryKey: ['game_listings'],
+    queryFn: async (): Promise<GetGameListingResult[]> =>
+      fetch(`http://localhost:3000/api/games`)
+        .then(res => res.json())
+  });
+  const {data: publishers, isLoading: pubsIsLoading, error: pubsError} = useQuery({
+    queryKey: ['publishers'],
+    queryFn: async (): Promise<GetFeaturedPublishersResult[]> =>
+      fetch(`http://localhost:3000/api/publishers/featured`)
+        .then(res => res.json()) 
+  });
+
+  if(gamesIsLoading || pubsIsLoading) {
+    return <HomeSkeleton />
+  }
+
+  if(gamesError || pubsError) {
+    console.error(gamesError ?? pubsError);
+    return <Text>Some error occurred...</Text>
+  }
+
+  if(!games) {
+    return <Text>No games found?</Text>
+  }
+
+  if(!publishers) {
+    return <Text>No publishers found?</Text>
+  }
+
+  const newReleases = games?.sort(
+    (a, b) => new Date(b.release_date).getTime() - new Date(a.release_date).getTime()
+  ).slice(0, NUM_HOME_PAGE_GAMES);
+
+  // We don't really have a way of telling if a game is popular right now
+  // This would probably invove some backend work
+  
+  // const popularGames = games?.sort(
+  //   (a, b) => b.orders - a.orders
+  // ).slice(0, NUM_NEW_RELEASES);
+
+  const popularGames = games?.slice(0, NUM_HOME_PAGE_GAMES);
+
+  const featuredPublishers = publishers?.sort(
+    (a, b) => b.game_count - a.game_count
+  ).slice(0, NUM_FEATURED_PUBLISHERS);
+
   return (
     <Container size="xl" pt="xl" pb={120} px="clamp(1rem, 5vw, 77.5px)">
       <Stack gap={100}>
@@ -196,11 +226,15 @@ export default function Home() {
               root: { padding: "0 64px" },
             }}
           >
-            {newReleases.map((game) => (
-              <Carousel.Slide key={game.id}>
-                <GameCard game={game} />
-              </Carousel.Slide>
-            ))}
+            {
+              newReleases 
+              ?
+              newReleases.map((game) => 
+                <Carousel.Slide key={game.game_id}>
+                  <GameCard game={game} />
+                </Carousel.Slide>
+              ) : undefined
+            }
           </Carousel>
         </Box>
 
@@ -221,7 +255,7 @@ export default function Home() {
             }}
           >
             {popularGames.map((game) => (
-              <Carousel.Slide key={game.id}>
+              <Carousel.Slide key={game.game_id}>
                 <GameCard game={game}/>
               </Carousel.Slide>
             ))}
@@ -232,7 +266,7 @@ export default function Home() {
         <Box>
           <SectionHeader title="Featured Publishers" />
           <SimpleGrid cols={{ base: 2, sm: 4 }} spacing="md">
-            {publishers.map((pub) => (
+            {featuredPublishers.map((pub) => (
               <Card
                 key={pub.name}
                 p={0}
@@ -240,7 +274,7 @@ export default function Home() {
                 radius="md"
                 style={{ overflow: "hidden" }}
               >
-                <Image src={pub.image} h={140} alt={pub.name} />
+                <Image src={pub.logo} h={140} alt={pub.name} />
                 <Text ta="center" fw={600} fz="sm" py="xs">
                   {pub.name}
                 </Text>

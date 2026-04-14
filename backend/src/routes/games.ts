@@ -1,7 +1,20 @@
 import { Router, Request, Response } from 'express';
 import pool from '../db'; // your mysql2 connection pool
+import { RowDataPacket } from 'mysql2';
 
 const router = Router();
+
+interface GameListingRow extends RowDataPacket {
+  game_id: number;
+  title: string;
+  summary: string;
+  thumbnail: string;
+  release_date: string;
+  price: number;
+  genres: string;
+  publishers: string;
+  developers: string;
+}
 
 // GET /api/games
 // General game listing for catalog pages
@@ -31,8 +44,16 @@ router.get('/', async (req: Request, res: Response) => {
             params.push(`%${search}%`);
         }
 
-        const [rows] = await pool.query(query, params);
-        res.json(rows);
+        const [rows] = await pool.query<GameListingRow[]>(query, params);
+
+        const games = rows.map((row) => ({
+          ...row,
+          genres: row.genres?.split(', ') ?? [],
+          publishers: row.publishers?.split(', ') ?? [],
+          developers: row.developers?.split(', ') ?? []
+        }));
+
+        res.json(games);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to fetch games' });
@@ -73,7 +94,6 @@ router.get('/:id', async (req: Request, res: Response) => {
         const game: GameDetailsRow = {
           ...gameRows[0],
           // purchased,
-          id: gameRows[0].game_id,
           genres: gameRows[0]?.genres.split(', ') ?? [],
           publishers: gameRows[0]?.publishers.split(', ') ?? [],
           developers: gameRows[0]?.developers.split(', ') ?? []

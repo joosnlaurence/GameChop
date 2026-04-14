@@ -101,7 +101,7 @@ CREATE TABLE orders (
 CREATE TABLE game_previews (
     game_id    INT          NOT NULL,
     preview_id INT          NOT NULL,
-    url        VARCHAR(255) NOT NULL,
+    url        VARCHAR(512) NOT NULL,
     PRIMARY KEY (game_id, preview_id),
     FOREIGN KEY (game_id) REFERENCES games(id)
         ON UPDATE CASCADE ON DELETE CASCADE

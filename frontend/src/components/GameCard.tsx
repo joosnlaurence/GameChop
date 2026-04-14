@@ -12,8 +12,11 @@ interface GameCardProps {
 }
 
 export default function GameCard({ game, variant = "store", onRemoveFromWishlist }: GameCardProps) {
-  const publisherDeveloper =
-    `${game.publisher ?? ''}${(game.developer && game.publisher) ? ' · ' : ''}${game.developer ?? ''}`;
+  const publishers = (game?.publishers ?? []).join(', ');
+  const developers = (game?.developers ?? []).join(', ');
+  const middot = publishers && developers ? ' · ' : '';
+  const publisherDeveloper = `${publishers}${middot}${developers}`;
+
   const navigate = useNavigate();
   const { addItem } = useCart();
 
@@ -30,7 +33,7 @@ export default function GameCard({ game, variant = "store", onRemoveFromWishlist
 
   const handleRemove = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onRemoveFromWishlist?.(game.id);
+    onRemoveFromWishlist?.(game.game_id);
   };
 
   const cardContent = (
@@ -38,8 +41,10 @@ export default function GameCard({ game, variant = "store", onRemoveFromWishlist
       <Box pos="relative">
         <Image
           bdrs="md"
-          src={game.image}
+          src={game.thumbnail}
+          // fallbackSrc="https://placehold.co/600x900?text=No+Image"
           w="100%"
+          bg='dark.8'
           style={{ aspectRatio: '3/4', objectFit: 'cover' }}
           alt={game.title}
         />
@@ -135,7 +140,7 @@ export default function GameCard({ game, variant = "store", onRemoveFromWishlist
       <Box
         w="100%"
         style={{ overflow: "visible", cursor: "pointer" }}
-        onClick={() => navigate(`/browse/${game.id}`)}
+        onClick={() => navigate(`/browse/${game.game_id}`)}
       >
         {cardContent}
       </Box>
@@ -145,7 +150,7 @@ export default function GameCard({ game, variant = "store", onRemoveFromWishlist
   return (
     <Box
       component={Link}
-      to={`/browse/${game.id}`}
+      to={`/browse/${game.game_id}`}
       w="100%"
       style={{ overflow: "hidden", textDecoration: "none" }}
     >

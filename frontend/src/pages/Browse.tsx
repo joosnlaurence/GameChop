@@ -1,4 +1,4 @@
-import { Group, SimpleGrid, Stack, Title } from "@mantine/core";
+import { Group, SimpleGrid, Stack, Title, Text } from "@mantine/core";
 import GameCard from "../components/GameCard";
 import { useCart, type CartItem } from "../context/CartContext";
 import SelectStore from "../components/SelectStore";
@@ -6,49 +6,20 @@ import SearchFilters from "../components/SearchWidget";
 import GenreSidebar from "../components/GenreSidebar";
 import StickyBox from "react-sticky-box";
 import { useEffect, useRef, useState } from "react";
-
-const testGames: CartItem[] = 
-[
-  {
-    id: 1,
-    title: "Neon Legends",
-    price: 59.99,
-    image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=400&fit=crop",
-    type: "Digital",
-  },
-  {
-    id: 2,
-    title: "Apex Warriors",
-    price: 49.99,
-    image: "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=300&h=400&fit=crop",
-    type: "Physical",
-  },
-  {
-    id: 3,
-    title: "Cyber Frontiers",
-    price: 39.99,
-    image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=400&fit=crop",
-    type: "Digital",
-  },
-  {
-    id: 4,
-    title: "Cyber Frontiers",
-    price: 39.99,
-    image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=400&fit=crop",
-    type: "Digital",
-  },
-  {
-    id: 5,
-    title: "Cyber Frontiers",
-    price: 39.99,
-    image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=400&fit=crop",
-    type: "Digital",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import type { GetGameListingResult } from "../types";
+import BrowseSkeleton from "./skeletons/BrowseSkeleton";
 
 const GENRES = ['Action', 'Puzzle', 'RPG', 'FPS', 'Platformer', 'Puzzle', 'RPG', 'FPS', 'Platformer', 'Puzzle', 'RPG', 'FPS', 'Platformer', 'Puzzle', 'RPG', 'FPS', 'Platformer', 'Puzzle', 'RPG', 'FPS', 'Platformer']
 
 export default function Browse() {
+  const {data: games, isLoading, error} = useQuery({
+    queryKey: ['game_listings'],
+    queryFn: async (): Promise<GetGameListingResult[]> =>
+      fetch(`http://localhost:3000/api/games`)
+        .then(res => res.json())
+  });
+  
   const [offset, setOffset] = useState(0);
   const rootRef = useRef<HTMLDivElement>(null);
   const { addItem } = useCart();
@@ -59,6 +30,15 @@ export default function Browse() {
 
     setOffset(root.getBoundingClientRect().top + window.scrollY);
   }, []);
+
+  if(isLoading) {
+    return <BrowseSkeleton />;
+  }
+
+  if(error) {
+    console.error(error);
+    return <Text>Some unknown error occurred...</Text>
+  }
 
   return (
     <Stack gap='32px' ref={rootRef}>
@@ -75,11 +55,17 @@ export default function Browse() {
             genres={GENRES}
           />}
         </StickyBox>
-        <SimpleGrid flex='4' cols={{ base: 1, sm: 2, md: 3, lg: 4 }}>
-          {testGames.map((game) => 
-            <GameCard game={game} variant='store'/>  
-          )}
-        </SimpleGrid>
+        {
+          games 
+          ?
+          <SimpleGrid flex='4' cols={{ base: 1, sm: 2, md: 3, lg: 4 }}>
+            {games.map((game) => 
+              <GameCard game={game} variant='store'/>  
+            )}
+          </SimpleGrid>
+          :
+          <Text>No games found...</Text>
+        }
       </Group>
     </Stack>
   );

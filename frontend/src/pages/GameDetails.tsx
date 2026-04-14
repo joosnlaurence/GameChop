@@ -4,61 +4,8 @@ import type { GetGameDetailsResult, Hardware } from '../types';
 import { IconAwardFilled, IconHeart, IconLock, IconShoppingCart } from '@tabler/icons-react';
 import { useState } from 'react';
 import SelectStore from '../components/SelectStore';
-
-const gameDetails: GetGameDetailsResult = {
-  id: 1,
-  title: "Neon Legends",
-  summary: "Dive into a vibrant cyberpunk world where ancient legends meet cutting-edge technology. Neon Legends offers an immersive action RPG experience with dynamic combat, deep character customization, and a gripping story that unfolds across a sprawling open world. Team up with friends or go solo as you uncover the mysteries of a city on the brink of collapse.",
-  price: 59.99,
-  genres: ["Action", "RPG", "Open World"],
-  publishers: ["Neon Interactive"],
-  developers: ["Neon Studio"],
-  thumbnail: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=400&fit=crop",
-  release_date: '2022-02-25T05:00:00.000Z',
-  achievements: [
-    { "id": 1, "title": "First Steps", "description": "Complete the tutorial.", "achieved": true },
-    { "id": 2, "title": "Rookie Hunter", "description": "Defeat your first enemy.", "achieved": true },
-    { "id": 3, "title": "Weapon Master", "description": "Unlock all weapon types.", "achieved": true },
-    { "id": 4, "title": "Speed Demon", "description": "Complete a level in under 2 minutes.", "achieved": true },
-    { "id": 5, "title": "Legendary Fighter", "description": "Win 100 battles.", "achieved": true },
-    { "id": 6, "title": "Treasure Seeker", "description": "Find all hidden collectibles in a level.", "achieved": true },
-    { "id": 7, "title": "Quest Completer", "description": "Finish all side quests.", "achieved": true },
-    { "id": 8, "title": "Stealth Expert", "description": "Complete a mission without being detected.", "achieved": true },
-    { "id": 9, "title": "Boss Slayer", "description": "Defeat all boss enemies.", "achieved": true },
-    { "id": 10, "title": "Explorer Elite", "description": "Discover every area on the map.", "achieved": true },
-    { "id": 11, "title": "Team Player", "description": "Complete 10 co-op missions.", "achieved": true },
-    { "id": 12, "title": "Fashion Icon", "description": "Collect every cosmetic item.", "achieved": true },
-    { "id": 13, "title": "Master Craftsman", "description": "Craft 50 items.", "achieved": false },
-    { "id": 14, "title": "Ultimate Victory", "description": "Complete the game on the hardest difficulty.", "achieved": false },
-    { "id": 15, "title": "Collector Supreme", "description": "Collect every item in the game.", "achieved": false },
-    { "id": 16, "title": "Hidden Secret", "description": "Find the secret Easter egg.", "achieved": false },
-    { "id": 17, "title": "No Damage Run", "description": "Complete a level without taking damage.", "achieved": false },
-    { "id": 18, "title": "Time Trial Champion", "description": "Set a new record on every time trial.", "achieved": false },
-    { "id": 19, "title": "Perfect Score", "description": "Earn a perfect score on any level.", "achieved": false },
-    { "id": 20, "title": "Platinum Trophy", "description": "Unlock every other achievement.", "achieved": false }
-  ],
-  previews: [
-    { preview_id: 1, url: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=400&h=225&fit=crop' },
-    { preview_id: 2, url: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=400&fit=crop' },
-    { preview_id: 3, url: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=400&h=225&fit=crop' },
-    { preview_id: 4, url: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=400&fit=crop' },
-    { preview_id: 5, url: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=400&h=225&fit=crop' },
-    { preview_id: 6, url: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=400&fit=crop' },
-    { preview_id: 7, url: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=400&h=225&fit=crop' },
-    { preview_id: 8, url: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=400&fit=crop' },
-    { preview_id: 9, url: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=400&h=225&fit=crop' }
-  ],
-  requirements: {
-    minimum: {
-      id: 1, os: "Windows 10", cpu: "Intel i5-8400 / AMD Ryzen 3 3300X",
-      mem: "12 GB", gpu: "GTX 1060 3GB / RX 580 4GB", storage: "60 GB", recommended: 0
-    },
-    recommended: {
-      id: 2, os: "Windows 10/11", cpu: "Intel i7-8700K / AMD Ryzen 5 3600X",
-      mem: "16 GB", gpu: "GTX 1070 8GB / RX Vega 56 8GB", storage: "60 GB", recommended: 1
-    }
-  }
-}
+import { useQuery } from '@tanstack/react-query';
+import GameDetailsSkeleton from './skeletons/GameDetailsSkeleton';
 
 const parseDate = (dateStr: string) => {
   const date = new Date(dateStr);
@@ -95,13 +42,40 @@ function Hardware({ hardware }: { hardware: Hardware}) {
   )
 }
 
+export interface Preview {
+  preview_id: number;
+  url: string;
+}
+
 export default function GameDetails() {
   const { gameId } = useParams();
   
-
+  const { data: gameDetails, isLoading, error } = useQuery({
+    queryKey: ['game_details', gameId],
+    queryFn: async (): Promise<GetGameDetailsResult> => 
+      await fetch(`http://localhost:3000/api/games/${gameId}`)
+        .then(res => res.json())
+  });
 
   const [orderType, setOrderType] = useState('digital');
-  const [selectedPreview, setSelectedPreview] = useState(gameDetails?.previews[0] ?? 0);
+  const [selectedPreview, setSelectedPreview] = useState<Preview | null>(null);
+
+  if (isLoading) {
+    return <GameDetailsSkeleton />
+  }
+  
+  if (error) {
+    console.error(error);
+    return <Text>Something went wrong...</Text>
+  }
+
+  if (!gameDetails) {
+    return <Text>404 Game not found...</Text>
+  }
+
+  if(!selectedPreview && gameDetails.previews.length > 0) {
+    setSelectedPreview(gameDetails.previews[0]);
+  }
 
   const publishers = gameDetails.publishers.join(', ');
   const developers = gameDetails.developers.join(', ');
@@ -113,18 +87,15 @@ export default function GameDetails() {
 
   const numAchieved = gameDetails.achievements.reduce((sum: number, a) => sum += a.achieved ? 1 : 0, 0 );
 
-  // something like this 
-  // const gameDetails = await fetch(...);
-  
   return (
     <Stack gap='48'>
-      <Group justify='space-between' wrap='nowrap'> 
-        <Group gap='24' mb='32' wrap='nowrap'>
+      <Group justify='space-between' mb='32'  wrap='nowrap' align='stretch'> 
+        <Group gap='24' wrap='nowrap' flex='1'>
           <Image
             bd='2px solid dark.5'
             bdrs="md"
             src={gameDetails.thumbnail}
-            w="192"
+            maw={192}
             style={{ aspectRatio: '3/4', objectFit: 'cover' }}
             alt={gameDetails.title}
           />
@@ -171,11 +142,13 @@ export default function GameDetails() {
           </Stack>
         </Group>
         <Image
-          src={selectedPreview.url}
-          maw='384'
+          src={selectedPreview?.url ?? ''}
+          w='100%'
+          maw={450}
+          mah={256}
           bdrs='10px'
-          style={{ aspectRatio: '3/2', objectFit: 'cover' }}
-          alt={`${gameDetails.title} Preview Image ${1}`}
+          style={{ aspectRatio: '16/9', objectFit: 'cover' }}
+          alt={`${gameDetails.title} Preview Image ${selectedPreview?.preview_id ?? ''}`}
         />
       </Group>
       
@@ -185,10 +158,10 @@ export default function GameDetails() {
           scrollbarSize='16'
           scrollbars='x'
           styles={{
-            scrollbar : {
-              backgroundColor: 'var(--mantine-color-dark-8)',
-              borderRadius: '100px'
-            },
+            // scrollbar : {
+            //   backgroundColor: 'var(--mantine-color-dark-8)',
+            //   borderRadius: '100px'
+            // },
             thumb: {
               backgroundColor: 'var(--mantine-color-dark-5)'
             }
@@ -207,7 +180,7 @@ export default function GameDetails() {
                     draggable={false}
                     w='186'
                     bdrs='10px'
-                    bd={preview.preview_id === selectedPreview.preview_id ?'2px solid violet' : undefined}
+                    bd={preview.preview_id === selectedPreview?.preview_id ?'2px solid violet' : undefined}
                     style={{ aspectRatio: '5/3', objectFit: 'cover' }}
                     alt={`${gameDetails.title} Preview Image ${i+1}`}
                   />
@@ -320,7 +293,7 @@ export default function GameDetails() {
                   <Stack gap={8}>
                     {
                       gameDetails.achievements.map((a) => 
-                        <HoverCard shadow='md' width={320}>
+                        <HoverCard shadow='md' width={320} key={a.id}>
                           <HoverCard.Target>
                             <Card bg='dark.7' bd='none' p='6 12'>
                               <Group justify='space-between' wrap='nowrap'>

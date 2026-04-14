@@ -250,7 +250,7 @@ export default function Layout() {
         </Group>
       </AppShell.Header>
 
-      <AppShell.Main p='97 101.5'>
+      <AppShell.Main py='120' px="clamp(1rem, 15vw, 178px)">
         <Outlet />
       </AppShell.Main>
       <Footer />

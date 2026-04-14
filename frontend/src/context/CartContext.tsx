@@ -1,7 +1,8 @@
 import {createContext, useContext, useState, type ReactNode} from "react";
-import type { Game } from "../types";
+import type { Game, GetGameListingResult } from "../types";
 
 
+// export interface CartItem extends Game
 export interface CartItem extends Game
 {
     type: "Digital" | "Physical";
@@ -28,13 +29,13 @@ export const CartProvider = ({ children }: {children: ReactNode}) =>
     {
         setItems((prev): CartItem[] => 
         {
-            const existing = prev.find((i) => i.id === item.id);
+            const existing = prev.find((i) => i.game_id === item.game_id);
             if(existing)
             {
                 if(existing.type === "Physical")
                 {
                     return prev.map((i) =>
-                    i.id === item.id ? {...i, quantity: (i.quantity ?? 1) + 1} : i
+                    i.game_id === item.game_id ? {...i, quantity: (i.quantity ?? 1) + 1} : i
                     );
                 }
 
@@ -47,7 +48,7 @@ export const CartProvider = ({ children }: {children: ReactNode}) =>
     
     const removeItem = (id: number) =>
     {
-        setItems((prev): CartItem[] => prev.filter((item) => item.id !== id));
+        setItems((prev): CartItem[] => prev.filter((item) => item.game_id !== id));
     };
 
     const updateQuantity = (id: number, quantity: number) => 
@@ -58,7 +59,7 @@ export const CartProvider = ({ children }: {children: ReactNode}) =>
             return;
         }
         setItems((prev): CartItem[] =>
-            prev.map((item) => (item.id === id ? {...item, quantity} : item))
+            prev.map((item) => (item.game_id === id ? {...item, quantity} : item))
         );
     };
 
