@@ -16,11 +16,29 @@ interface GameListingRow extends RowDataPacket {
   developers: string;
 }
 
+// GET /api/games/filters
+// Returns distinct genres, publishers, and developers for populating filter dropdowns
+router.get('/filters', async (_req: Request, res: Response) => {
+    try {
+        const [genres] = await pool.query('SELECT DISTINCT name FROM genres ORDER BY name');
+        const [publishers] = await pool.query('SELECT DISTINCT name FROM publishers ORDER BY name');
+        const [developers] = await pool.query('SELECT DISTINCT name FROM developers ORDER BY name');
+        res.json({
+            genres:     (genres as any[]).map((r) => r.name),
+            publishers: (publishers as any[]).map((r) => r.name),
+            developers: (developers as any[]).map((r) => r.name),
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch filter options' });
+    }
+});
+
 // GET /api/games
 // General game listing for catalog pages
 router.get('/', async (req: Request, res: Response) => {
     try {
-        const { genre, publisher, developer, search } = req.query;
+        const { genre, publisher, developer, search, sortBy } = req.query;
 
         let query = `SELECT * FROM game_listing WHERE 1=1`;
         const params: any[] = [];
@@ -43,6 +61,11 @@ router.get('/', async (req: Request, res: Response) => {
             query += ` AND title LIKE ?`;
             params.push(`%${search}%`);
         }
+
+        if (sortBy === 'alpha')      query += ` ORDER BY title ASC`;
+        else if (sortBy === 'price_asc')  query += ` ORDER BY price ASC`;
+        else if (sortBy === 'price_desc') query += ` ORDER BY price DESC`;
+        else if (sortBy === 'newest')     query += ` ORDER BY release_date DESC`;
 
         const [rows] = await pool.query<GameListingRow[]>(query, params);
 

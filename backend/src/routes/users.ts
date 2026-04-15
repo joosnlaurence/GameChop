@@ -4,19 +4,49 @@ import pool from '../db';
 const router = Router();
 
 // GET /api/users/:id/library
-// Returns all games a user owns or wishlisted
-// with achievement progress counts per game
+// Returns all games a user owns or wishlisted, with optional filtering.
+// Supports query params: search, genre, publisher, developer, sortBy
 router.get('/:id/library', async (req: Request, res: Response) => {
     const { id } = req.params;
+    const { search, genre, publisher, developer, sortBy } = req.query;
     try {
-        const [rows]: any = await pool.query(
-            `SELECT * FROM user_library WHERE user_id = ?`,
-            [id]
-        );
+        // Join with game_listing to enable genre/publisher/developer filtering
+        let query = `
+            SELECT
+                ul.user_id, ul.username, ul.game_id, ul.title, ul.thumbnail, ul.price,
+                ul.purchased, ul.wishlisted, ul.total_achievements, ul.earned_achievements
+            FROM user_library ul
+            JOIN game_listing gl ON ul.game_id = gl.game_id
+            WHERE ul.user_id = ?
+        `;
+        const params: any[] = [id];
+
+        if (search) {
+            query += ` AND ul.title LIKE ?`;
+            params.push(`%${search}%`);
+        }
+        if (genre) {
+            query += ` AND FIND_IN_SET(?, gl.genres)`;
+            params.push(genre);
+        }
+        if (publisher) {
+            query += ` AND FIND_IN_SET(?, gl.publishers)`;
+            params.push(publisher);
+        }
+        if (developer) {
+            query += ` AND FIND_IN_SET(?, gl.developers)`;
+            params.push(developer);
+        }
+
+        if (sortBy === 'alpha')           query += ` ORDER BY ul.title ASC`;
+        else if (sortBy === 'price_asc')  query += ` ORDER BY ul.price ASC`;
+        else if (sortBy === 'price_desc') query += ` ORDER BY ul.price DESC`;
+
+        const [rows]: any = await pool.query(query, params);
 
         // Split owned vs wishlisted so frontend
         // can render two separate sections easily
-        const owned     = rows.filter((r: any) => r.purchased);
+        const owned      = rows.filter((r: any) => r.purchased);
         const wishlisted = rows.filter((r: any) => r.wishlisted && !r.purchased);
 
         res.json({ owned, wishlisted });

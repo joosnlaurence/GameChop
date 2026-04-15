@@ -10,7 +10,6 @@ import {
   SimpleGrid, 
   Stack, 
   Text, 
-  TextInput 
 } from '@mantine/core';
 import { NavLink } from "react-router-dom";
 import { 
@@ -18,8 +17,7 @@ import {
   IconBrandInstagram, 
   IconBrandX, 
   IconBrandYoutube, 
-  IconSearch, 
-  IconShoppingCart, 
+  IconShoppingCart,
 } from "@tabler/icons-react";
 import { useState, type ReactNode } from 'react';
 import { useDisclosure } from '@mantine/hooks';
@@ -29,6 +27,7 @@ import Login from "./Login";
 import SignUp from "./SignUp";
 import { useAuth } from "../context/AuthContext";
 import LogoutButton from "./LogoutButton";
+import NavSearch from "./NavSearch";
 
 function Link( {to, children} : {to: string, children: ReactNode}) {
   return (
@@ -225,18 +224,7 @@ export default function Layout() {
                 Orders
               </Link>
             </SimpleGrid>
-            <TextInput 
-              fz='sm'
-              flex='1 0 auto'
-              leftSection={<IconSearch size='1rem' />}
-              styles={{ 
-                input: { 
-                  background: 'var(--mantine-color-dark-7)', 
-                  border: '1px solid var(--mantine-color-dark-5)'
-                }
-              }}
-              placeholder='Search games...' 
-            />
+            <NavSearch />
             <Group
               gap='0.75rem'
               wrap='nowrap'

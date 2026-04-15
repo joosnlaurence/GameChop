@@ -1,51 +1,80 @@
 import { useState } from "react";
-import {
-  Box,
-  Container,
-  Group,
-  Select,
-  SimpleGrid,
-  Tabs,
-  TextInput,
-  Title,
-} from "@mantine/core";
-import { IconSearch } from "@tabler/icons-react";
-import { type Game } from "../types";
+import { Box, SimpleGrid, Tabs, Text, Title } from "@mantine/core";
+import { type Game, type GetUserLibraryResult, DEFAULT_FILTERS, type GameFilters } from "../types";
 import GameCard from "../components/GameCard";
+import SearchFilters from "../components/SearchWidget";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useAuth } from "../context/AuthContext";
 
-const ownedGames: Game[] = [
-  { game_id: 1, title: "Neon Legends", thumbnail: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=400&fit=crop", achievements: { earned: 12, total: 20 } },
-  { game_id: 2, title: "Warzones Elite", thumbnail: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=300&h=400&fit=crop", achievements: { earned: 18, total: 25 } },
-  { game_id: 3, title: "Cyber Phantom", thumbnail: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=400&fit=crop", achievements: { earned: 5, total: 20 } },
-  { game_id: 4, title: "Shadow Realm", thumbnail: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=300&h=400&fit=crop", achievements: { earned: 22, total: 22 } },
-  { game_id: 5, title: "Velocity Shift", thumbnail: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=300&h=400&fit=crop", achievements: { earned: 8, total: 30 } },
-  { game_id: 6, title: "Infinite Quest", thumbnail: "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=300&h=400&fit=crop", achievements: { earned: 14, total: 18 } },
-  { game_id: 7, title: "Dark Legacy", thumbnail: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=400&fit=crop", achievements: { earned: 3, total: 15 } },
-  { game_id: 8, title: "Cosmic Wars", thumbnail: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=300&h=400&fit=crop", achievements: { earned: 0, total: 35 } },
-];
-
-const initialWishlist: Game[] = [
-  { game_id: 101, title: "Apex Warriors", price: 44.99, thumbnail: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=300&h=400&fit=crop", wishlisted: true },
-  { game_id: 102, title: "Mystic Realms", price: 49.99, thumbnail: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=400&fit=crop", wishlisted: true },
-  { game_id: 103, title: "Galactic Conquest", price: 59.99, thumbnail: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=300&h=400&fit=crop", wishlisted: true },
-  { game_id: 104, title: "Urban Legends", price: 54.99, thumbnail: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=400&fit=crop", wishlisted: true },
+const LIBRARY_SORT_OPTIONS = [
+  { value: "alpha",      label: "Alphabetical" },
+  { value: "price_asc",  label: "Price: Low to High" },
+  { value: "price_desc", label: "Price: High to Low" },
 ];
 
 export default function MyLibrary() {
-  const [search, setSearch] = useState("");
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<string | null>("owned");
-  const [wishlist, setWishlist] = useState<Game[]>(initialWishlist);
+  const [filters, setFilters] = useState<GameFilters>(DEFAULT_FILTERS);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["library", user?.id, filters.search, filters.genre, filters.publisher, filters.developer, filters.sortBy],
+    queryFn: async (): Promise<GetUserLibraryResult> => {
+      const params = new URLSearchParams();
+      if (filters.search)    params.set("search",    filters.search);
+      if (filters.genre)     params.set("genre",     filters.genre);
+      if (filters.publisher) params.set("publisher", filters.publisher);
+      if (filters.developer) params.set("developer", filters.developer);
+      if (filters.sortBy)    params.set("sortBy",    filters.sortBy);
+      return fetch(`http://localhost:3000/api/users/${user!.id}/library?${params.toString()}`, {
+        credentials: "include",
+      }).then((res) => res.json());
+    },
+    enabled: !!user,
+    placeholderData: keepPreviousData,
+  });
+
+  const ownedGames: Game[] = (data?.owned ?? []).map((g) => ({
+    game_id: g.game_id,
+    title: g.title,
+    thumbnail: g.thumbnail,
+    achievements: {
+      earned: g.earned_achievements,
+      total: g.total_achievements,
+    },
+  }));
+
+  const [wishlist, setWishlist] = useState<Game[]>([]);
+
+  const serverWishlist: Game[] = (data?.wishlisted ?? []).map((g) => ({
+    game_id: g.game_id,
+    title: g.title,
+    thumbnail: g.thumbnail,
+    price: g.price,
+    wishlisted: true,
+  }));
 
   const isWishlist = activeTab === "wishlist";
-  const sourceGames = isWishlist ? wishlist : ownedGames;
-
-  const filteredGames = sourceGames.filter((game) =>
-    game.title.toLowerCase().includes(search.toLowerCase())
-  );
+  const displayGames = isWishlist
+    ? (wishlist.length > 0 ? wishlist : serverWishlist)
+    : ownedGames;
 
   const handleRemoveFromWishlist = (id: number) => {
-    setWishlist((prev) => prev.filter((g) => g.game_id !== id));
+    const base = wishlist.length > 0 ? wishlist : serverWishlist;
+    setWishlist(base.filter((g) => g.game_id !== id));
   };
+
+  if (!user) {
+    return <Text>Please log in to view your library.</Text>;
+  }
+
+  if (isLoading) {
+    return <Text>Loading library...</Text>;
+  }
+
+  if (error) {
+    return <Text>Failed to load library.</Text>;
+  }
 
   return (
     <Box>
@@ -64,49 +93,31 @@ export default function MyLibrary() {
         </Tabs.List>
       </Tabs>
 
-      <TextInput
-        placeholder={isWishlist ? "Search your wishlist..." : "Search your library..."}
-        leftSection={<IconSearch size={16} />}
-        value={search}
-        onChange={(e) => setSearch(e.currentTarget.value)}
-        mb="lg"
+      <SearchFilters
+        filters={filters}
+        onFiltersChange={setFilters}
+        sortOptions={LIBRARY_SORT_OPTIONS}
+        searchPlaceholder={isWishlist ? "Search your wishlist..." : "Search your library..."}
+        debounceMs={400}
       />
 
-      <Group mb="xl" gap="sm">
-        <Select
-          placeholder="Genre"
-          data={["Action", "RPG", "Strategy", "Sports", "Horror", "Adventure"]}
-          w={180}
-        />
-        <Select
-          placeholder="Publisher"
-          data={["Activision", "EA Games", "Ubisoft", "Valve"]}
-          w={180}
-        />
-        <Select
-          placeholder="Developer"
-          data={["Studio A", "Studio B", "Studio C", "Studio D"]}
-          w={180}
-        />
-        <Box style={{ flex: 1 }} />
-        <Select
-          placeholder="Sort by: Recently Purchased"
-          data={["Recently Purchased", "Alphabetical", "Most Played", "Price"]}
-          defaultValue="Recently Purchased"
-          w={250}
-        />
-      </Group>
-
-      <SimpleGrid cols={{ base: 2, sm: 3, md: 4 }} spacing="md">
-        {filteredGames.map((game) => (
-          <GameCard
-            key={game.game_id}
-            game={game}
-            variant={isWishlist ? "wishlist" : "library"}
-            onRemoveFromWishlist={handleRemoveFromWishlist}
-          />
-        ))}
-      </SimpleGrid>
+      <Box mt="xl">
+        <SimpleGrid cols={{ base: 2, sm: 3, md: 4 }} spacing="md">
+          {displayGames.map((game) => (
+            <GameCard
+              key={game.game_id}
+              game={game}
+              variant={isWishlist ? "wishlist" : "library"}
+              onRemoveFromWishlist={handleRemoveFromWishlist}
+            />
+          ))}
+        </SimpleGrid>
+        {displayGames.length === 0 && (
+          <Text c="dimmed" ta="center" mt="xl">
+            No games found.
+          </Text>
+        )}
+      </Box>
     </Box>
   );
 }
