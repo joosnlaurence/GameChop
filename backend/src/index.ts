@@ -3,14 +3,23 @@ import express from 'express';
 import gamesRouter from './routes/games';
 import publishersRouter from './routes/publishers';
 import usersRouter from './routes/users';
+import storesRouter from './routes/stores';
+import cors from 'cors';
 
 const app = express();
+
+// for whatever reason, data from DB would not show up
+// unless I added this ¯\_(ツ)_/¯
+app.use(cors({
+  origin: 'http://localhost:5173'  
+}))
 
 app.use(express.json());
 
 app.use('/api/games', gamesRouter);
 app.use('/api/publishers', publishersRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/stores', storesRouter);
 
 app.get('/', async (req, res) => {
   res.json({'message': 'Hello, world!'});
