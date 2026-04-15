@@ -3,7 +3,6 @@ import pool from '../db';
 
 const router = Router();
 
-
 // GET /api/users/:id/library
 // Returns all games a user owns or wishlisted
 // with achievement progress counts per game

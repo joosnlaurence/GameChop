@@ -29,7 +29,7 @@ export default function Checkout() {
   const handlePlaceOrder = () => 
   {
     checkout();
-    navigate("/orderconfirmation");
+    navigate("/order-confirmation");
   };
 
   const inputStyle = {

@@ -25,6 +25,10 @@ import { useState, type ReactNode } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { useCart } from "../context/CartContext";
 import classes from './Layout.module.css';
+import Login from "./Login";
+import SignUp from "./SignUp";
+import { useAuth } from "../context/AuthContext";
+import LogoutButton from "./LogoutButton";
 
 function Link( {to, children} : {to: string, children: ReactNode}) {
   return (
@@ -155,6 +159,7 @@ function Footer() {
 export default function Layout() {
   const [opened, {open, close}] = useDisclosure(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
+  const { user } = useAuth();  
 
   const openLogin = () => {
     setAuthMode('login');
@@ -171,8 +176,21 @@ export default function Layout() {
       bg='dark.9'
       header={{ height: 65 }}
     >
-      <Drawer opened={opened} onClose={close} title='Authentication'>
-        <h1>{authMode == 'login' ? 'login' : 'signup'}</h1>
+      <Drawer 
+        opened={opened} 
+        onClose={close} 
+        styles={{
+          header: { backgroundColor: 'var(--mantine-color-dark-8)'},
+          content: { backgroundColor: 'var(--mantine-color-dark-8)'}
+        }}  
+      >
+        {
+          authMode == 'login' 
+          ? 
+          <Login onSignUp={() => setAuthMode('signup')} onSuccess={close}/> 
+          : 
+          <SignUp onLogin={() => setAuthMode('login')} onSuccess={close}/>
+        }
       </Drawer>
       
       <AppShell.Header
@@ -235,16 +253,24 @@ export default function Layout() {
                 />
                 <CartBadge/>
               </ActionIcon>
-              <Button
-                p='0.5rem 1rem'
-                onClick={openLogin}
-                variant='subtle'
-              >
-                Login
-              </Button>
-              <Button onClick={openSignup}>
-                Sign Up
-              </Button>
+              {
+                user
+                ?
+                <LogoutButton />
+                :
+                <>
+                  <Button
+                    p='0.5rem 1rem'
+                    onClick={openLogin}
+                    variant='subtle'
+                  >
+                    Login
+                  </Button>
+                  <Button onClick={openSignup}>
+                    Sign Up
+                  </Button>
+                </>
+              }
             </Group>
           </Group>
         </Group>

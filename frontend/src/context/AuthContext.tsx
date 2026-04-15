@@ -1,0 +1,44 @@
+import { createContext, useContext, useEffect, useState } from "react";
+
+interface User {
+  id: number;
+  username: string;
+}
+
+interface AuthContextType {
+  user: User | null;
+  login: (user: User) => void;
+  logout: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    fetch('http://localhost:3000/auth/me', {
+      credentials: 'include'
+    })
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data) setUser({ id: data.id, username: data.username });
+      })
+      .catch(() => {});
+  }, []);
+
+  const login = (user: User) => setUser(user);
+  const logout = () => setUser(null);
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if(!context) throw new Error('useAuth must be userd within AuthProvider')
+  return context;
+}

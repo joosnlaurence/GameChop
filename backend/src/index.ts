@@ -1,5 +1,8 @@
 import 'dotenv/config'
 import express from 'express';
+import cookieParser from 'cookie-parser';
+
+import authRouter from './routes/auth';
 import gamesRouter from './routes/games';
 import publishersRouter from './routes/publishers';
 import usersRouter from './routes/users';
@@ -11,10 +14,14 @@ const app = express();
 // for whatever reason, data from DB would not show up
 // unless I added this ¯\_(ツ)_/¯
 app.use(cors({
-  origin: 'http://localhost:5173'  
+  origin: 'http://localhost:5173',
+  credentials: true
 }))
 
 app.use(express.json());
+app.use(cookieParser());
+
+app.use('/auth', authRouter);
 
 app.use('/api/games', gamesRouter);
 app.use('/api/publishers', publishersRouter);

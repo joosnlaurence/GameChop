@@ -16,6 +16,7 @@ import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
 import OrderConfirmation from './pages/OrderConfirmation'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import { AuthProvider } from './context/AuthContext'
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -33,25 +34,27 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <MantineProvider theme={theme} defaultColorScheme='dark'>
-        <CartProvider>
-          <BrowserRouter>
-            <ScrollToTop />
-            <Routes>
-              <Route element={<Layout />}>
-                <Route path='/' element={<Home />} />
-                <Route path='/browse'>
-                  <Route index  element={<Browse />} />
-                  <Route path=':gameId' element={<GameDetails />}/>
+        <AuthProvider>
+          <CartProvider>
+            <BrowserRouter>
+              <ScrollToTop />
+              <Routes>
+                <Route element={<Layout />}>
+                  <Route path='/' element={<Home />} />
+                  <Route path='/browse'>
+                    <Route index  element={<Browse />} />
+                    <Route path=':gameId' element={<GameDetails />}/>
+                  </Route>
+                  <Route path='/my-games' element={<MyLibrary />} />
+                  <Route path='/orders' element={<Orders />} />
+                  <Route path='/cart' element={<Cart />} />
+                  <Route path='/checkout' element={<Checkout />} />
+                  <Route path='/order-confirmation' element={<OrderConfirmation />} />
                 </Route>
-                <Route path='/my-games' element={<MyLibrary />} />
-                <Route path='/orders' element={<Orders />} />
-                <Route path='/cart' element={<Cart />} />
-                <Route path='/checkout' element={<Checkout />} />
-                <Route path='/order-confirmation' element={<OrderConfirmation />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </CartProvider>
+              </Routes>
+            </BrowserRouter>
+          </CartProvider>
+        </AuthProvider>
       </MantineProvider>
     </QueryClientProvider>
   )
