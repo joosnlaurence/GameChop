@@ -7,6 +7,7 @@ import gamesRouter from './routes/games';
 import publishersRouter from './routes/publishers';
 import usersRouter from './routes/users';
 import storesRouter from './routes/stores';
+import ordersRouter from './routes/orders';
 import cors from 'cors';
 
 const app = express();
@@ -27,6 +28,7 @@ app.use('/api/games', gamesRouter);
 app.use('/api/publishers', publishersRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/stores', storesRouter);
+app.use('/api/orders', ordersRouter);
 
 app.get('/', async (req, res) => {
   res.json({'message': 'Hello, world!'});
