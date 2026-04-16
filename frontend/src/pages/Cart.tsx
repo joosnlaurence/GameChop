@@ -32,8 +32,8 @@ export default function Cart() {
             ) : (
               items.map((item) => 
               (
-                <div key = {item.id} style = {{backgroundColor: "#1a1d2e", borderRadius: "12px", padding: "1rem", display: "flex", alignItems: "center", gap: "1rem", position: "relative",}}>
-                  <img src = {item.image} alt = {item.title} style = {{ width: "80px", height: "80px", borderRadius: "8xp", objectFit: "cover"}}/>
+                <div key = {item.game_id} style = {{backgroundColor: "#1a1d2e", borderRadius: "12px", padding: "1rem", display: "flex", alignItems: "center", gap: "1rem", position: "relative",}}>
+                  <img src = {item.thumbnail} alt = {item.title} style = {{ width: "80px", height: "80px", borderRadius: "8xp", objectFit: "cover"}}/>
                   <div style = {{flex: 1}}>
                     <h3 style = {{margin: 0}}>{item.title}</h3>
                     <p style = {{color: "#7x6ff7", fontWeight: "bold", margin: "0.25rem 0"}}>
@@ -49,11 +49,11 @@ export default function Cart() {
                     {item.type === "Physical" && 
                       (
                         <div style = {{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.5rem"}}>
-                          <button onClick = {() => updateQuantity(item.id, (item.quantity ?? 1) - 1)} style = {{width: "24px", height: "24px", borderRadius: "50%", border: "none", backgroundColor: "#2a2d3e", color: "white", cursor: "pointer"}}>
+                          <button onClick = {() => updateQuantity(item.game_id, (item.quantity ?? 1) - 1)} style = {{width: "24px", height: "24px", borderRadius: "50%", border: "none", backgroundColor: "#2a2d3e", color: "white", cursor: "pointer"}}>
                             -
                           </button>
                           <span>{item.quantity ?? 1}</span>
-                          <button onClick = {() => updateQuantity(item.id, (item.quantity ?? 1) + 1)} style = {{width: "24px", height: "24px", borderRadius: "50%", border: "none", backgroundColor: "#2a2d3e", color: "white", cursor: "pointer"}}>
+                          <button onClick = {() => updateQuantity(item.game_id, (item.quantity ?? 1) + 1)} style = {{width: "24px", height: "24px", borderRadius: "50%", border: "none", backgroundColor: "#2a2d3e", color: "white", cursor: "pointer"}}>
                             +
                           </button>
                         </div>
@@ -64,7 +64,7 @@ export default function Cart() {
                   <span style = {{color: "#7c6ff7", fontWeight: "bold", fontSize: "1.1rem"}}>
                     ${(item.price * (item.type === "Physical" ? (item.quantity ?? 1) : 1)).toFixed(2)}
                   </span>
-                  <button onClick = {() => removeItem(item.id)} style = {{position: "absolute", top: "1rem", right: "1rem", background: "none", border: "none", color: "#aaa", cursor: "pointer", fontSize: "1rem"}}>
+                  <button onClick = {() => removeItem(item.game_id)} style = {{position: "absolute", top: "1rem", right: "1rem", background: "none", border: "none", color: "#aaa", cursor: "pointer", fontSize: "1rem"}}>
                     ✕
                   </button>
                 </div>

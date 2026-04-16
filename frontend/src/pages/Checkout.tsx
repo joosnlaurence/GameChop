@@ -90,11 +90,11 @@ export default function Checkout() {
 
               {physicalItem.map((item) => 
               (
-                 <div key = {item.id} style = {{display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem"}}>
-                  <img src = {item.image} alt = {item.title} style={{width: "50px", height: "50px", borderRadius: "8px", objectFit: "cover"}}/>
+                 <div key = {item.game_id} style = {{display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem"}}>
+                  <img src = {item.thumbnail} alt = {item.title} style={{width: "50px", height: "50px", borderRadius: "8px", objectFit: "cover"}}/>
                   <div style = {{flex: 1}}>
                     <p style = {{margin: 0, fontWeight: "bold"}}>{item.title}</p>
-                    {item.publisher && <p style = {{margin: 0, color: "#aaa", fontSize: "0.85rem"}}>{item.publisher}</p>}
+                    {item.publishers && <p style = {{margin: 0, color: "#aaa", fontSize: "0.85rem"}}>{item.publishers}</p>}
                   </div>
                   <span style = {{backgroundColor: "#2a2d3e", padding: "2px 10px", borderRadius: "6px", fontSize: "0.8rem"}}>
                     Physical
@@ -109,11 +109,11 @@ export default function Checkout() {
               <>
               <h3 style = {{color: "#7c6ff7", marginTop: physicalItem.length > 0 ? "1rem" : 0}}>Digital Downloads</h3>
               {digitalItem.map((item) => (
-                <div key = {item.id} style = {{display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem"}}>
-                  <img src = {item.image} alt = {item.title} style = {{width: "50px", height: "50px", borderRadius: "8px", objectFit: "cover"}}/>
+                <div key = {item.game_id} style = {{display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem"}}>
+                  <img src = {item.thumbnail} alt = {item.title} style = {{width: "50px", height: "50px", borderRadius: "8px", objectFit: "cover"}}/>
                   <div style = {{flex: 1}}>
                     <p style = {{margin: 0, fontWeight: "bold"}}>{item.title}</p>
-                    {item.publisher && <p style = {{margin: 0, color: "#aaa", fontSize: "0.85rem"}}>{item.publisher}</p>}
+                    {item.publishers && <p style = {{margin: 0, color: "#aaa", fontSize: "0.85rem"}}>{item.publishers}</p>}
                   </div>
                   <span style = {{backgroundColor: "#2a2d3e", padding: "2px 10px", borderRadius: "6px", fontSize: "0.8rem"}}>
                     Digital
@@ -149,7 +149,7 @@ export default function Checkout() {
       <div style = {{backgroundColor: "#1a1d2e", borderRadius: "12px", padding: "1.5rem", width: "340px", flexShrink: 0}}>
         <h2 style = {{marginTop: 0}}>Order Summary</h2>
         {items.map((item) => (
-          <div key = {item.id} style = {{marginBottom: "1rem", paddingBottom: "1rem", borderBottom: "1px solid #2a2d3e"}}>
+          <div key = {item.game_id} style = {{marginBottom: "1rem", paddingBottom: "1rem", borderBottom: "1px solid #2a2d3e"}}>
             <div style = {{display: "flex", justifyContent: "space-between", marginBottom: "0.25rem"}}>
               <span style = {{fontWeight: "bold"}}>{item.title}</span>
               <span>{item.price}</span>
