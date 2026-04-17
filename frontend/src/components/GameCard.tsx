@@ -1,6 +1,6 @@
-import { ActionIcon, Box, Button, Group, Image, Progress, Stack, Text } from "@mantine/core";
+import { ActionIcon, Badge, Box, Button, Group, Image, Progress, Stack, Text } from "@mantine/core";
 import { IconHeartFilled, IconShoppingCart, IconX } from "@tabler/icons-react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import type { Game } from "../types";
 
@@ -11,7 +11,7 @@ interface GameCardProps {
   onRemoveFromWishlist?: (id: number) => void;
 }
 
-export default function GameCard({ game, variant = "store", onRemoveFromWishlist }: GameCardProps) {
+export default function GameCard({ game, variant, onRemoveFromWishlist }: GameCardProps) {
   const publishers = (game?.publishers ?? []).join(', ');
   const developers = (game?.developers ?? []).join(', ');
   const middot = publishers && developers ? ' · ' : '';
@@ -35,7 +35,6 @@ export default function GameCard({ game, variant = "store", onRemoveFromWishlist
     e.stopPropagation();
     onRemoveFromWishlist?.(game.game_id);
   };
-
   const cardContent = (
     <>
       <Box pos="relative">
@@ -83,6 +82,29 @@ export default function GameCard({ game, variant = "store", onRemoveFromWishlist
         <Text fw={600} fz="lg" c="dark.0" lineClamp={1}>
           {game.title}
         </Text>
+
+        {variant === 'store' && game.genres 
+          ? 
+          <Group wrap='nowrap' gap='8'>
+          {
+            game.genres.slice(0, 2).map((genre) => 
+              <Badge 
+                component={Text} 
+                tt='none' 
+                c='dimmed' 
+                fw='400'  
+                bg='dark.7' 
+                bdrs='6px'
+                px='4px'
+                style={{ cursor: 'pointer' }}
+              >
+                {genre}
+              </Badge>
+            )
+          }
+          </Group>
+          : undefined
+        }
 
         {variant === "library" && game.achievements ? (
           <Stack gap={4} mt={4}>
@@ -149,10 +171,8 @@ export default function GameCard({ game, variant = "store", onRemoveFromWishlist
 
   return (
     <Box
-      component={Link}
-      to={`/browse/${game.game_id}`}
-      w="100%"
-      style={{ overflow: "hidden", textDecoration: "none" }}
+      style={{ overflow: "hidden", cursor: 'pointer', textDecoration: "none" }}
+      onClick={() => navigate(`/browse/${game.game_id}`)}
     >
       {cardContent}
     </Box>

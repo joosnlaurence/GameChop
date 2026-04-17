@@ -32,9 +32,9 @@ interface GameDetailsRow {
 // strings from views into proper arrays
 const parseGameRow = (row: GameListingRow) => ({
     ...row,
-    genres:     row.genres?.split(', ')     ?? [],
-    publishers: row.publishers?.split(', ') ?? [],
-    developers: row.developers?.split(', ') ?? []
+    genres:     row.genres?.split(',')     ?? [],
+    publishers: row.publishers?.split(',') ?? [],
+    developers: row.developers?.split(',') ?? []
 });
 
 // GET /api/games/filters
@@ -180,9 +180,9 @@ router.get('/:id', async (req: Request, res: Response) => {
 
         const game: GameDetailsRow = {
             ...gameRows[0],
-            genres:     gameRows[0]?.genres?.split(', ')     ?? [],
-            publishers: gameRows[0]?.publishers?.split(', ') ?? [],
-            developers: gameRows[0]?.developers?.split(', ') ?? []
+            genres:     gameRows[0]?.genres?.split(',')     ?? [],
+            publishers: gameRows[0]?.publishers?.split(',') ?? [],
+            developers: gameRows[0]?.developers?.split(',') ?? []
         };
 
         const [achievements]: any = await pool.query(

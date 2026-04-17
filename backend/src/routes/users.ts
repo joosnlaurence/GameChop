@@ -81,4 +81,38 @@ router.get('/:id/library/:gameId/achievements', async (req: Request, res: Respon
     }
 });
 
+// POST /api/users/:id/wishlist
+// Adds a game to a user's wishlist.
+/* If the game is already in user_games (owned or wishlisted), 
+just sets wishlisted = TRUE without duplicating. */
+router.post('/:id/wishlist', async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { gameId } = req.body;
+
+    if (!gameId) {
+        return res.status(400).json({ error: 'gameId is required' });
+    }
+
+    try {
+        // INSERT IGNORE skips if (user_id, game_id) already exists
+        await pool.query(
+            `INSERT IGNORE INTO user_games (user_id, game_id, purchased, wishlisted)
+             VALUES (?, ?, FALSE, TRUE)`,
+            [id, gameId]
+        );
+
+        // UPDATE handles the case where the row already existed
+        // (e.g. they own the game but want to re-wishlist it)
+        await pool.query(
+            `UPDATE user_games SET wishlisted = TRUE
+             WHERE user_id = ? AND game_id = ?`,
+            [id, gameId]
+        );
+
+        res.status(201).json({ message: 'Game added to wishlist' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to add to wishlist' });
+    }
+});
 export default router;

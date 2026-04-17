@@ -2,7 +2,7 @@ import { Button, Card, ScrollArea, Stack, Title, type CardProps } from "@mantine
 
 interface GenreSidebarProps extends CardProps {
   genres: string[],
-  selected: string[];
+  selected?: string | null;
   onToggle: (genre: string) => void;
 }
 
@@ -27,7 +27,14 @@ export default function GenreSidebar({
         <Stack gap='8'>
           {
             genres.map((genre) => 
-              <Button w='100%' variant='subtle' justify='flex-start' bdrs='4px'>
+              <Button 
+                key={genre} 
+                w='100%' 
+                variant={genre === selected ? 'filled' : 'subtle'} 
+                justify='flex-start' 
+                bdrs='4px'
+                onClick={() => onToggle(genre)}
+              >
                 {genre}
               </Button>
             )

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Button, Group, Select, Stack, TextInput } from "@mantine/core";
 import { IconSearch, IconX } from "@tabler/icons-react";
-import { useQuery } from "@tanstack/react-query";
 import type { GameFilters, GetGameFiltersResult } from "../types";
 
 const BROWSE_SORT_OPTIONS = [
@@ -12,6 +11,7 @@ const BROWSE_SORT_OPTIONS = [
 ];
 
 interface SearchFiltersProps {
+  filterOptions?: GetGameFiltersResult;
   filters: GameFilters;
   onFiltersChange: (filters: GameFilters) => void;
   sortOptions?: { value: string; label: string }[];
@@ -20,6 +20,7 @@ interface SearchFiltersProps {
 }
 
 export default function SearchFilters({
+  filterOptions,
   filters,
   onFiltersChange,
   sortOptions = BROWSE_SORT_OPTIONS,
@@ -47,13 +48,6 @@ export default function SearchFilters({
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
   }, []);
-
-  const { data: filterOptions } = useQuery<GetGameFiltersResult>({
-    queryKey: ["gameFilters"],
-    queryFn: () =>
-      fetch("http://localhost:3000/api/games/filters").then((r) => r.json()),
-    staleTime: Infinity, // options don't change during a session
-  });
 
   const handleSearchChange = (value: string) => {
     setSearchInput(value);

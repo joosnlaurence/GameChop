@@ -24,7 +24,7 @@ import { Link } from "react-router-dom";
 import type { TablerIcon } from "@tabler/icons-react";
 import GameCard from "../components/GameCard";
 import { useQuery } from "@tanstack/react-query";
-import type { FeaturedPublisher, GetGameListingResult } from "../types";
+import type { FeaturedPublisher, GameListing, GetGameListingResult } from "../types";
 import HomeSkeleton from "./skeletons/HomeSkeleton";
 
 const genres: { name: string; image: string; icon: TablerIcon }[] = [
@@ -68,6 +68,35 @@ function SectionHeader({ title }: { title: string }) {
   );
 }
 
+function GameCarousel({ games }: { games: GameListing[]}) {
+  return (
+    <Carousel
+      slideSize={{ base: "50%", sm: "33%" }}
+      slideGap="sm"
+      previousControlIcon={<IconChevronLeft size={24} />}
+      nextControlIcon={<IconChevronRight size={24} />}
+      px='clamp(1rem, 5vw, 64px)'
+      styles={{
+        control: arrowStyles,
+        controls: { left: -64, right: -64 },
+      }}
+      emblaOptions={{
+        loop: true
+      }}
+    >
+      {
+        games 
+        ?
+        games.map((game) => 
+          <Carousel.Slide key={game.game_id} miw={0}>
+            <GameCard game={game}/>
+          </Carousel.Slide>
+        ) : undefined
+      } 
+    </Carousel>
+  )
+}
+
 const NUM_HOME_PAGE_GAMES = 4;
 const NUM_FEATURED_PUBLISHERS = 4;
 
@@ -108,7 +137,7 @@ export default function Home() {
 
   // We don't really have a way of telling if a game is popular right now
   // This would probably invove some backend work
-  
+
   // const popularGames = games?.sort(
   //   (a, b) => b.orders - a.orders
   // ).slice(0, NUM_NEW_RELEASES);
@@ -120,7 +149,7 @@ export default function Home() {
   ).slice(0, NUM_FEATURED_PUBLISHERS);
 
   return (
-    <Container size="xl" pt="xl" pb={120} px="clamp(1rem, 5vw, 77.5px)">
+    <Container size="xl">
       <Stack gap={100}>
         {/* Browse by Genre */}
         <Box>
@@ -213,53 +242,13 @@ export default function Home() {
         {/* New Releases */}
         <Box>
           <SectionHeader title="New Releases" />
-          <Carousel
-            slideSize={{ base: "50%", sm: "25%" }}
-            slideGap="sm"
-
-
-            previousControlIcon={<IconChevronLeft size={24} />}
-            nextControlIcon={<IconChevronRight size={24} />}
-            styles={{
-              control: arrowStyles,
-              controls: { left: -64, right: -64 },
-              root: { padding: "0 64px" },
-            }}
-          >
-            {
-              newReleases 
-              ?
-              newReleases.map((game) => 
-                <Carousel.Slide key={game.game_id}>
-                  <GameCard game={game} />
-                </Carousel.Slide>
-              ) : undefined
-            }
-          </Carousel>
+          <GameCarousel games={newReleases}/>
         </Box>
 
         {/* Popular Games */}
         <Box>
           <SectionHeader title="Popular Games" />
-          <Carousel
-            slideSize={{ base: "50%", sm: "25%" }}
-            slideGap="sm"
-
-
-            previousControlIcon={<IconChevronLeft size={24} />}
-            nextControlIcon={<IconChevronRight size={24} />}
-            styles={{
-              control: arrowStyles,
-              controls: { left: -64, right: -64 },
-              root: { padding: "0 64px" },
-            }}
-          >
-            {popularGames.map((game) => (
-              <Carousel.Slide key={game.game_id}>
-                <GameCard game={game}/>
-              </Carousel.Slide>
-            ))}
-          </Carousel>
+          <GameCarousel games={popularGames}/>
         </Box>
 
         {/* Featured Publishers */}
