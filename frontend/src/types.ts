@@ -35,7 +35,14 @@ export interface Game {
   achievements?: Achievements;
 }
 
-export interface GetGameListingResult {
+interface Pagination {
+  limit: number;
+  page: number;
+  total: number;
+  totalPages: number;
+}
+
+export interface GameListing {
   game_id: number;
   title: string;
   summary: string;
@@ -45,6 +52,11 @@ export interface GetGameListingResult {
   genres: string[];
   publishers: string[];
   developers: string[];
+}
+
+export interface GetGameListingResult {
+  data: GameListing[];
+  pagination: Pagination
 }
 
 export interface GetGameDetailsResult {
@@ -78,12 +90,17 @@ export interface GetUserLibraryResult {
   wishlisted: LibraryGame[];
 }
 
-export interface GetFeaturedPublishersResult {
+export interface FeaturedPublisher {
   id: number;
   name: string;
   logo: string;
   banner: string;
   game_count: number;
+}
+
+export interface GetFeaturedPublishersResult {
+  data: FeaturedPublisher[];
+  pagination: Pagination;
 }
 
 export interface GameFilters {
