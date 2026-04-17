@@ -2,7 +2,7 @@ import { Group, Stack, Image, Title, Text, Badge, Button, ActionIcon, ScrollArea
 import { useParams } from 'react-router-dom';
 import type { GetGameDetailsResult, Hardware } from '../types';
 import { IconAwardFilled, IconHeart, IconLock, IconShoppingCart } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SelectStore from '../components/SelectStore';
 import { useCart } from '../context/CartContext';
 import { useQuery } from '@tanstack/react-query';
@@ -61,6 +61,7 @@ export default function GameDetails() {
   const [orderType, setOrderType] = useState('digital');
   const [selectedPreview, setSelectedPreview] = useState<Preview | null>(null);
 
+  
   const { addItem } = useCart();
 
 
@@ -93,7 +94,7 @@ export default function GameDetails() {
 
   const handleAddToCart = () => {
     addItem({
-      game_id: gameDetails.id,
+      game_id: gameDetails.game_id,
       title: gameDetails.title,
       thumbnail: gameDetails.thumbnail,
       price: gameDetails.price,
@@ -279,7 +280,9 @@ export default function GameDetails() {
               />
               {
                 orderType === 'physical' &&
-                <SelectStore />
+                <SelectStore onSelectStore={function (store: Store): void {
+                  throw new Error('Function not implemented.');
+                } } />
               }
             </Stack>
           </Card>

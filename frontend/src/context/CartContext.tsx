@@ -27,8 +27,10 @@ export const CartProvider = ({ children }: {children: ReactNode}) =>
 
     const addItem = (item: CartItem) =>
     {
+        console.log('addItem called:', item.game_id, item.title)
         setItems((prev): CartItem[] => 
         {
+            console.log('current cart:', prev.length, 'items')
             const existing = prev.find((i) => i.game_id === item.game_id);
             if(existing)
             {
@@ -42,7 +44,7 @@ export const CartProvider = ({ children }: {children: ReactNode}) =>
                 return prev;
             }
 
-            return [...prev, {...item, quantity: item.type === "Physical" ? 1 : 0}];
+            return [...prev, {...item, quantity: item.type === "Physical" ? 1 : undefined}];
         });
     };
     
