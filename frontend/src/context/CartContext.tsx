@@ -1,5 +1,5 @@
 import {createContext, useContext, useState, type ReactNode} from "react";
-import type { Game, GetGameListingResult } from "../types";
+import type { Game } from "../types";
 
 
 // export interface CartItem extends Game

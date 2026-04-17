@@ -5,6 +5,7 @@ import GameCard from "../components/GameCard";
 import SearchFilters from "../components/SearchWidget";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useAuth } from "../context/AuthContext";
+import { api_url } from "../global";
 
 const LIBRARY_SORT_OPTIONS = [
   { value: "alpha",      label: "Alphabetical" },
@@ -26,7 +27,7 @@ export default function MyLibrary() {
       if (filters.publisher) params.set("publisher", filters.publisher);
       if (filters.developer) params.set("developer", filters.developer);
       if (filters.sortBy)    params.set("sortBy",    filters.sortBy);
-      return fetch(`http://localhost:3000/api/users/${user!.id}/library?${params.toString()}`, {
+      return fetch(api_url(`/api/users/${user!.id}/library?${params.toString()}`), {
         credentials: "include",
       }).then((res) => res.json());
     },

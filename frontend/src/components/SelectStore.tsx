@@ -1,8 +1,9 @@
 import { IconChevronRight } from "@tabler/icons-react";
 import { useDisclosure } from '@mantine/hooks';
-import { Modal, Button, Select, TextInput, Divider, Stack, Group, Text, Box, Anchor, Loader } from '@mantine/core';
+import { Modal, Button, Select, TextInput, Divider, Stack, Group, Text, Anchor, Loader, UnstyledButton } from '@mantine/core';
 import { IconMapPin} from '@tabler/icons-react'
 import { useState, useEffect } from 'react'
+import { api_url } from "../global";
 
 interface Store
 {
@@ -15,19 +16,29 @@ interface Store
   google_map_url: string
 }
 
-interface Props
+interface SelectStoreProps
 {
   onSelectStore: (store: Store) => void
   label?: string
 }
 
-export default function SelectStore({onSelectStore, label = "Select Your Store"}: Props) {
+export default function SelectStore({onSelectStore, label = "Select Your Store"}: SelectStoreProps) {
   const [opened, {open, close}] = useDisclosure(false);
   const [stores, setStores] = useState<Store[]>([]);
   const [loading, setLoading] = useState(true);
   const [cityFilter, setCityFilter] = useState<string | null>(null);
   const [stateFilter, setStateFilter] = useState<string | null>(null);
   const [zipSearch, setZipSearch] = useState('')
+
+  onSelectStore({
+    id: 1,
+    address: "string",
+    city: 'string',
+    state: 'string',
+    open_hour: 'string',
+    close_hour: 'string',
+    google_map_url: 'string'
+  });
 
   useEffect(() =>
   {
@@ -41,7 +52,7 @@ export default function SelectStore({onSelectStore, label = "Select Your Store"}
       params.append('state', stateFilter);
     }
 
-    fetch(`http://localhost:3000/api/stores?${params.toString()}`)
+    fetch(api_url(`/api/stores?${params.toString()}`))
     .then(res=>res.json())
     .then(data=>{setStores(data); setLoading(false)})
     .catch(err=>{console.error('Failed to fetch stores:', err); setLoading(false)})
@@ -55,15 +66,15 @@ export default function SelectStore({onSelectStore, label = "Select Your Store"}
     <>
       <Modal.Root opened={opened} onClose={close}>
         <Modal.Overlay />
-        <Modal.Content>
-          <Modal.Header>
+        <Modal.Content bg='dark.9'>
+          <Modal.Header bg='dark.9'>
             <Modal.Title>Select Your Store</Modal.Title>
             <Modal.CloseButton />
           </Modal.Header>
           <Modal.Body>
             <Stack>
               <Group grow>
-                <Select placeholder = "City" data = {cityOptions} value = {cityFilter} onChange = {setCityFilter} clearable/>
+                <Select placeholder="City" data={cityOptions} value={cityFilter} onChange={setCityFilter} clearable/>
                 <Select placeholder = "State" data = {stateOptions} value = {stateFilter} onChange = {setStateFilter} clearable/>
               </Group>
               <Divider label = "or" labelPosition = "center"/>
@@ -77,17 +88,23 @@ export default function SelectStore({onSelectStore, label = "Select Your Store"}
                       (
                         filteredStores.map(store =>
                           (
-                            <Box key = {store.id} p = "sm" onClick={()=>{onSelectStore(store); close()}} style = {{border: '1px solid var(--mantine-color-dark-4)', borderRadius: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                            <UnstyledButton 
+                              
+                              key={store.id} 
+                              p="sm" 
+                              bd='1px solid dark.5'
+                              bdrs='8px'
+                            >
                               <Group>
-                                <IconMapPin size = {20} color = 'violet'/>
+                                <IconMapPin size = {20} color="violet"/>
                                 <div>
                                   <Text fw = {500} size = "sm">{store.address}</Text>
                                   <Text size = "xs" c = "dimmed">{store.city}, {store.state}</Text>
                                   <Text size = "xs" c = "dimmed">{store.open_hour} - {store.close_hour}</Text> 
                                 </div>
                               </Group>
-                              <Anchor size = "xs" href = {store.google_map_url} target = "_blank" c = "dimmed">Google Maps </Anchor>
-                            </Box>
+                              <Anchor size = "xs" href = {store.google_map_url} target = "_blank" c = "dimmed">Google Maps →</Anchor>
+                            </UnstyledButton>
                           )
                         )
                       )

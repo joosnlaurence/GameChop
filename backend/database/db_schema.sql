@@ -1,4 +1,4 @@
-CREATE DATABASE gamechop;
+-- CREATE DATABASE gamechop; -- Docker handles this when you run it
 USE gamechop;
 
 -- USERS

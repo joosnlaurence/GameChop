@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { api_url } from "../global";
 
 interface User {
   id: number;
@@ -17,7 +18,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/auth/me', {
+    fetch(api_url('/auth/me'), {
       credentials: 'include'
     })
       .then(res => res.ok ? res.json() : null)

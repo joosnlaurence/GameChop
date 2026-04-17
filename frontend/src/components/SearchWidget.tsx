@@ -32,6 +32,8 @@ export default function SearchFilters({
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const filtersRef  = useRef(filters);
 
+  
+
   // Keep ref in sync so debounce closure always sees latest filter values
   useEffect(() => { filtersRef.current = filters; }, [filters]);
 

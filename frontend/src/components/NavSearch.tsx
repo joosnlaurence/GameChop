@@ -3,6 +3,7 @@ import { Combobox, Group, Image, Loader, Text, TextInput, useCombobox } from "@m
 import { IconSearch } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import type { GameListing, GetGameListingResult } from "../types";
+import { api_url } from "../global";
 
 export default function NavSearch() {
   const [search, setSearch] = useState("");
@@ -29,7 +30,7 @@ export default function NavSearch() {
       try {
         const params = new URLSearchParams({ search: value });
         const data: GetGameListingResult = await fetch(
-          `http://localhost:3000/api/games?${params}`
+          api_url(`/api/games?${params}`)
         ).then((r) => r.json());
         setResults(data?.data.slice(0, 8));
         combobox.openDropdown();

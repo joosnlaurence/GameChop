@@ -2,8 +2,8 @@ import { Stack, Title, Text, TextInput, PasswordInput, Button, Anchor, Group } f
 import { useForm, isNotEmpty } from '@mantine/form'
 import { IconX } from "@tabler/icons-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { api_url } from "../global";
 
 interface LoginForm {
   username: string;
@@ -36,7 +36,7 @@ export default function Login(
   });
 
   const handleSubmit = async (values: LoginForm) => {
-    const res = await fetch('http://localhost:3000/auth/login', {
+    const res = await fetch(api_url('/auth/login'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

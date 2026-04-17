@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function Cart() {
-  const { items, removeItem, updateQuantity, checkout} = useCart();
+  const { items, removeItem, updateQuantity } = useCart();
   
   const subtotal = items.reduce((sum, item) =>
   {

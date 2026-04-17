@@ -1,0 +1,1 @@
+export const api_url = (api: string) => `http://localhost:8080${api}`;

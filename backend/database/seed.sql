@@ -148,75 +148,6 @@ INSERT INTO games (title, summary, thumbnail, release_date, price) VALUES
  'Defy the god of the dead as you hack and slash out of the Underworld.',
  'https://cdn.cloudflare.steamstatic.com/steam/apps/1145360/library_600x900.jpg', '2020-09-17', 24.99);
 
--- GAME_PREVIEWS
-INSERT INTO game_previews (game_id, preview_id, url) VALUES
-(1,  1, 'https://cdn.gamechop.com/games/elden-ring/preview-1.mp4'),
-(1,  2, 'https://cdn.gamechop.com/games/elden-ring/preview-2.jpg'),
-(1,  3, 'https://cdn.gamechop.com/games/elden-ring/preview-3.jpg'),
-(2,  1, 'https://cdn.gamechop.com/games/the-last-of-us/preview-1.mp4'),
-(2,  2, 'https://cdn.gamechop.com/games/the-last-of-us/preview-2.jpg'),
-(2,  3, 'https://cdn.gamechop.com/games/the-last-of-us/preview-3.jpg'),
-(3,  1, 'https://cdn.gamechop.com/games/spider-man-2/preview-1.mp4'),
-(3,  2, 'https://cdn.gamechop.com/games/spider-man-2/preview-2.jpg'),
-(3,  3, 'https://cdn.gamechop.com/games/spider-man-2/preview-3.jpg'),
-(4,  1, 'https://cdn.gamechop.com/games/apex-legends/preview-1.mp4'),
-(4,  2, 'https://cdn.gamechop.com/games/apex-legends/preview-2.jpg'),
-(5,  1, 'https://cdn.gamechop.com/games/cod-mw3/preview-1.mp4'),
-(5,  2, 'https://cdn.gamechop.com/games/cod-mw3/preview-2.jpg'),
-(5,  3, 'https://cdn.gamechop.com/games/cod-mw3/preview-3.jpg'),
-(6,  1, 'https://cdn.gamechop.com/games/totk/preview-1.mp4'),
-(6,  2, 'https://cdn.gamechop.com/games/totk/preview-2.jpg'),
-(6,  3, 'https://cdn.gamechop.com/games/totk/preview-3.jpg'),
-(7,  1, 'https://cdn.gamechop.com/games/hogwarts-legacy/preview-1.mp4'),
-(7,  2, 'https://cdn.gamechop.com/games/hogwarts-legacy/preview-2.jpg'),
-(7,  3, 'https://cdn.gamechop.com/games/hogwarts-legacy/preview-3.jpg'),
-(8,  1, 'https://cdn.gamechop.com/games/gow-ragnarok/preview-1.mp4'),
-(8,  2, 'https://cdn.gamechop.com/games/gow-ragnarok/preview-2.jpg'),
-(8,  3, 'https://cdn.gamechop.com/games/gow-ragnarok/preview-3.jpg'),
-(9,  1, 'https://cdn.gamechop.com/games/cyberpunk-2077/preview-1.mp4'),
-(9,  2, 'https://cdn.gamechop.com/games/cyberpunk-2077/preview-2.jpg'),
-(9,  3, 'https://cdn.gamechop.com/games/cyberpunk-2077/preview-3.jpg'),
-(10, 1, 'https://cdn.gamechop.com/games/ff16/preview-1.mp4'),
-(10, 2, 'https://cdn.gamechop.com/games/ff16/preview-2.jpg'),
-(10, 3, 'https://cdn.gamechop.com/games/ff16/preview-3.jpg'),
-(11, 1, 'https://cdn.gamechop.com/games/re4/preview-1.mp4'),
-(11, 2, 'https://cdn.gamechop.com/games/re4/preview-2.jpg'),
-(11, 3, 'https://cdn.gamechop.com/games/re4/preview-3.jpg'),
-(12, 1, 'https://cdn.gamechop.com/games/starfield/preview-1.mp4'),
-(12, 2, 'https://cdn.gamechop.com/games/starfield/preview-2.jpg'),
-(12, 3, 'https://cdn.gamechop.com/games/starfield/preview-3.jpg'),
-(13, 1, 'https://cdn.gamechop.com/games/ac-mirage/preview-1.mp4'),
-(13, 2, 'https://cdn.gamechop.com/games/ac-mirage/preview-2.jpg'),
-(14, 1, 'https://cdn.gamechop.com/games/sf6/preview-1.mp4'),
-(14, 2, 'https://cdn.gamechop.com/games/sf6/preview-2.jpg'),
-(15, 1, 'https://cdn.gamechop.com/games/gtav/preview-1.mp4'),
-(15, 2, 'https://cdn.gamechop.com/games/gtav/preview-2.jpg'),
-(16, 1, 'https://cdn.gamechop.com/games/rdr2/preview-1.mp4'),
-(16, 2, 'https://cdn.gamechop.com/games/rdr2/preview-2.jpg'),
-(16, 3, 'https://cdn.gamechop.com/games/rdr2/preview-3.jpg'),
-(17, 1, 'https://cdn.gamechop.com/games/bg3/preview-1.mp4'),
-(17, 2, 'https://cdn.gamechop.com/games/bg3/preview-2.jpg'),
-(17, 3, 'https://cdn.gamechop.com/games/bg3/preview-3.jpg'),
-(18, 1, 'https://cdn.gamechop.com/games/sonic-frontiers/preview-1.mp4'),
-(18, 2, 'https://cdn.gamechop.com/games/sonic-frontiers/preview-2.jpg'),
-(19, 1, 'https://cdn.gamechop.com/games/witcher-3/preview-1.mp4'),
-(19, 2, 'https://cdn.gamechop.com/games/witcher-3/preview-2.jpg'),
-(19, 3, 'https://cdn.gamechop.com/games/witcher-3/preview-3.jpg'),
-(20, 1, 'https://cdn.gamechop.com/games/da-inquisition/preview-1.mp4'),
-(20, 2, 'https://cdn.gamechop.com/games/da-inquisition/preview-2.jpg'),
-(21, 1, 'https://cdn.gamechop.com/games/mhw/preview-1.mp4'),
-(21, 2, 'https://cdn.gamechop.com/games/mhw/preview-2.jpg'),
-(21, 3, 'https://cdn.gamechop.com/games/mhw/preview-3.jpg'),
-(22, 1, 'https://cdn.gamechop.com/games/dmc5/preview-1.mp4'),
-(22, 2, 'https://cdn.gamechop.com/games/dmc5/preview-2.jpg'),
-(23, 1, 'https://cdn.gamechop.com/games/fifa24/preview-1.mp4'),
-(23, 2, 'https://cdn.gamechop.com/games/fifa24/preview-2.jpg'),
-(24, 1, 'https://cdn.gamechop.com/games/fh5/preview-1.mp4'),
-(24, 2, 'https://cdn.gamechop.com/games/fh5/preview-2.jpg'),
-(24, 3, 'https://cdn.gamechop.com/games/fh5/preview-3.jpg'),
-(25, 1, 'https://cdn.gamechop.com/games/hades/preview-1.mp4'),
-(25, 2, 'https://cdn.gamechop.com/games/hades/preview-2.jpg');
-
 -- ACHIEVEMENTS
 -- 4-5 per game, 25 games
 INSERT INTO achievements (title, description) VALUES
@@ -683,7 +614,6 @@ INSERT INTO game_requirements (req_id, game_id, recommended) VALUES
 (47, 24, FALSE), (48, 24, TRUE),   -- Forza Horizon 5
 (49, 25, FALSE), (50, 25, TRUE);   -- Hades
 
-DELETE FROM game_previews;
 INSERT INTO game_previews (game_id, preview_id, url) VALUES
 (1, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/ss_943bf6fe62352757d9070c1d33e50b92fe8539f1.1920x1080.jpg?t=1767883716')
 ,(1, 2, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/ss_dcdac9e4b26ac0ee5248bfd2967d764fd00cdb42.1920x1080.jpg?t=1767883716')

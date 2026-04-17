@@ -1,4 +1,4 @@
-import { Group, Stack, Image, Title, Text, Badge, Button, ActionIcon, ScrollArea, Box, Card, SimpleGrid, SegmentedControl, Progress, HoverCard, UnstyledButton, Scroller } from '@mantine/core';
+import { Group, Stack, Image, Title, Text, Badge, Button, ActionIcon, ScrollArea, Box, Card, SimpleGrid, SegmentedControl, Progress, HoverCard, UnstyledButton } from '@mantine/core';
 import { useParams } from 'react-router-dom';
 import type { GetGameDetailsResult, Hardware } from '../types';
 import { IconAwardFilled, IconHeart, IconLock, IconShoppingCart } from '@tabler/icons-react';
@@ -7,6 +7,7 @@ import SelectStore from '../components/SelectStore';
 import { useCart } from '../context/CartContext';
 import { useQuery } from '@tanstack/react-query';
 import GameDetailsSkeleton from './skeletons/GameDetailsSkeleton';
+import { api_url } from '../global';
 
 const parseDate = (dateStr: string) => {
   const date = new Date(dateStr);
@@ -54,7 +55,7 @@ export default function GameDetails() {
   const { data: gameDetails, isLoading, error } = useQuery({
     queryKey: ['game_details', gameId],
     queryFn: async (): Promise<GetGameDetailsResult> => 
-      await fetch(`http://localhost:3000/api/games/${gameId}`)
+      await fetch(api_url(`/api/games/${gameId}`))
         .then(res => res.json())
   });
 
@@ -279,7 +280,7 @@ export default function GameDetails() {
               />
               {
                 orderType === 'physical' &&
-                <SelectStore />
+                <SelectStore onSelectStore={() => {}} />
               }
             </Stack>
           </Card>

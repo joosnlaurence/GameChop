@@ -9,6 +9,7 @@ import type { GetGameFiltersResult, GetGameListingResult } from "../types";
 import { DEFAULT_FILTERS, type GameFilters } from "../types";
 import BrowseSkeleton from "./skeletons/BrowseSkeleton";
 import { useCart } from "../context/CartContext";
+import { api_url } from "../global";
 
 export default function Browse() {
   const [filters, setFilters] = useState<GameFilters>(DEFAULT_FILTERS);
@@ -26,7 +27,7 @@ export default function Browse() {
       if (filters.sortBy)    params.set('sortBy',    filters.sortBy);
       params.append('page', page.toString());
       params.append('limit', '12');
-      return fetch(`http://localhost:3000/api/games?${params.toString()}`)
+      return fetch(api_url(`/api/games?${params.toString()}`))
         .then(res => res.json());
     },
     placeholderData: keepPreviousData,
@@ -35,7 +36,7 @@ export default function Browse() {
   const { data: filterOptions, isLoading: filtersLoading } = useQuery<GetGameFiltersResult>({
     queryKey: ['genres'],
     queryFn: async () => 
-      fetch(`http://localhost:3000/api/games/filters`)
+      fetch(api_url(`/api/games/filters`))
         .then(res => res.json()),
     staleTime: Infinity
   });
@@ -55,14 +56,13 @@ export default function Browse() {
     setFilters(newFilters);
   }
 
+  console.log(gamesData)
   return (
     <Stack gap='32px'>
       <Stack gap='24px'>
         <Group justify='space-between'>
           <Title order={1}>Browse Games</Title>
-          <SelectStore onSelectStore={function (store: Store): void {
-            throw new Error("Function not implemented.");
-          } } />
+          <SelectStore onSelectStore={() => {}}/>
         </Group>
         <SearchFilters filterOptions={filterOptions} filters={filters} onFiltersChange={handleFiltersChange} />
       </Stack>

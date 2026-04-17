@@ -26,6 +26,7 @@ import GameCard from "../components/GameCard";
 import { useQuery } from "@tanstack/react-query";
 import type { FeaturedPublisher, GameListing, GetGameListingResult } from "../types";
 import HomeSkeleton from "./skeletons/HomeSkeleton";
+import { api_url } from "../global";
 
 const genres: { name: string; image: string; icon: TablerIcon }[] = [
   { name: "RPG", image: "/images/rpg_bg.jpg", icon: IconSparkles },
@@ -104,13 +105,13 @@ export default function Home() {
   const {data: gamesData, isLoading: gamesIsLoading, error: gamesError} = useQuery({
     queryKey: ['game_listings'],
     queryFn: async (): Promise<GetGameListingResult> =>
-      fetch(`http://localhost:3000/api/games`)
+      fetch(api_url(`/api/games`))
         .then(res => res.json())
   });
   const {data: publishersData, isLoading: pubsIsLoading, error: pubsError} = useQuery({
     queryKey: ['publishers'],
     queryFn: async (): Promise<FeaturedPublisher[]> =>
-      fetch(`http://localhost:3000/api/publishers/featured`)
+      fetch(api_url(`/api/publishers/featured`))
         .then(res => res.json()) 
   });
 

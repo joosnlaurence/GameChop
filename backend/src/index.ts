@@ -9,13 +9,14 @@ import usersRouter from './routes/users';
 import storesRouter from './routes/stores';
 import ordersRouter from './routes/orders';
 import cors from 'cors';
+import path from 'path';
 
 const app = express();
 
 // for whatever reason, data from DB would not show up
 // unless I added this ¯\_(ツ)_/¯
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: '*',
   credentials: true
 }))
 
@@ -30,10 +31,11 @@ app.use('/api/users', usersRouter);
 app.use('/api/stores', storesRouter);
 app.use('/api/orders', ordersRouter);
 
-app.get('/', async (req, res) => {
-  res.json({'message': 'Hello, world!'});
-});
+app.use(express.static(path.join(__dirname, '../public')));
+app.get('/{*path}', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
+})
 
 const server = app.listen(3000, () => {
-  console.log('Server ready at : http://localhost:3000');
+  console.log('Server ready at : http://localhost:8080');
 })

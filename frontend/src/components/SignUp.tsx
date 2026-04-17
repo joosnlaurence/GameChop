@@ -2,8 +2,8 @@ import { Stack, Title, Text, TextInput, PasswordInput, Button, Anchor, Group } f
 import { useForm, isNotEmpty } from '@mantine/form'
 import { IconX } from "@tabler/icons-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { api_url } from "../global";
 
 interface SignUpForm {
   username: string;
@@ -17,7 +17,6 @@ export default function SignUp(
   {onLogin: () => void, onSuccess: () => void}
 ) {
   const [errorStatus, setErrorStatus] = useState('');
-  const navigate = useNavigate();
   const { login } = useAuth();
 
   const form = useForm<SignUpForm>({
@@ -36,7 +35,7 @@ export default function SignUp(
   });
 
   const handleSubmit = async (values: SignUpForm) => {
-    const res = await fetch('http://localhost:3000/auth/signup', {
+    const res = await fetch(api_url('/auth/signup'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify({
