@@ -15,9 +15,9 @@ const GENRES = ['Action', 'Puzzle', 'RPG', 'FPS', 'Platformer', 'Puzzle', 'RPG',
 export default function Browse() {
   const [filters, setFilters] = useState<GameFilters>(DEFAULT_FILTERS);
 
-  const { data: games, isLoading, error } = useQuery({
+  const { data: gamesData, isLoading, error } = useQuery({
     queryKey: ['game_listings', filters.search, filters.genre, filters.publisher, filters.developer, filters.sortBy],
-    queryFn: async (): Promise<GetGameListingResult[]> => {
+    queryFn: async (): Promise<GetGameListingResult> => {
       const params = new URLSearchParams();
       if (filters.search)    params.set('search',    filters.search);
       if (filters.genre)     params.set('genre',     filters.genre);
@@ -68,10 +68,10 @@ export default function Browse() {
           />
         </StickyBox>
         {
-          games
+          gamesData
           ?
           <SimpleGrid flex='4' cols={{ base: 1, sm: 2, md: 3, lg: 4 }}>
-            {games.map((game) =>
+            {gamesData?.data.map((game) =>
               <GameCard key={game.game_id} game={game} variant='store'/>
             )}
           </SimpleGrid>

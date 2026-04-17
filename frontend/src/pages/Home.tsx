@@ -24,7 +24,7 @@ import { Link } from "react-router-dom";
 import type { TablerIcon } from "@tabler/icons-react";
 import GameCard from "../components/GameCard";
 import { useQuery } from "@tanstack/react-query";
-import type { FeaturedPublisher, GetFeaturedPublishersResult, GetGameListingResult } from "../types";
+import type { FeaturedPublisher, GetGameListingResult } from "../types";
 import HomeSkeleton from "./skeletons/HomeSkeleton";
 
 const genres: { name: string; image: string; icon: TablerIcon }[] = [
