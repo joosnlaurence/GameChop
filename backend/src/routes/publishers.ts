@@ -18,9 +18,9 @@ interface GameListingRow extends RowDataPacket {
 
 const parseGameRow = (row: GameListingRow) => ({
     ...row,
-    genres:     row.genres?.split(', ')     ?? [],
-    publishers: row.publishers?.split(', ') ?? [],
-    developers: row.developers?.split(', ') ?? []
+    genres:     row.genres?.split(',')     ?? [],
+    publishers: row.publishers?.split(',') ?? [],
+    developers: row.developers?.split(',') ?? []
 });
 
 // GET /api/publishers/featured
