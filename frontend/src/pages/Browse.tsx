@@ -8,10 +8,12 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import type { GetGameFiltersResult, GetGameListingResult } from "../types";
 import { DEFAULT_FILTERS, type GameFilters } from "../types";
 import BrowseSkeleton from "./skeletons/BrowseSkeleton";
+import { useCart } from "../context/CartContext";
 
 export default function Browse() {
   const [filters, setFilters] = useState<GameFilters>(DEFAULT_FILTERS);
   const [page, setPage] = useState(1);
+    useCart();
 
   const { data: gamesData, isLoading, error } = useQuery({
     queryKey: ['game_listings', filters.search, filters.genre, filters.publisher, filters.developer, filters.sortBy, page],

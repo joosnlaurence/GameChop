@@ -2,11 +2,11 @@ import { useRef, useState } from "react";
 import { Combobox, Group, Image, Loader, Text, TextInput, useCombobox } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
-import type { GetGameListingResult } from "../types";
+import type { GameListing, GetGameListingResult } from "../types";
 
 export default function NavSearch() {
   const [search, setSearch] = useState("");
-  const [results, setResults] = useState<GetGameListingResult[]>([]);
+  const [results, setResults] = useState<GameListing[]>();
   const [loading, setLoading] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const combobox = useCombobox({ onDropdownClose: () => combobox.resetSelectedOption() });
@@ -19,6 +19,7 @@ export default function NavSearch() {
     if (!value.trim()) {
       setResults([]);
       combobox.closeDropdown();
+      setLoading(false);
       return;
     }
 
@@ -27,10 +28,10 @@ export default function NavSearch() {
     debounceRef.current = setTimeout(async () => {
       try {
         const params = new URLSearchParams({ search: value });
-        const data: GetGameListingResult[] = await fetch(
+        const data: GetGameListingResult = await fetch(
           `http://localhost:3000/api/games?${params}`
         ).then((r) => r.json());
-        setResults(data.slice(0, 8));
+        setResults(data?.data.slice(0, 8));
         combobox.openDropdown();
       } finally {
         setLoading(false);
@@ -62,14 +63,14 @@ export default function NavSearch() {
           value={search}
           onChange={(e) => handleChange(e.currentTarget.value)}
           onBlur={() => combobox.closeDropdown()}
-          onFocus={() => results.length > 0 && combobox.openDropdown()}
+          onFocus={() => (results?.length ?? 0) > 0 && combobox.openDropdown()}
         />
       </Combobox.Target>
 
-      <Combobox.Dropdown>
+      <Combobox.Dropdown bg='dark.7' bd='1px solid dark.5'>
         <Combobox.Options>
-          {results.length > 0 ? (
-            results.map((game) => (
+          {(results?.length ?? 0) > 0 ? (
+            results?.map((game) => (
               <Combobox.Option value={String(game.game_id)} key={game.game_id}>
                 <Group gap="sm" wrap="nowrap">
                   <Image
