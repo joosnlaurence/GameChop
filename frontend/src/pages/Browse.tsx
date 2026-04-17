@@ -53,7 +53,9 @@ export default function Browse() {
       <Stack gap='24px'>
         <Group justify='space-between'>
           <Title order={1}>Browse Games</Title>
-          <SelectStore />
+          <SelectStore onSelectStore={function (store: Store): void {
+            throw new Error("Function not implemented.");
+          } } />
         </Group>
         <SearchFilters filters={filters} onFiltersChange={setFilters} />
       </Stack>

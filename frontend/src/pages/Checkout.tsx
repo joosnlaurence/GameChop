@@ -1,17 +1,42 @@
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { Title, Text, Stack, Grid, Paper, Group, Badge, TextInput, Button, Divider, Box, Image} from "@mantine/core";
+import SelectStore from "../components/SelectStore";
 
 
+interface Store
+{
+  id: number
+  address: string
+  city: string
+  state: string
+  open_hour: string
+  close_hour: string
+  google_map_url: string
+}
+
+
+const formatTime = (time: string) => 
+{
+  const [hourStr, minute] = time.split(':')
+  const hour = parseInt(hourStr)
+  const ampm = hour >= 12 ? 'PM' : 'AM'
+  const hour12 = hour % 12 === 0 ? 12 : hour % 12
+  return `${hour12}:${minute} ${ampm}`
+}
 
 export default function Checkout() {
   const { items, checkout } = useCart();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
   const [cvv, setCvv] = useState("");
   const [nameCard, setNameCard] = useState("");
+  const [selectedStore, setSelectedStore] = useState<Store | null>(null);
 
   const physicalItem = items.filter((item) => item.type === "Physical");
   const digitalItem = items.filter((item) => item.type === "Digital");
@@ -32,149 +57,141 @@ export default function Checkout() {
     navigate("/order-confirmation");
   };
 
-  const inputStyle = {
-    width: "100%",
-    padding: "0.75rem 1rem",
-    backgroundColor: "#0f1118",
-    border: "1px solid #2a2d3e",
-    borderRadius: "8px",
-    color: "white",
-    fontSize: "1rem",
-    boxSizing: "border-box" as const,
-  };
 
-  const labelStyle = {
-    color: "#aaa",
-    fontSize: "0.85rem",
-    marginBottom: "0.4rem",
-    display: "block",
-  };
-
-  const sectionStyle = {
-    backgroundColor: "#1a1d2e",
-    borderRadius: "12px",
-    padding: "1.5rem",
-    marginBottom: "1.5rem",
-  };
 
   return (
-    <div style = {{ padding: "2rem", color: "white"}}>
-      <h1 style = {{ fontSize: "2rem", marginBottom: "1.5rem"}}>Checkout</h1>
+    <Box p ="xl" c = "white">
+      <Title order = {1} mb = "xl">Checkout</Title>
+      <Grid align = "flex-start">
+        {/*LEFT COLUMN*/}
+        <Grid.Col span = {{base: 12, md: 8}}>
+          <Stack gap = "1g">
+            {/*ACCOUNT*/}
+            <Paper p = "xl" radius = "md" bg = "dark.7">
+              <Title order = {2} mb = "md">Account</Title>
+              <Text size="xs" c="dimmed" mb={4}>Username</Text>
+              <Text fw={500} mb="md">{user?.username ?? '-'}</Text>
+            </Paper>
 
-      <div style = {{ display: "flex", gap: "2rem", alignItems: "flex-start"}}>
-        <div style = {{flex: 1}}>
-          <div style = {sectionStyle}>
-            <h2 style = {{marginTop: 0}}>Account</h2>
-            <p style = {{color: "aaa", fontSize: "0.85rem", margin: "0 0 0.25rem"}}>Username</p>
-            {/*username*/}
-            <p style = {{color: "aaa", fontSize: "0.85rem", margin: "0 0 0.25rem"}}>Email</p>
-            {/*email*/}
-          </div>
+            {/*DELIVERY*/}
+            <Paper p="xl" radius="md" bg="dark.7">
+              <Title order={2} mb="md">Delivery</Title>
+              {/*PHYSICAL PICKUP*/}
+              {physicalItem.length > 0 && (
+                <Stack gap="sm" mb="md">
+                  <Text fw={600} c="violet.4">Physcial Pickup</Text>
+                  <Paper p="md" radius="md" bg="dark.8">
+                    <Text size="xs" c="dimmed" mb={4}>Pickup Location</Text>
+                    {selectedStore ? (
+                      <>
+                        <Text fw={700} size="lg">{selectedStore.state}</Text>
+                        <Text size="sm" c="dimmed" mb={4}>{selectedStore.city}, {selectedStore.state}</Text>
+                        <Text size="xs" c="dimmed" mb="sm">{formatTime(selectedStore.open_hour)} - {formatTime(selectedStore.close_hour)}</Text>
+                      </>
+                    ) : (
+                      <Text c="dimmed" size="sm" mb="sm">No store selected</Text>
+                    )}
+                    <SelectStore onSelectStore={setSelectedStore} label={selectedStore ? "Change Store" : "Select a Store"}/>
+                  </Paper>
 
-          <div style = {sectionStyle}>
-            <h2 style = {{marginTop: 0}}>Delivery</h2>
+                  {physicalItem.map((item)=> (
+                    <Group key = {item.game_id} justify = "space-between">
+                      <Group>
+                        <Image src={item.thumbnail} alt={item.title} w={50} h={50} radius="md" fit="cover"/>
+                        <div>
+                          <Text fw={500}>{item.title}</Text>
+                          {item.publishers && (
+                            <Text size="xs" c="dimmed">
+                              {Array.isArray(item.publishers) ? item.publishers[0] : item.publishers}
+                            </Text>
+                          )}
+                        </div>
+                      </Group>
+                      <Badge color="dark.4" c="white" variant="filled">Physical</Badge>
+                    </Group>
+                  ))}
+                </Stack>
+              )}
 
-            {/*for physical pickup*/}
-            {physicalItem.length > 0 && (
-              <>
-              <h3 style = {{color: "#7c6ff7", marginTop: 0}}>Physical Pickup</h3>
-              <div style = {{backgroundColor: "#0f118", borderRadius: "8px", padding: "1rem", marginBottom: "1rem"}}>
-                <p style = {{color: "aaa", fontSize: "0.85rem", margin: "0 0 0.25rem"}}>Pickup Location</p>
-                {/*Connect to API for Gamechop location */}
-                <p style = {{fontSize: "1.1rem", fontWeight: "bold", margin: "0 0 0.25rem"}}>GameChop - Orlando</p>
-                <p style = {{color: "aaa", fontSize: "0.85rem", margin: "0 0 0.75rem"}}>123 Generic Road, Orlando, Fl</p>
-                <span style = {{color: "#7c6ff7", fontSize: "0.85rem", cursor: "pointer"}}>
-                  Change Store &rsaquo;
-                </span>
-              </div>
+              {/*DIGITAL DOWNLOADS*/}
+              {digitalItem.length > 0 && (
+                <Stack gap="sm">
+                  <Text fw={600} c="violet.4" mt={physicalItem.length > 0 ? "md" : 0}>Digital Downloads</Text>
+                  {digitalItem.map((item) => (
+                    <Group key={item.game_id} justify="space-between">
+                      <Group>
+                        <Image src={item.thumbnail} alt={item.title} w={50} h={50} radius="md" fit="cover"/>
+                        <div>
+                          <Text fw={500}>{item.title}</Text>
+                          {item.publishers && (
+                            <Text size="xs" c="dimmed">
+                              {Array.isArray(item.publishers) ? item.publishers[0] : item.publishers}
+                            </Text>
+                          )}
+                        </div>
+                      </Group>
+                      <Badge color="dark.4" c="white" variant="filled">Digital</Badge>
+                    </Group>
+                  ))}
 
-              {physicalItem.map((item) => 
-              (
-                 <div key = {item.game_id} style = {{display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem"}}>
-                  <img src = {item.thumbnail} alt = {item.title} style={{width: "50px", height: "50px", borderRadius: "8px", objectFit: "cover"}}/>
-                  <div style = {{flex: 1}}>
-                    <p style = {{margin: 0, fontWeight: "bold"}}>{item.title}</p>
-                    {item.publishers && <p style = {{margin: 0, color: "#aaa", fontSize: "0.85rem"}}>{item.publishers}</p>}
-                  </div>
-                  <span style = {{backgroundColor: "#2a2d3e", padding: "2px 10px", borderRadius: "6px", fontSize: "0.8rem"}}>
-                    Physical
-                  </span>
-                 </div> 
-              ))}
-              </>
-            )}
+                  <Text size="sm" c="dimmed">Available immediately after purchase in your library</Text>
+                </Stack>
+              )}
+            </Paper>
 
-            {/*Digital Downloads */}
-            {digitalItem.length > 0 && (
-              <>
-              <h3 style = {{color: "#7c6ff7", marginTop: physicalItem.length > 0 ? "1rem" : 0}}>Digital Downloads</h3>
-              {digitalItem.map((item) => (
-                <div key = {item.game_id} style = {{display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem"}}>
-                  <img src = {item.thumbnail} alt = {item.title} style = {{width: "50px", height: "50px", borderRadius: "8px", objectFit: "cover"}}/>
-                  <div style = {{flex: 1}}>
-                    <p style = {{margin: 0, fontWeight: "bold"}}>{item.title}</p>
-                    {item.publishers && <p style = {{margin: 0, color: "#aaa", fontSize: "0.85rem"}}>{item.publishers}</p>}
-                  </div>
-                  <span style = {{backgroundColor: "#2a2d3e", padding: "2px 10px", borderRadius: "6px", fontSize: "0.8rem"}}>
-                    Digital
-                  </span>
-                </div>
-              ))}
-                <p style = {{color: "#aaa", fontSize: "0.85rem", marginBottom: 0}}>
-                  Available to download in your library
-                </p>
-              </>
-            )}
-          </div>
+            {/*PAYMENT*/}
+            <Paper p="xl" radius="md" bg="dark.7">
+              <Title order={2} mb="md">Payment</Title>
+              <Stack gap="md">
+                <TextInput label="Card Number" placeholder="1234 5678 9012 3456" value={cardNumber} onChange={(e) => setCardNumber(e.currentTarget.value)}/>
+                <Group grow>
+                  <TextInput label="Expiration Date" placeholder="MM/YY" value={expiry} onChange={(e) => setExpiry(e.currentTarget.value)}/>
+                  <TextInput label="CVV" placeholder="123" value={cvv} onChange={(e) => setCvv(e.currentTarget.value)}/>
+                </Group>
+                <TextInput label="Name on Card" placeholder="John Doe" value={nameCard} onChange={(e) => setNameCard(e.currentTarget.value)}/>
+              </Stack>
+            </Paper>
+          </Stack>
+        </Grid.Col>
 
-          {/*Payment Section */}
-          <div style = {sectionStyle}>
-            <h2 style = {{marginTop: 0}}>Payment</h2>
-            <div style = {{marginBottom: "1rem"}}>
-              <label style = {labelStyle}>Card Number</label>
-              <input style = {inputStyle} placeholder = "MM/YY" value = {expiry} onChange = {(e) => setExpiry(e.target.value)}/>
-            </div>
-            <div style = {{flex: 1}}>
-              <label style = {labelStyle}>CVV</label>
-              <input style = {inputStyle} placeholder = "123" value = {cvv} onChange = {(e) => setCvv(e.target.value)}/>
-            </div>
-          </div>
-          <div>
-            <label style = {labelStyle}>Name on Card</label>
-            <input style = {inputStyle} placeholder = " " value = {nameCard} onChange = {(e) => setNameCard(e.target.value)}/>
-          </div>
-        </div>
-      </div>
-      {/*actual order summary */}
-      <div style = {{backgroundColor: "#1a1d2e", borderRadius: "12px", padding: "1.5rem", width: "340px", flexShrink: 0}}>
-        <h2 style = {{marginTop: 0}}>Order Summary</h2>
-        {items.map((item) => (
-          <div key = {item.game_id} style = {{marginBottom: "1rem", paddingBottom: "1rem", borderBottom: "1px solid #2a2d3e"}}>
-            <div style = {{display: "flex", justifyContent: "space-between", marginBottom: "0.25rem"}}>
-              <span style = {{fontWeight: "bold"}}>{item.title}</span>
-              <span>{item.price}</span>
-            </div>
-            <span style = {{backgroundColor: "#2a2d3e", padding: "2px 10px", borderRadius: "6px", fontSize: "0.75rem"}}>
-              {item.type ?? "Digital"}
-            </span>
-          </div>
-        ))}
-        <div style = {{display: "flex", justifyContent: "space-between", marginBottom: "0.75rem"}}>
-          <span style = {{color: "aaa"}}>Subtotal</span>
-          <span>${tax.toFixed(2)}</span>
-        </div>
-        <div style = {{display: "flex", justifyContent: "space-between", marginBottom: "1.5rem"}}>
-          <span style = {{color: "#aaa"}}>Tax (8%)</span>
-          <span>${tax.toFixed(2)}</span>
-        </div>
-        <div style = {{display: "flex", justifyContent: "space-betweeen", marginBottom: "1.5rem", fontSize: "1.2rem"}}>
-          <span style = {{fontWeight: "bold"}}>Total</span>
-          <span style = {{color: "#7c6ff7", fontWeight: "bold"}}>${total.toFixed(2)}</span>
-        </div>
-        <button onClick = {handlePlaceOrder} style = {{width: "100%", padding: "0.9rem", backgroundColor: "#7x6ff7", color: "white", border: "none", borderRadius: "8px", fontSize: "1rem", cursor: "pointer", fontWeight: "bold"}}>
-          Place Order
-        </button>
-      </div>
-    </div>
+        {/*RIGHT COLUMN ORDER SUMMARY*/}
+        <Grid.Col span={{base: 12, md: 4}}>
+          <Box style={{position:"sticky", top:"2rem"}}>
+            <Paper p="xl" radius="md" bg="dark.7">
+              <Title order={2} mb="md">Order Summary</Title>
+              <Stack gap="sm" mb="md">
+                {items.map((item) => (
+                  <Box key={item.game_id} pb="sm" style={{borderBottom:"1px solid var(--mantine-color-dark-4"}}>
+                    <Group justify="space-between" mb={4}>
+                      <Text fw={600}>{item.title}</Text>
+                      <Text>${parseFloat(item.price.toString().replace("$","")).toFixed(2)}</Text>
+                    </Group>
+                    <Badge color="dark.4" c="white" variant="filled" size="sm">{item.type ?? "Digital"}</Badge>
+                  </Box>
+                ))}
+              </Stack>
+
+              <Group justify="space-between" mb="xs">
+                <Text c="dimmed">Subtotal</Text>
+                <Text>${subTotal.toFixed(2)}</Text>
+              </Group>
+              <Group justify="space-between" mb="md">
+                <Text c="dimmed">Tax (8%)</Text>
+                <Text>${tax.toFixed(2)}</Text>
+              </Group>
+
+              <Divider mb="md"/>
+
+              <Group justify="space-between" mb="xl">
+                <Text fw={700} size="lg">Total</Text>
+                <Text fw={700} size="lg" c="violet.4">${total.toFixed(2)}</Text>
+              </Group>
+
+              <Button fullWidth size="lg" color="violet" radius="md" onClick={handlePlaceOrder}>Place Order</Button>
+            </Paper>
+          </Box>
+        </Grid.Col>
+      </Grid>
+    </Box>
   );
 }

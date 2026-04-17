@@ -4,6 +4,7 @@ import type { GetGameDetailsResult, Hardware } from '../types';
 import { IconAwardFilled, IconHeart, IconLock, IconShoppingCart } from '@tabler/icons-react';
 import { useState } from 'react';
 import SelectStore from '../components/SelectStore';
+import { useCart } from '../context/CartContext';
 import { useQuery } from '@tanstack/react-query';
 import GameDetailsSkeleton from './skeletons/GameDetailsSkeleton';
 
@@ -60,6 +61,9 @@ export default function GameDetails() {
   const [orderType, setOrderType] = useState('digital');
   const [selectedPreview, setSelectedPreview] = useState<Preview | null>(null);
 
+  const { addItem } = useCart();
+
+
   if (isLoading) {
     return <GameDetailsSkeleton />
   }
@@ -86,6 +90,17 @@ export default function GameDetails() {
   const subtitle = `${publishers}${pubDevMiddot}${developers}${dateMiddot}${release}`;
 
   const numAchieved = gameDetails.achievements.reduce((sum: number, a) => sum += a.achieved ? 1 : 0, 0 );
+
+  const handleAddToCart = () => {
+    addItem({
+      game_id: gameDetails.id,
+      title: gameDetails.title,
+      thumbnail: gameDetails.thumbnail,
+      price: gameDetails.price,
+      type: orderType === 'physical' ? 'Physical' : 'Digital'
+    })
+  }
+
 
   return (
     <Stack gap='48'>
@@ -129,6 +144,7 @@ export default function GameDetails() {
                 ${gameDetails.price}
               </Text>
               <Button
+                onClick = {handleAddToCart}
                 leftSection={<IconShoppingCart stroke='1.5'/>}
                 size='md'
                 p='0px 32px'
