@@ -27,12 +27,12 @@ router.get('/', async (req: Request, res: Response) =>
 
         if(city)
         {
-            query += `AND city = ?`;
+            query += ` AND city = ?`;
             params.push(city);
         }
         if(state)
         {
-            query += `AND state = ?`;
+            query += ` AND state = ?`;
             params.push(state);
         }
 
