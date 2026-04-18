@@ -3,6 +3,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { Modal, Button, Select, TextInput, Divider, Stack, Group, Text, Box, Anchor, Loader } from '@mantine/core';
 import { IconMapPin} from '@tabler/icons-react'
 import { useState, useEffect } from 'react'
+import { useStore } from "../context/StoreContext";
 
 interface Store
 {
@@ -21,9 +22,30 @@ interface Props
   label?: string
 }
 
+
+const formatTime = (time: any) => 
+{
+  if(typeof time === 'object' && time !== null)
+  {
+    const hour = time.hours ?? 0;
+    const minute = String(time.minutes ?? 0).padStart(2,'0');
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const hour12 = hour % 12 === 0 ? 12 : hour % 12;
+    return `${hour12}:00 ${ampm}`;
+  }
+
+  const timestr = String(time);
+  const [hourStr, minute] = timestr.split(':')
+  const hour = parseInt(hourStr)
+  const ampm = hour >= 12 ? 'PM' : 'AM'
+  const hour12 = hour % 12 === 0 ? 12 : hour % 12
+  return `${hour12}:00 ${ampm}`
+}
+
 export default function SelectStore({onSelectStore, label = "Select Your Store"}: Props) {
   const [opened, {open, close}] = useDisclosure(false);
   const [stores, setStores] = useState<Store[]>([]);
+  const { selectedStore, setSelectedStore } = useStore();
   const [loading, setLoading] = useState(true);
   const [cityFilter, setCityFilter] = useState<string | null>(null);
   const [stateFilter, setStateFilter] = useState<string | null>(null);
@@ -73,22 +95,22 @@ export default function SelectStore({onSelectStore, label = "Select Your Store"}
                     {filteredStores.length === 0 ?
                       (
                         <Text c = "dimmed" size = "sm" ta = "center">No stores found</Text>
-                      ) : 
-                      (
+                      ) : (
+
                         filteredStores.map(store =>
                           (
-                            <Box key = {store.id} p = "sm" onClick={()=>{onSelectStore(store); close()}} style = {{border: '1px solid var(--mantine-color-dark-4)', borderRadius: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                              <Group>
-                                <IconMapPin size = {20} color = 'violet'/>
-                                <div>
-                                  <Text fw = {500} size = "sm">{store.address}</Text>
-                                  <Text size = "xs" c = "dimmed">{store.city}, {store.state}</Text>
-                                  <Text size = "xs" c = "dimmed">{store.open_hour} - {store.close_hour}</Text> 
-                                </div>
-                              </Group>
-                              <Anchor size = "xs" href = {store.google_map_url} target = "_blank" c = "dimmed">Google Maps </Anchor>
-                            </Box>
-                          )
+                              <Box key = {store.id} p = "sm" onClick={()=>{setSelectedStore(store); onSelectStore(store); close()}} style = {{border: '1px solid var(--mantine-color-dark-4)', borderRadius: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor:'pointer'}}>
+                                <Group>
+                                  <IconMapPin size = {20} color = 'violet'/>
+                                  <div>
+                                    <Text fw = {500} size = "sm">{store.address}</Text>
+                                    <Text size = "xs" c = "dimmed">{store.city}, {store.state}</Text>
+                                    <Text size = "xs" c = "dimmed">{formatTime(store.open_hour)} - {formatTime(store.close_hour)}</Text> 
+                                  </div>
+                                </Group>
+                                <Anchor size = "xs" href = {store.google_map_url} target = "_blank" c = "dimmed" onClick={(e) => e.stopPropagation()}>Google Maps </Anchor>
+                              </Box>
+                            )
                         )
                       )
                     }
@@ -108,7 +130,7 @@ export default function SelectStore({onSelectStore, label = "Select Your Store"}
         onClick={open}
       >
         <Group gap='4'>
-          {label} 
+          {selectedStore ? `GameChop - ${selectedStore.address}` : label} 
           <IconChevronRight size='16'/>
         </Group>
       </Button>
