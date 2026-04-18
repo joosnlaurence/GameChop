@@ -51,18 +51,55 @@ export default function Checkout() {
   const tax = subTotal * 0.08;
   const total = subTotal + tax;
 
-  const handlePlaceOrder = () =>
+  const handlePlaceOrder = async () =>
   {
-    const orderNumber = `GC-${Math.floor(10000000 + Math.random() * 90000000)}`;
-    const orderState = {
-      orderNumber,
-      items: [...items],
-      subtotal: subTotal,
-      tax,
-      total,
-    };
-    checkout();
-    navigate("/order-confirmation", { state: orderState });
+    if(!user)
+    {
+      return;
+    }
+    try
+    {
+      const body = {
+        userId: user.id,
+        items: items.map((item) => ({
+          gameId: item.game_id,
+          storeId: item.type === 'Physical' ? selectedStore?.id ?? null : null,
+          copies: item.quantity ?? 1,
+          isDigital: item.type === 'Digital'
+        }))
+      }
+      console.log('Sending Order:', body);
+
+      const res = await fetch('http://localhost:3000/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(body)
+      })
+
+      const data = await res.json();
+      console.log('Response:', data);
+
+      if(!res.ok)
+      {
+        console.error('Order failed:', data.error);
+        return;
+      }
+      const orderNumber = `GC-${Math.floor(10000000 + Math.random() * 90000000)}`;
+      const orderState = {
+        orderNumber,
+        items: [...items],
+        subtotal: subTotal,
+        tax,
+        total,
+      };
+      checkout();
+      navigate("/order-confirmation", { state: orderState });
+    }
+    catch (err)
+    {
+      console.error('Order failed:', err)
+    }
   };
 
 
