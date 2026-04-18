@@ -4,6 +4,7 @@ import SelectStore from "../components/SelectStore";
 import SearchFilters from "../components/SearchWidget";
 import GenreSidebar from "../components/GenreSidebar";
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import type { GetGameFiltersResult, GetGameListingResult } from "../types";
 import { DEFAULT_FILTERS, type GameFilters } from "../types";
@@ -11,7 +12,12 @@ import BrowseSkeleton from "./skeletons/BrowseSkeleton";
 import { useCart } from "../context/CartContext";
 
 export default function Browse() {
-  const [filters, setFilters] = useState<GameFilters>(DEFAULT_FILTERS);
+  const [searchParams] = useSearchParams();
+  const [filters, setFilters] = useState<GameFilters>({
+    ...DEFAULT_FILTERS,
+    genre:  searchParams.get("genre")  ?? DEFAULT_FILTERS.genre,
+    sortBy: searchParams.get("sortBy") ?? DEFAULT_FILTERS.sortBy,
+  });
   const [page, setPage] = useState(1);
     useCart();
 
@@ -60,9 +66,7 @@ export default function Browse() {
       <Stack gap='24px'>
         <Group justify='space-between'>
           <Title order={1}>Browse Games</Title>
-          <SelectStore onSelectStore={function (store: Store): void {
-            throw new Error("Function not implemented.");
-          } } />
+          <SelectStore onSelectStore={() => {}} />
         </Group>
         <SearchFilters filterOptions={filterOptions} filters={filters} onFiltersChange={handleFiltersChange} />
       </Stack>

@@ -51,10 +51,18 @@ export default function Checkout() {
   const tax = subTotal * 0.08;
   const total = subTotal + tax;
 
-  const handlePlaceOrder = () => 
+  const handlePlaceOrder = () =>
   {
+    const orderNumber = `GC-${Math.floor(10000000 + Math.random() * 90000000)}`;
+    const orderState = {
+      orderNumber,
+      items: [...items],
+      subtotal: subTotal,
+      tax,
+      total,
+    };
     checkout();
-    navigate("/order-confirmation");
+    navigate("/order-confirmation", { state: orderState });
   };
 
 

@@ -60,7 +60,7 @@ export interface GetGameListingResult {
 }
 
 export interface GetGameDetailsResult {
-  id: number;
+  game_id: number;
   title: string;
   summary: string;
   thumbnail: string;

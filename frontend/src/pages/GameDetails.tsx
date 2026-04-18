@@ -1,11 +1,12 @@
-import { Group, Stack, Image, Title, Text, Badge, Button, ActionIcon, ScrollArea, Box, Card, SimpleGrid, SegmentedControl, Progress, HoverCard, UnstyledButton, Scroller } from '@mantine/core';
+import { Group, Stack, Image, Title, Text, Badge, Button, ActionIcon, ScrollArea, Box, Card, SimpleGrid, SegmentedControl, Progress, HoverCard, UnstyledButton } from '@mantine/core';
 import { useParams } from 'react-router-dom';
 import type { GetGameDetailsResult, Hardware } from '../types';
-import { IconAwardFilled, IconHeart, IconLock, IconShoppingCart } from '@tabler/icons-react';
+import { IconAwardFilled, IconHeart, IconHeartFilled, IconLock, IconShoppingCart } from '@tabler/icons-react';
 import { useState } from 'react';
 import SelectStore from '../components/SelectStore';
 import { useCart } from '../context/CartContext';
-import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '../context/AuthContext';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import GameDetailsSkeleton from './skeletons/GameDetailsSkeleton';
 
 const parseDate = (dateStr: string) => {
@@ -60,8 +61,29 @@ export default function GameDetails() {
 
   const [orderType, setOrderType] = useState('digital');
   const [selectedPreview, setSelectedPreview] = useState<Preview | null>(null);
+  const [, setSelectedStore] = useState<{ id: number; address: string; city: string; state: string; open_hour: string; close_hour: string; google_map_url: string } | null>(null);
+  const [wishlistLoading, setWishlistLoading] = useState(false);
 
   const { addItem } = useCart();
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const { data: libraryData } = useQuery({
+    queryKey: ['user_library', user?.id],
+    queryFn: async () =>
+      fetch(`http://localhost:3000/api/users/${user!.id}/library`, {
+        credentials: 'include',
+      }).then((r) => r.json()),
+    enabled: !!user,
+  });
+
+  const isWishlisted: boolean = !!libraryData?.wishlisted?.some(
+    (g: { game_id: number }) => g.game_id === Number(gameId)
+  );
+
+  const isOwned: boolean = !!libraryData?.owned?.some(
+    (g: { game_id: number }) => g.game_id === Number(gameId)
+  );
 
 
   if (isLoading) {
@@ -93,12 +115,35 @@ export default function GameDetails() {
 
   const handleAddToCart = () => {
     addItem({
-      game_id: gameDetails.id,
+      game_id: gameDetails.game_id,
       title: gameDetails.title,
       thumbnail: gameDetails.thumbnail,
       price: gameDetails.price,
       type: orderType === 'physical' ? 'Physical' : 'Digital'
     })
+  }
+
+  const handleWishlist = async () => {
+    if (!user || wishlistLoading) return;
+    setWishlistLoading(true);
+    try {
+      if (isWishlisted) {
+        await fetch(`http://localhost:3000/api/users/${user.id}/wishlist/${gameDetails.game_id}`, {
+          method: 'DELETE',
+          credentials: 'include',
+        });
+      } else {
+        await fetch(`http://localhost:3000/api/users/${user.id}/wishlist`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ gameId: gameDetails.game_id }),
+        });
+      }
+      queryClient.invalidateQueries({ queryKey: ['user_library', user.id] });
+    } finally {
+      setWishlistLoading(false);
+    }
   }
 
 
@@ -151,9 +196,23 @@ export default function GameDetails() {
               >
                 Add to Cart
               </Button>
-              <ActionIcon size='42' color='dark.7' bd='1px solid dark.5'>
-                <IconHeart size='24' stroke='1.5'/>
-              </ActionIcon>
+              {isOwned
+                ? <Badge size='lg' color='violet' variant='light' radius='md'>Owned</Badge>
+                : (
+                  <ActionIcon
+                    size='42'
+                    color={isWishlisted ? 'red' : 'dark.7'}
+                    bd='1px solid dark.5'
+                    onClick={handleWishlist}
+                    loading={wishlistLoading}
+                    disabled={!user}
+                  >
+                    {isWishlisted
+                      ? <IconHeartFilled size='24' />
+                      : <IconHeart size='24' stroke='1.5' />}
+                  </ActionIcon>
+                )
+              }
             </Group>
           </Stack>
         </Group>
@@ -279,7 +338,7 @@ export default function GameDetails() {
               />
               {
                 orderType === 'physical' &&
-                <SelectStore />
+                <SelectStore onSelectStore={setSelectedStore} />
               }
             </Stack>
           </Card>

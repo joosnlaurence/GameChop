@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function Cart() {
-  const { items, removeItem, updateQuantity, checkout} = useCart();
+  const { items, removeItem, updateQuantity } = useCart();
   
   const subtotal = items.reduce((sum, item) =>
   {
@@ -88,7 +88,21 @@ export default function Cart() {
             <span style = {{fontWeight: "bold"}}>Total</span>
             <span style = {{color: "#7x6ff7", fontWeight: "bold"}}>${total.toFixed(2)}</span>
           </div>
-          <button onClick = {() => navigate("/checkout")} style = {{width: "100%", padding: "0.9rem", backgroundColor: "#7c6ff7", color: "white", border: "none", borderRadius: "8px", fontSize: "1rem", cursor: "pointer", fontWeight: "bold"}}>
+          <button
+            onClick={() => navigate("/checkout")}
+            disabled={items.length === 0}
+            style={{
+              width: "100%",
+              padding: "0.9rem",
+              backgroundColor: items.length === 0 ? "#353C50" : "#7c6ff7",
+              color: items.length === 0 ? "#585E70" : "white",
+              border: "none",
+              borderRadius: "8px",
+              fontSize: "1rem",
+              cursor: items.length === 0 ? "not-allowed" : "pointer",
+              fontWeight: "bold",
+            }}
+          >
             Checkout
           </button>
         </div>

@@ -19,6 +19,16 @@ import {
   IconTrophy,
   IconCompass,
   IconGhost3,
+  IconSword,
+  IconCrosshair,
+  IconCar,
+  IconRun,
+  IconSwords,
+  IconMap,
+  IconEyeOff,
+  IconFlame,
+  IconPuzzle,
+  IconSettings,
 } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import type { TablerIcon } from "@tabler/icons-react";
@@ -28,11 +38,21 @@ import type { FeaturedPublisher, GameListing, GetGameListingResult } from "../ty
 import HomeSkeleton from "./skeletons/HomeSkeleton";
 
 const genres: { name: string; image: string; icon: TablerIcon }[] = [
-  { name: "RPG", image: "/images/rpg_bg.jpg", icon: IconSparkles },
-  { name: "Strategy", image: "/images/strategy_bg.jpg", icon: IconGridDots },
-  { name: "Sports", image: "/images/sports_bg.jpg", icon: IconTrophy },
-  { name: "Horror", image: "/images/horror_bg.jpg", icon: IconGhost3 },
-  { name: "Adventure", image: "/images/adventure_bg.jpg", icon: IconCompass },
+  { name: "Action",     image: "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80", icon: IconSword      },
+  { name: "Adventure",  image: "/images/adventure_bg.jpg",                                                                  icon: IconCompass    },
+  { name: "RPG",        image: "/images/rpg_bg.jpg",                                                                        icon: IconSparkles   },
+  { name: "FPS",        image: "https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=800&q=80", icon: IconCrosshair  },
+  { name: "Sports",     image: "/images/sports_bg.jpg",                                                                     icon: IconTrophy     },
+  { name: "Racing",     image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80", icon: IconCar      },
+  { name: "Horror",     image: "/images/horror_bg.jpg",                                                                     icon: IconGhost3     },
+  { name: "Platformer", image: "https://images.unsplash.com/photo-1551103782-8ab07afd45c1?auto=format&fit=crop&w=800&q=80", icon: IconRun        },
+  { name: "Fighting",   image: "https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=800&q=80", icon: IconSwords     },
+  { name: "Strategy",   image: "/images/strategy_bg.jpg",                                                                   icon: IconGridDots   },
+  { name: "Simulation", image: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=800&q=80", icon: IconSettings },
+  { name: "Open World", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=800&q=80", icon: IconMap      },
+  { name: "Stealth",    image: "https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?auto=format&fit=crop&w=800&q=80", icon: IconEyeOff   },
+  { name: "Survival",   image: "https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?auto=format&fit=crop&w=800&q=80", icon: IconFlame    },
+  { name: "Puzzle",     image: "https://images.unsplash.com/photo-1611996575749-79a3a250f948?auto=format&fit=crop&w=800&q=80", icon: IconPuzzle   },
 ];
 
 const arrowStyles = {
@@ -48,7 +68,7 @@ const arrowStyles = {
   color: "white",
 } as const;
 
-function SectionHeader({ title }: { title: string }) {
+function SectionHeader({ title, to = "/browse" }: { title: string; to?: string }) {
   return (
     <Group justify="space-between" mb="md">
       <Title order={2} fz={30}>
@@ -56,7 +76,7 @@ function SectionHeader({ title }: { title: string }) {
       </Title>
       <UnstyledButton
         component={Link}
-        to="/browse"
+        to={to}
         style={{ display: "flex", alignItems: "center", gap: 4 }}
       >
         <Text fz="sm" c="violet">
@@ -173,7 +193,7 @@ export default function Home() {
               <Carousel.Slide key={genre.name}>
                 <UnstyledButton
                   component={Link}
-                  to={`/browse?genre=${genre.name.toLowerCase()}`}
+                  to={`/browse?genre=${encodeURIComponent(genre.name)}`}
                   w="100%"
                 >
                   <Box pos="relative">
@@ -241,7 +261,7 @@ export default function Home() {
 
         {/* New Releases */}
         <Box>
-          <SectionHeader title="New Releases" />
+          <SectionHeader title="New Releases" to="/browse?sortBy=newest" />
           <GameCarousel games={newReleases}/>
         </Box>
 

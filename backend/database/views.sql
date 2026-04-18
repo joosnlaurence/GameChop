@@ -61,11 +61,11 @@ SELECT
     g.price,
     -- Aggregate all genres into one comma separated string
     -- e.g. "Action, RPG, Open World"
-    GROUP_CONCAT(DISTINCT ge.name ORDER BY ge.name SEPARATOR ', ')      AS genres,
+    GROUP_CONCAT(DISTINCT ge.name ORDER BY ge.name SEPARATOR ',')      AS genres,
     -- Aggregate all publishers into one string
-    GROUP_CONCAT(DISTINCT p.name ORDER BY p.name SEPARATOR ', ')        AS publishers,
+    GROUP_CONCAT(DISTINCT p.name ORDER BY p.name SEPARATOR ',')        AS publishers,
     -- Aggregate all developers into one string
-    GROUP_CONCAT(DISTINCT d.name ORDER BY d.name SEPARATOR ', ')        AS developers
+    GROUP_CONCAT(DISTINCT d.name ORDER BY d.name SEPARATOR ',')        AS developers
 FROM games g
 LEFT JOIN game_genres gg        ON g.id = gg.game_id
 LEFT JOIN genres ge             ON gg.genre_id = ge.id
@@ -87,9 +87,9 @@ SELECT
     g.thumbnail,
     g.release_date,
     g.price,
-    GROUP_CONCAT(DISTINCT ge.name ORDER BY ge.name SEPARATOR ', ')     AS genres,
-    GROUP_CONCAT(DISTINCT p.name ORDER BY p.name SEPARATOR ', ')       AS publishers,
-    GROUP_CONCAT(DISTINCT d.name ORDER BY d.name SEPARATOR ', ')       AS developers
+    GROUP_CONCAT(DISTINCT ge.name ORDER BY ge.name SEPARATOR ',')     AS genres,
+    GROUP_CONCAT(DISTINCT p.name ORDER BY p.name SEPARATOR ',')       AS publishers,
+    GROUP_CONCAT(DISTINCT d.name ORDER BY d.name SEPARATOR ',')       AS developers
 FROM games g
 LEFT JOIN game_genres gg        ON g.id = gg.game_id
 LEFT JOIN genres ge             ON gg.genre_id = ge.id
@@ -118,7 +118,7 @@ SELECT
     -- How many the user has earned
     COUNT(DISTINCT CASE WHEN ua.achieved = TRUE
           THEN ua.achievement_id END)                   AS earned_achievements,
-    GROUP_CONCAT(DISTINCT ge.name SEPARATOR ', ')       AS genres
+    GROUP_CONCAT(DISTINCT ge.name SEPARATOR ',')       AS genres
 FROM users u
 JOIN user_games ug          ON u.id      = ug.user_id
 JOIN games g                ON ug.game_id = g.id

@@ -1,5 +1,5 @@
 import { ActionIcon, Badge, Box, Button, Group, Image, Progress, Stack, Text } from "@mantine/core";
-import { IconHeartFilled, IconShoppingCart, IconX } from "@tabler/icons-react";
+import { IconHeartFilled, IconShoppingCart } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import type { Game } from "../types";
@@ -48,34 +48,19 @@ export default function GameCard({ game, variant, onRemoveFromWishlist }: GameCa
           alt={game.title}
         />
         {isWishlist && (
-          <>
-            <ActionIcon
-              pos="absolute"
-              top={8}
-              left={8}
-              radius="xl"
-              size="lg"
-              variant="filled"
-              color="dark.7"
-              style={{ zIndex: 2 }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <IconHeartFilled size={16} color="white" />
-            </ActionIcon>
-            <ActionIcon
-              pos="absolute"
-              top={8}
-              right={8}
-              radius="xl"
-              size="lg"
-              variant="filled"
-              color="dark.7"
-              style={{ zIndex: 2 }}
-              onClick={handleRemove}
-            >
-              <IconX size={16} color="white" />
-            </ActionIcon>
-          </>
+          <ActionIcon
+            pos="absolute"
+            top={8}
+            right={8}
+            radius="xl"
+            size="lg"
+            variant="filled"
+            color="red"
+            style={{ zIndex: 2 }}
+            onClick={handleRemove}
+          >
+            <IconHeartFilled size={16} />
+          </ActionIcon>
         )}
       </Box>
       <Stack gap={0} pt="0.75rem">
