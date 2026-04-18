@@ -81,12 +81,12 @@ router.get('/popular', async (_req: Request, res: Response) => {
         const [rows] = await pool.query<GameListingRow[]>(
             `SELECT gl.*, COUNT(o.game_id) AS order_count
              FROM game_listing gl
-             JOIN orders o ON gl.game_id = o.game_id
+             LEFT JOIN orders o ON gl.game_id = o.game_id
              GROUP BY
                 gl.game_id, gl.title, gl.summary, gl.thumbnail,
                 gl.release_date, gl.price, gl.genres,
                 gl.publishers, gl.developers
-             ORDER BY order_count DESC
+             ORDER BY order_count DESC, gl.release_date DESC
              LIMIT 8`
         );
         res.json(rows.map(parseGameRow));

@@ -1028,3 +1028,149 @@ INSERT INTO game_previews (game_id, preview_id, url) VALUES
 ,(25, 10, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1145360/ss_2a9e3f9ad4d29d900b890d56361be5b1634225a0.1920x1080.jpg?t=1758127023')
 ,(25, 11, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1145360/ss_e0622b5a57521b76182d7e7e1ae47ee440edcf90.1920x1080.jpg?t=1758127023')
 ;
+
+-- SEED USER (username: seeduser, password: password123)
+INSERT INTO users (id, username, password_hash) VALUES
+(1, 'seeduser', '$2b$10$O2V/uM/hdewKS9JrCLOu.e4oiOBBxYz9QhEj63OY0fd16fwDp7Ry6');
+
+-- ORDERS
+-- Each game gets a different order count so Popular Games ranks them distinctly.
+-- game_id 1  (Elden Ring)           → 12 orders
+-- game_id 2  (The Last of Us)       →  9 orders
+-- game_id 3  (Spider-Man 2)         → 15 orders
+-- game_id 4  (Apex Legends)         →  5 orders
+-- game_id 5  (CoD MW3)              → 11 orders
+-- game_id 6  (Zelda TotK)           → 14 orders
+-- game_id 7  (Hogwarts Legacy)      →  8 orders
+-- game_id 8  (God of War Ragnarok)  → 13 orders
+-- game_id 9  (Cyberpunk 2077)       → 10 orders
+-- game_id 10 (Final Fantasy XVI)    →  6 orders
+-- game_id 11 (Resident Evil 4)      →  7 orders
+-- game_id 12 (Starfield)            →  4 orders
+-- game_id 13 (AC Mirage)            →  3 orders
+-- game_id 14 (Street Fighter 6)     →  2 orders
+-- game_id 15 (GTA V)                → 20 orders
+-- game_id 16 (RDR2)                 → 18 orders
+-- game_id 17 (Baldur's Gate 3)      → 16 orders
+-- game_id 18 (Sonic Frontiers)      →  1 order
+-- game_id 19 (The Witcher 3)        → 17 orders
+-- game_id 20 (Dragon Age)           →  2 orders
+-- game_id 21 (Monster Hunter World) →  5 orders
+-- game_id 22 (Devil May Cry 5)      →  3 orders
+-- game_id 23 (FIFA 24)              →  9 orders
+-- game_id 24 (Forza Horizon 5)      →  7 orders
+-- game_id 25 (Hades)                → 19 orders
+INSERT INTO orders (user_id, game_id, copies, is_digital, order_num) VALUES
+-- Elden Ring (12)
+(1,1,1,TRUE,'GC-00001'),(1,1,1,TRUE,'GC-00002'),(1,1,1,FALSE,'GC-00003'),
+(1,1,1,TRUE,'GC-00004'),(1,1,1,TRUE,'GC-00005'),(1,1,1,FALSE,'GC-00006'),
+(1,1,1,TRUE,'GC-00007'),(1,1,1,TRUE,'GC-00008'),(1,1,1,FALSE,'GC-00009'),
+(1,1,1,TRUE,'GC-00010'),(1,1,1,TRUE,'GC-00011'),(1,1,1,FALSE,'GC-00012'),
+-- The Last of Us (9)
+(1,2,1,TRUE,'GC-00013'),(1,2,1,TRUE,'GC-00014'),(1,2,1,FALSE,'GC-00015'),
+(1,2,1,TRUE,'GC-00016'),(1,2,1,TRUE,'GC-00017'),(1,2,1,FALSE,'GC-00018'),
+(1,2,1,TRUE,'GC-00019'),(1,2,1,TRUE,'GC-00020'),(1,2,1,FALSE,'GC-00021'),
+-- Spider-Man 2 (15)
+(1,3,1,TRUE,'GC-00022'),(1,3,1,TRUE,'GC-00023'),(1,3,1,FALSE,'GC-00024'),
+(1,3,1,TRUE,'GC-00025'),(1,3,1,TRUE,'GC-00026'),(1,3,1,FALSE,'GC-00027'),
+(1,3,1,TRUE,'GC-00028'),(1,3,1,TRUE,'GC-00029'),(1,3,1,FALSE,'GC-00030'),
+(1,3,1,TRUE,'GC-00031'),(1,3,1,TRUE,'GC-00032'),(1,3,1,FALSE,'GC-00033'),
+(1,3,1,TRUE,'GC-00034'),(1,3,1,TRUE,'GC-00035'),(1,3,1,FALSE,'GC-00036'),
+-- Apex Legends (5)
+(1,4,1,TRUE,'GC-00037'),(1,4,1,TRUE,'GC-00038'),(1,4,1,TRUE,'GC-00039'),
+(1,4,1,TRUE,'GC-00040'),(1,4,1,TRUE,'GC-00041'),
+-- CoD MW3 (11)
+(1,5,1,TRUE,'GC-00042'),(1,5,1,TRUE,'GC-00043'),(1,5,1,FALSE,'GC-00044'),
+(1,5,1,TRUE,'GC-00045'),(1,5,1,TRUE,'GC-00046'),(1,5,1,FALSE,'GC-00047'),
+(1,5,1,TRUE,'GC-00048'),(1,5,1,TRUE,'GC-00049'),(1,5,1,FALSE,'GC-00050'),
+(1,5,1,TRUE,'GC-00051'),(1,5,1,TRUE,'GC-00052'),
+-- Zelda TotK (14)
+(1,6,1,TRUE,'GC-00053'),(1,6,1,TRUE,'GC-00054'),(1,6,1,FALSE,'GC-00055'),
+(1,6,1,TRUE,'GC-00056'),(1,6,1,TRUE,'GC-00057'),(1,6,1,FALSE,'GC-00058'),
+(1,6,1,TRUE,'GC-00059'),(1,6,1,TRUE,'GC-00060'),(1,6,1,FALSE,'GC-00061'),
+(1,6,1,TRUE,'GC-00062'),(1,6,1,TRUE,'GC-00063'),(1,6,1,FALSE,'GC-00064'),
+(1,6,1,TRUE,'GC-00065'),(1,6,1,TRUE,'GC-00066'),
+-- Hogwarts Legacy (8)
+(1,7,1,TRUE,'GC-00067'),(1,7,1,TRUE,'GC-00068'),(1,7,1,FALSE,'GC-00069'),
+(1,7,1,TRUE,'GC-00070'),(1,7,1,TRUE,'GC-00071'),(1,7,1,FALSE,'GC-00072'),
+(1,7,1,TRUE,'GC-00073'),(1,7,1,TRUE,'GC-00074'),
+-- God of War Ragnarok (13)
+(1,8,1,TRUE,'GC-00075'),(1,8,1,TRUE,'GC-00076'),(1,8,1,FALSE,'GC-00077'),
+(1,8,1,TRUE,'GC-00078'),(1,8,1,TRUE,'GC-00079'),(1,8,1,FALSE,'GC-00080'),
+(1,8,1,TRUE,'GC-00081'),(1,8,1,TRUE,'GC-00082'),(1,8,1,FALSE,'GC-00083'),
+(1,8,1,TRUE,'GC-00084'),(1,8,1,TRUE,'GC-00085'),(1,8,1,FALSE,'GC-00086'),
+(1,8,1,TRUE,'GC-00087'),
+-- Cyberpunk 2077 (10)
+(1,9,1,TRUE,'GC-00088'),(1,9,1,TRUE,'GC-00089'),(1,9,1,FALSE,'GC-00090'),
+(1,9,1,TRUE,'GC-00091'),(1,9,1,TRUE,'GC-00092'),(1,9,1,FALSE,'GC-00093'),
+(1,9,1,TRUE,'GC-00094'),(1,9,1,TRUE,'GC-00095'),(1,9,1,FALSE,'GC-00096'),
+(1,9,1,TRUE,'GC-00097'),
+-- Final Fantasy XVI (6)
+(1,10,1,TRUE,'GC-00098'),(1,10,1,TRUE,'GC-00099'),(1,10,1,FALSE,'GC-00100'),
+(1,10,1,TRUE,'GC-00101'),(1,10,1,TRUE,'GC-00102'),(1,10,1,FALSE,'GC-00103'),
+-- Resident Evil 4 (7)
+(1,11,1,TRUE,'GC-00104'),(1,11,1,TRUE,'GC-00105'),(1,11,1,FALSE,'GC-00106'),
+(1,11,1,TRUE,'GC-00107'),(1,11,1,TRUE,'GC-00108'),(1,11,1,FALSE,'GC-00109'),
+(1,11,1,TRUE,'GC-00110'),
+-- Starfield (4)
+(1,12,1,TRUE,'GC-00111'),(1,12,1,TRUE,'GC-00112'),
+(1,12,1,FALSE,'GC-00113'),(1,12,1,TRUE,'GC-00114'),
+-- AC Mirage (3)
+(1,13,1,TRUE,'GC-00115'),(1,13,1,TRUE,'GC-00116'),(1,13,1,FALSE,'GC-00117'),
+-- Street Fighter 6 (2)
+(1,14,1,TRUE,'GC-00118'),(1,14,1,TRUE,'GC-00119'),
+-- GTA V (20)
+(1,15,1,TRUE,'GC-00120'),(1,15,1,TRUE,'GC-00121'),(1,15,1,FALSE,'GC-00122'),
+(1,15,1,TRUE,'GC-00123'),(1,15,1,TRUE,'GC-00124'),(1,15,1,FALSE,'GC-00125'),
+(1,15,1,TRUE,'GC-00126'),(1,15,1,TRUE,'GC-00127'),(1,15,1,FALSE,'GC-00128'),
+(1,15,1,TRUE,'GC-00129'),(1,15,1,TRUE,'GC-00130'),(1,15,1,FALSE,'GC-00131'),
+(1,15,1,TRUE,'GC-00132'),(1,15,1,TRUE,'GC-00133'),(1,15,1,FALSE,'GC-00134'),
+(1,15,1,TRUE,'GC-00135'),(1,15,1,TRUE,'GC-00136'),(1,15,1,FALSE,'GC-00137'),
+(1,15,1,TRUE,'GC-00138'),(1,15,1,TRUE,'GC-00139'),
+-- RDR2 (18)
+(1,16,1,TRUE,'GC-00140'),(1,16,1,TRUE,'GC-00141'),(1,16,1,FALSE,'GC-00142'),
+(1,16,1,TRUE,'GC-00143'),(1,16,1,TRUE,'GC-00144'),(1,16,1,FALSE,'GC-00145'),
+(1,16,1,TRUE,'GC-00146'),(1,16,1,TRUE,'GC-00147'),(1,16,1,FALSE,'GC-00148'),
+(1,16,1,TRUE,'GC-00149'),(1,16,1,TRUE,'GC-00150'),(1,16,1,FALSE,'GC-00151'),
+(1,16,1,TRUE,'GC-00152'),(1,16,1,TRUE,'GC-00153'),(1,16,1,FALSE,'GC-00154'),
+(1,16,1,TRUE,'GC-00155'),(1,16,1,TRUE,'GC-00156'),(1,16,1,FALSE,'GC-00157'),
+-- Baldur's Gate 3 (16)
+(1,17,1,TRUE,'GC-00158'),(1,17,1,TRUE,'GC-00159'),(1,17,1,FALSE,'GC-00160'),
+(1,17,1,TRUE,'GC-00161'),(1,17,1,TRUE,'GC-00162'),(1,17,1,FALSE,'GC-00163'),
+(1,17,1,TRUE,'GC-00164'),(1,17,1,TRUE,'GC-00165'),(1,17,1,FALSE,'GC-00166'),
+(1,17,1,TRUE,'GC-00167'),(1,17,1,TRUE,'GC-00168'),(1,17,1,FALSE,'GC-00169'),
+(1,17,1,TRUE,'GC-00170'),(1,17,1,TRUE,'GC-00171'),(1,17,1,FALSE,'GC-00172'),
+(1,17,1,TRUE,'GC-00173'),
+-- Sonic Frontiers (1)
+(1,18,1,TRUE,'GC-00174'),
+-- The Witcher 3 (17)
+(1,19,1,TRUE,'GC-00175'),(1,19,1,TRUE,'GC-00176'),(1,19,1,FALSE,'GC-00177'),
+(1,19,1,TRUE,'GC-00178'),(1,19,1,TRUE,'GC-00179'),(1,19,1,FALSE,'GC-00180'),
+(1,19,1,TRUE,'GC-00181'),(1,19,1,TRUE,'GC-00182'),(1,19,1,FALSE,'GC-00183'),
+(1,19,1,TRUE,'GC-00184'),(1,19,1,TRUE,'GC-00185'),(1,19,1,FALSE,'GC-00186'),
+(1,19,1,TRUE,'GC-00187'),(1,19,1,TRUE,'GC-00188'),(1,19,1,FALSE,'GC-00189'),
+(1,19,1,TRUE,'GC-00190'),(1,19,1,TRUE,'GC-00191'),
+-- Dragon Age (2)
+(1,20,1,TRUE,'GC-00192'),(1,20,1,TRUE,'GC-00193'),
+-- Monster Hunter World (5)
+(1,21,1,TRUE,'GC-00194'),(1,21,1,TRUE,'GC-00195'),(1,21,1,FALSE,'GC-00196'),
+(1,21,1,TRUE,'GC-00197'),(1,21,1,TRUE,'GC-00198'),
+-- Devil May Cry 5 (3)
+(1,22,1,TRUE,'GC-00199'),(1,22,1,TRUE,'GC-00200'),(1,22,1,FALSE,'GC-00201'),
+-- FIFA 24 (9)
+(1,23,1,TRUE,'GC-00202'),(1,23,1,TRUE,'GC-00203'),(1,23,1,FALSE,'GC-00204'),
+(1,23,1,TRUE,'GC-00205'),(1,23,1,TRUE,'GC-00206'),(1,23,1,FALSE,'GC-00207'),
+(1,23,1,TRUE,'GC-00208'),(1,23,1,TRUE,'GC-00209'),(1,23,1,FALSE,'GC-00210'),
+-- Forza Horizon 5 (7)
+(1,24,1,TRUE,'GC-00211'),(1,24,1,TRUE,'GC-00212'),(1,24,1,FALSE,'GC-00213'),
+(1,24,1,TRUE,'GC-00214'),(1,24,1,TRUE,'GC-00215'),(1,24,1,FALSE,'GC-00216'),
+(1,24,1,TRUE,'GC-00217'),
+-- Hades (19)
+(1,25,1,TRUE,'GC-00218'),(1,25,1,TRUE,'GC-00219'),(1,25,1,FALSE,'GC-00220'),
+(1,25,1,TRUE,'GC-00221'),(1,25,1,TRUE,'GC-00222'),(1,25,1,FALSE,'GC-00223'),
+(1,25,1,TRUE,'GC-00224'),(1,25,1,TRUE,'GC-00225'),(1,25,1,FALSE,'GC-00226'),
+(1,25,1,TRUE,'GC-00227'),(1,25,1,TRUE,'GC-00228'),(1,25,1,FALSE,'GC-00229'),
+(1,25,1,TRUE,'GC-00230'),(1,25,1,TRUE,'GC-00231'),(1,25,1,FALSE,'GC-00232'),
+(1,25,1,TRUE,'GC-00233'),(1,25,1,TRUE,'GC-00234'),(1,25,1,FALSE,'GC-00235'),
+(1,25,1,TRUE,'GC-00236');
+;

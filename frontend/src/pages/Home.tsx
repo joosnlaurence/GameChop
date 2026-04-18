@@ -34,7 +34,7 @@ import { Link } from "react-router-dom";
 import type { TablerIcon } from "@tabler/icons-react";
 import GameCard from "../components/GameCard";
 import { useQuery } from "@tanstack/react-query";
-import type { FeaturedPublisher, GameListing, GetGameListingResult } from "../types";
+import type { FeaturedPublisher, GameListing } from "../types";
 import HomeSkeleton from "./skeletons/HomeSkeleton";
 
 const genres: { name: string; image: string; icon: TablerIcon }[] = [
@@ -68,22 +68,24 @@ const arrowStyles = {
   color: "white",
 } as const;
 
-function SectionHeader({ title, to = "/browse" }: { title: string; to?: string }) {
+function SectionHeader({ title, to }: { title: string; to?: string }) {
   return (
     <Group justify="space-between" mb="md">
       <Title order={2} fz={30}>
         {title}
       </Title>
-      <UnstyledButton
-        component={Link}
-        to={to}
-        style={{ display: "flex", alignItems: "center", gap: 4 }}
-      >
-        <Text fz="sm" c="violet">
-          View All
-        </Text>
-        <IconChevronRight size={16} color="var(--mantine-color-violet-filled)" />
-      </UnstyledButton>
+      {to && (
+        <UnstyledButton
+          component={Link}
+          to={to}
+          style={{ display: "flex", alignItems: "center", gap: 4 }}
+        >
+          <Text fz="sm" c="violet">
+            View All
+          </Text>
+          <IconChevronRight size={16} color="var(--mantine-color-violet-filled)" />
+        </UnstyledButton>
+      )}
     </Group>
   );
 }
@@ -117,54 +119,45 @@ function GameCarousel({ games }: { games: GameListing[]}) {
   )
 }
 
-const NUM_HOME_PAGE_GAMES = 4;
 const NUM_FEATURED_PUBLISHERS = 4;
 
 export default function Home() {
-  const {data: gamesData, isLoading: gamesIsLoading, error: gamesError} = useQuery({
-    queryKey: ['game_listings'],
-    queryFn: async (): Promise<GetGameListingResult> =>
-      fetch(`http://localhost:3000/api/games`)
-        .then(res => res.json())
-  });
-  const {data: publishersData, isLoading: pubsIsLoading, error: pubsError} = useQuery({
-    queryKey: ['publishers'],
-    queryFn: async (): Promise<FeaturedPublisher[]> =>
-      fetch(`http://localhost:3000/api/publishers/featured`)
-        .then(res => res.json()) 
+  const { data: newReleases, isLoading: newReleasesLoading, error: newReleasesError } = useQuery({
+    queryKey: ['new_releases'],
+    queryFn: async (): Promise<GameListing[]> =>
+      fetch(`http://localhost:3000/api/games/new-releases`).then(res => res.json())
   });
 
-  if(gamesIsLoading || pubsIsLoading) {
+  const { data: popularGames, isLoading: popularLoading, error: popularError } = useQuery({
+    queryKey: ['popular_games'],
+    queryFn: async (): Promise<GameListing[]> =>
+      fetch(`http://localhost:3000/api/games/popular`).then(res => res.json())
+  });
+
+  const { data: publishersData, isLoading: pubsIsLoading, error: pubsError } = useQuery({
+    queryKey: ['publishers'],
+    queryFn: async (): Promise<FeaturedPublisher[]> =>
+      fetch(`http://localhost:3000/api/publishers/featured`).then(res => res.json())
+  });
+
+  if (newReleasesLoading || popularLoading || pubsIsLoading) {
     return <HomeSkeleton />
   }
 
-  if(gamesError || pubsError) {
-    console.error(gamesError ?? pubsError);
+  if (newReleasesError || popularError || pubsError) {
+    console.error(newReleasesError ?? popularError ?? pubsError);
     return <Text>Some error occurred...</Text>
   }
 
-  if(!gamesData) {
+  if (!newReleases || !popularGames) {
     return <Text>No games found?</Text>
   }
 
-  if(!publishersData) {
+  if (!publishersData) {
     return <Text>No publishers found?</Text>
   }
 
-  const newReleases = gamesData?.data.sort(
-    (a, b) => new Date(b.release_date).getTime() - new Date(a.release_date).getTime()
-  ).slice(0, NUM_HOME_PAGE_GAMES);
-
-  // We don't really have a way of telling if a game is popular right now
-  // This would probably invove some backend work
-
-  // const popularGames = games?.sort(
-  //   (a, b) => b.orders - a.orders
-  // ).slice(0, NUM_NEW_RELEASES);
-
-  const popularGames = gamesData?.data.slice(0, NUM_HOME_PAGE_GAMES);
-
-  const featuredPublishers = publishersData?.sort(
+  const featuredPublishers = publishersData.sort(
     (a, b) => b.game_count - a.game_count
   ).slice(0, NUM_FEATURED_PUBLISHERS);
 
