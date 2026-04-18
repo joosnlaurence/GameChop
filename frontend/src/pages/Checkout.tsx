@@ -124,7 +124,7 @@ export default function Checkout() {
               {/*PHYSICAL PICKUP*/}
               {physicalItem.length > 0 && (
                 <Stack gap="sm" mb="md">
-                  <Text fw={600} c="violet.4">Physcial Pickup</Text>
+                  <Text fw={600} c="violet.4">Physical Pickup</Text>
                   <Paper p="md" radius="md" bg="dark.8">
                     <Text size="xs" c="dimmed" mb={4}>Pickup Location</Text>
                     {selectedStore ? (
