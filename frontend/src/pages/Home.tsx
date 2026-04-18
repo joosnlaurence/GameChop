@@ -91,7 +91,7 @@ function SectionHeader({ title, to = "/browse" }: { title: string; to?: string }
 function GameCarousel({ games }: { games: GameListing[]}) {
   return (
     <Carousel
-      slideSize={{ base: "50%", sm: "33%" }}
+      slideSize={{ base: "50%", sm: "33%", md: '25%' }}
       slideGap="sm"
       previousControlIcon={<IconChevronLeft size={24} />}
       nextControlIcon={<IconChevronRight size={24} />}

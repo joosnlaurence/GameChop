@@ -1,0 +1,7 @@
+.orderedGameCard {
+    background: var(--mantine-color-dark-7);
+    transition: background 250ms ease;
+}
+.orderedGameCard:hover {
+    background: var(--mantine-color-dark-5);
+}

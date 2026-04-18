@@ -23,76 +23,79 @@ router.get('/user/:userId', async (req: Request, res: Response) => {
 });
 
 // POST /api/orders
-// Place a new order for a game.
-// Body: { userId, gameId, storeId, copies, isDigital }
-// Generates readable order_num like GC-00042.
-// Also marks the game as purchased in user_games.
-// If physical decrements store inventory.
+// Place an order for one or more games. All items share a single order_num.
+// Body: { userId, items: [{ gameId, storeId?, copies, isDigital }, ...] }
 router.post('/', async (req: Request, res: Response) => {
-    const { userId, gameId, storeId, copies, isDigital } = req.body;
+    const { userId, items } = req.body;
 
     // Basic validation
-    if (!userId || !gameId || copies < 1) {
-        return res.status(400).json({ error: 'Missing required fields' });
+    if (!userId || !Array.isArray(items) || items.length === 0) {
+        return res.status(400).json({ error: 'userId and items[] are required' });
     }
-    if (!isDigital && !storeId) {
-        return res.status(400).json({ error: 'Physical orders require a storeId' });
+    for (const item of items) {
+        if (!item.gameId || !item.copies || item.copies < 1) {
+            return res.status(400).json({ error: 'Each item needs gameId and copies >= 1' });
+        }
+        if (!item.isDigital && !item.storeId) {
+            return res.status(400).json({ error: 'Physical items require a storeId' });
+        }
     }
 
     const connection = await (pool as any).getConnection();
     try {
-        // Use a transaction so if any step fails,
-        // nothing is partially committed to the database
         await connection.beginTransaction();
 
-        // Insert the order
-        const [result]: any = await connection.query(
-            `INSERT INTO orders (user_id, game_id, store_id, copies, is_digital)
-             VALUES (?, ?, ?, ?, ?)`,
-            [userId, gameId, storeId || null, copies, isDigital]
+        // Generate one order_num for the whole order by taking
+        // the next auto-increment value. Pad to 5 digits like before.
+        const [maxRows]: any = await connection.query(
+            `SELECT COALESCE(MAX(order_id), 0) AS max_id FROM orders`
         );
+        const nextOrderId = maxRows[0].max_id + 1;
+        const orderNum = `GC-${String(nextOrderId).padStart(5, '0')}`;
 
-        const orderId = result.insertId;
+        const insertedOrderIds: number[] = [];
 
-        // Generate readable order number e.g. GC-00042
-        const orderNum = `GC-${String(orderId).padStart(5, '0')}`;
-        await connection.query(
-            `UPDATE orders SET order_num = ? WHERE order_id = ?`,
-            [orderNum, orderId]
-        );
+        for (const item of items) {
+            const { gameId, storeId, copies, isDigital } = item;
 
-        // Mark game as purchased in user_games.
-        // INSERT IGNORE skips if row already exists (eg was wishlisted).
-        // Then UPDATE sets purchased to TRUE either way.
-        await connection.query(
-            `INSERT IGNORE INTO user_games (user_id, game_id, purchased, wishlisted)
-             VALUES (?, ?, TRUE, FALSE)`,
-            [userId, gameId]
-        );
-        await connection.query(
-            `UPDATE user_games SET purchased = TRUE
-             WHERE user_id = ? AND game_id = ?`,
-            [userId, gameId]
-        );
-
-        // Decrement physical store inventory if applicable
-        if (!isDigital && storeId) {
-            await connection.query(
-                `UPDATE store_games
-                 SET copies = copies - ?
-                 WHERE store_id = ? AND game_id = ?`,
-                [copies, storeId, gameId]
+            // Insert the order row with the shared order_num
+            const [result]: any = await connection.query(
+                `INSERT INTO orders (user_id, game_id, store_id, copies, is_digital, order_num)
+                 VALUES (?, ?, ?, ?, ?, ?)`,
+                [userId, gameId, storeId || null, copies, isDigital, orderNum]
             );
+            insertedOrderIds.push(result.insertId);
+
+            // Mark as purchased in user_games
+            await connection.query(
+                `INSERT IGNORE INTO user_games (user_id, game_id, purchased, wishlisted)
+                 VALUES (?, ?, TRUE, FALSE)`,
+                [userId, gameId]
+            );
+            await connection.query(
+                `UPDATE user_games SET purchased = TRUE
+                 WHERE user_id = ? AND game_id = ?`,
+                [userId, gameId]
+            );
+
+            // Decrement physical store inventory if applicable
+            if (!isDigital && storeId) {
+                await connection.query(
+                    `UPDATE store_games
+                     SET copies = copies - ?
+                     WHERE store_id = ? AND game_id = ?`,
+                    [copies, storeId, gameId]
+                );
+            }
         }
 
         await connection.commit();
         res.status(201).json({
-            message:  'Order placed successfully',
-            orderId,
-            orderNum
+            message: 'Order placed successfully',
+            orderNum,
+            orderIds: insertedOrderIds,
         });
     } catch (err) {
-        // If anything fails roll back all changes
         await connection.rollback();
         console.error(err);
         res.status(500).json({ error: 'Failed to place order' });
