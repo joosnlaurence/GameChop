@@ -38,7 +38,7 @@ SELECT
     s.id          AS store_id,
     s.city        AS store_city,
     s.state       AS store_state,
-    s.address     AS store_address,
+    s.address     AS store_address
 FROM users u
 JOIN orders o      ON u.id      = o.user_id
 JOIN games g       ON o.game_id = g.id
