@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useStore } from "../context/StoreContext";
 import { Title, Text, Stack, Grid, Paper, Group, Badge, TextInput, Button, Divider, Box, Image} from "@mantine/core";
 import SelectStore from "../components/SelectStore";
 
@@ -18,13 +19,12 @@ interface Store
 }
 
 
-const formatTime = (time: string) => 
+const formatTime = (time: any) => 
 {
-  const [hourStr, minute] = time.split(':')
-  const hour = parseInt(hourStr)
+  const hour = typeof time === 'number' ? time : parseInt(String(time).split(':')[0])
   const ampm = hour >= 12 ? 'PM' : 'AM'
   const hour12 = hour % 12 === 0 ? 12 : hour % 12
-  return `${hour12}:${minute} ${ampm}`
+  return `${hour12}:00 ${ampm}`
 }
 
 export default function Checkout() {
@@ -36,7 +36,7 @@ export default function Checkout() {
   const [expiry, setExpiry] = useState("");
   const [cvv, setCvv] = useState("");
   const [nameCard, setNameCard] = useState("");
-  const [selectedStore, setSelectedStore] = useState<Store | null>(null);
+  const { selectedStore, setSelectedStore } = useStore();
 
   const physicalItem = items.filter((item) => item.type === "Physical");
   const digitalItem = items.filter((item) => item.type === "Digital");

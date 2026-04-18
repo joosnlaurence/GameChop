@@ -5,6 +5,7 @@ import { MantineProvider } from '@mantine/core'
 import { theme } from './theme'
 import { useEffect } from 'react'
 import { CartProvider } from "./context/CartContext";
+import { StoreProvider } from "./context/StoreContext";
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
 import Layout from './components/Layout'
@@ -35,25 +36,27 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <MantineProvider theme={theme} defaultColorScheme='dark'>
         <AuthProvider>
-          <CartProvider>
-            <BrowserRouter>
-              <ScrollToTop />
-              <Routes>
-                <Route element={<Layout />}>
-                  <Route path='/' element={<Home />} />
-                  <Route path='/browse'>
-                    <Route index  element={<Browse />} />
-                    <Route path=':gameId' element={<GameDetails />}/>
+          <StoreProvider>
+            <CartProvider>
+              <BrowserRouter>
+                <ScrollToTop />
+                <Routes>
+                  <Route element={<Layout />}>
+                    <Route path='/' element={<Home />} />
+                    <Route path='/browse'>
+                      <Route index  element={<Browse />} />
+                      <Route path=':gameId' element={<GameDetails />}/>
+                    </Route>
+                    <Route path='/my-games' element={<MyLibrary />} />
+                    <Route path='/orders' element={<Orders />} />
+                    <Route path='/cart' element={<Cart />} />
+                    <Route path='/checkout' element={<Checkout />} />
+                    <Route path='/order-confirmation' element={<OrderConfirmation />} />
                   </Route>
-                  <Route path='/my-games' element={<MyLibrary />} />
-                  <Route path='/orders' element={<Orders />} />
-                  <Route path='/cart' element={<Cart />} />
-                  <Route path='/checkout' element={<Checkout />} />
-                  <Route path='/order-confirmation' element={<OrderConfirmation />} />
-                </Route>
-              </Routes>
-            </BrowserRouter>
-          </CartProvider>
+                </Routes>
+              </BrowserRouter>
+            </CartProvider>
+          </StoreProvider>
         </AuthProvider>
       </MantineProvider>
     </QueryClientProvider>
