@@ -87,7 +87,7 @@ INSERT INTO games (title, summary, thumbnail, release_date, price) VALUES
  'https://cdn.cloudflare.steamstatic.com/steam/apps/1172470/library_600x900.jpg', '2019-02-04', 0.00),
 ('Call of Duty MW3',
  'Modern military FPS with an intense campaign and expansive multiplayer.',
- 'https://cdn.cloudflare.steamstatic.com/steam/apps/3595270/library_600x900.jpg', '2023-11-10', 69.99),
+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHTz65TwErdOMX_mMCQaqpIDnyiDG0jXX-Ow&s', '2023-11-10', 69.99),
 ('The Legend of Zelda: Tears of the Kingdom',
  'Explore Hyrule from the skies to the depths in this open world sequel.',
  'https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_1065/b_white/f_auto/q_auto/store/software/switch/70010000063714/fb30eab428df3fc993b41c76e20f72e4d76d49734d17d31996b5ab61c414b117', '2023-05-12', 69.99),
