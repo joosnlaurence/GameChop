@@ -66,6 +66,7 @@ export default function GameDetails() {
 
   const { addItem } = useCart();
   const { user } = useAuth();
+  const { selectedStore } = useStore();
   const queryClient = useQueryClient();
 
   const toggleAchievement = useMutation({
@@ -215,8 +216,9 @@ export default function GameDetails() {
                 leftSection={<IconShoppingCart stroke='1.5'/>}
                 size='md'
                 p='0px 32px'
+                disabled={(isOwned && orderType === 'digital') || (orderType === 'physical' && !selectedStore)}
               >
-                Add to Cart
+                {isOwned && orderType === 'digital' ? 'Already Owned' : orderType === 'physical' && !selectedStore ? 'Select a Store' : 'Add to Cart'}
               </Button>
               {isOwned
                 ? <Badge size='lg' color='violet' variant='light' radius='md'>Owned</Badge>

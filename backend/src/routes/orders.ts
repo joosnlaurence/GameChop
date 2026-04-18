@@ -24,7 +24,6 @@ router.get('/user/:userId', async (req: Request, res: Response) => {
 
 // POST /api/orders
 // Place an order for one or more games. All items share a single order_num.
-// Body: { userId, items: [{ gameId, storeId?, copies, isDigital }, ...] }
 router.post('/', async (req: Request, res: Response) => {
     const { userId, items } = req.body;
 
@@ -45,8 +44,6 @@ router.post('/', async (req: Request, res: Response) => {
     try {
         await connection.beginTransaction();
 
-        // Generate one order_num for the whole order by taking
-        // the next auto-increment value. Pad to 5 digits like before.
         const [maxRows]: any = await connection.query(
             `SELECT COALESCE(MAX(order_id), 0) AS max_id FROM orders`
         );
