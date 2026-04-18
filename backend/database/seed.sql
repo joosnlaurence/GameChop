@@ -1,3 +1,4 @@
+SET SQL_SAFE_UPDATES = 0;
 USE gamechop;
 
 -- GENRES
@@ -89,7 +90,7 @@ INSERT INTO games (title, summary, thumbnail, release_date, price) VALUES
  'https://cdn.cloudflare.steamstatic.com/steam/apps/3595270/library_600x900.jpg', '2023-11-10', 69.99),
 ('The Legend of Zelda: Tears of the Kingdom',
  'Explore Hyrule from the skies to the depths in this open world sequel.',
- 'https://cdn.gamechop.com/games/totk/thumbnail.png', '2023-05-12', 69.99),
+ 'https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_1065/b_white/f_auto/q_auto/store/software/switch/70010000063714/fb30eab428df3fc993b41c76e20f72e4d76d49734d17d31996b5ab61c414b117', '2023-05-12', 69.99),
 ('Hogwarts Legacy',
  'An open world RPG set in the 1800s wizarding world.',
  'https://cdn.cloudflare.steamstatic.com/steam/apps/990080/library_600x900.jpg', '2023-02-10', 59.99),
@@ -1174,3 +1175,4 @@ INSERT INTO orders (user_id, game_id, copies, is_digital, order_num) VALUES
 (1,25,1,TRUE,'GC-00233'),(1,25,1,TRUE,'GC-00234'),(1,25,1,FALSE,'GC-00235'),
 (1,25,1,TRUE,'GC-00236');
 ;
+SET SQL_SAFE_UPDATES = 1;
