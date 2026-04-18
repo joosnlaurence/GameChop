@@ -6,7 +6,7 @@ import { useState } from 'react';
 import SelectStore from '../components/SelectStore';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import GameDetailsSkeleton from './skeletons/GameDetailsSkeleton';
 
 const parseDate = (dateStr: string) => {
@@ -51,11 +51,11 @@ export interface Preview {
 
 export default function GameDetails() {
   const { gameId } = useParams();
-  
+
   const { data: gameDetails, isLoading, error } = useQuery({
     queryKey: ['game_details', gameId],
     queryFn: async (): Promise<GetGameDetailsResult> => 
-      await fetch(`http://localhost:3000/api/games/${gameId}`)
+      await fetch(`http://localhost:3000/api/games/${gameId}`, { credentials: 'include' })
         .then(res => res.json())
   });
 
@@ -68,10 +68,32 @@ export default function GameDetails() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
+  const toggleAchievement = useMutation({
+    mutationFn: async (achievementId: number) => {
+      const res = await fetch(
+        `http://localhost:3000/api/users/${user!.id}/achievements/toggle`,
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            gameId: gameDetails!.game_id,
+            achievementId,
+          }),
+        }
+      );
+      if (!res.ok) throw new Error('Failed to toggle');
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['game_details', gameId] });
+    },
+  });
+
   const { data: libraryData } = useQuery({
     queryKey: ['user_library', user?.id],
     queryFn: async () =>
-      fetch(`http://localhost:3000/api/users/${user!.id}/library`, {
+      await fetch(`http://localhost:3000/api/users/${user!.id}/library`, {
         credentials: 'include',
       }).then((r) => r.json()),
     enabled: !!user,
@@ -373,13 +395,30 @@ export default function GameDetails() {
                             <Card bg='dark.7' bd='none' p='6 12'>
                               <Group justify='space-between' wrap='nowrap'>
                                 {a.title}
-                                {
-                                  a.achieved 
-                                  ?
-                                  <IconAwardFilled color='var(--mantine-color-yellow-8)' stroke='1.5'/>
-                                  :
-                                  <IconLock color='var(--mantine-color-dimmed)' stroke='1.5'/>
-                                }
+                                {user ? (
+                                  <ActionIcon
+                                    variant="subtle"
+                                    size="sm"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      toggleAchievement.mutate(a.id);
+                                    }}
+                                    loading={
+                                      toggleAchievement.isPending &&
+                                      toggleAchievement.variables === a.id
+                                    }
+                                  >
+                                    {a.achieved ? (
+                                      <IconAwardFilled color="var(--mantine-color-yellow-8)" stroke="1.5" />
+                                    ) : (
+                                      <IconLock color="var(--mantine-color-dimmed)" stroke="1.5" />
+                                    )}
+                                  </ActionIcon>
+                                ) : a.achieved ? (
+                                  <IconAwardFilled color="var(--mantine-color-yellow-8)" stroke="1.5" />
+                                ) : (
+                                  <IconLock color="var(--mantine-color-dimmed)" stroke="1.5" />
+                                )}
                               </Group>
                             </Card>
                           </HoverCard.Target>

@@ -81,6 +81,40 @@ router.get('/:id/library/:gameId/achievements', async (req: Request, res: Respon
     }
 });
 
+// POST /api/users/:id/achievements/toggle
+// Body: { gameId, achievementId } — flips achieved state
+router.post('/:id/achievements/toggle', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { gameId, achievementId } = req.body;
+
+  if (!gameId || !achievementId) {
+    return res.status(400).json({ error: 'gameId and achievementId are required' });
+  }
+
+  try {
+    const [rows]: any = await pool.query(
+      `SELECT achieved FROM user_achievements
+       WHERE user_id = ? AND game_id = ? AND achievement_id = ?`,
+      [id, gameId, achievementId]
+    );
+
+    const currentlyAchieved = rows.length > 0 && !!rows[0].achieved;
+    const newState = !currentlyAchieved;
+
+    await pool.query(
+      `INSERT INTO user_achievements (user_id, game_id, achievement_id, achieved)
+       VALUES (?, ?, ?, ?)
+       ON DUPLICATE KEY UPDATE achieved = ?`,
+      [id, gameId, achievementId, newState, newState]
+    );
+
+    res.json({ achieved: newState });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to toggle achievement' });
+  }
+});
+
 // POST /api/users/:id/wishlist
 // Adds a game to a user's wishlist.
 /* If the game is already in user_games (owned or wishlisted), 
