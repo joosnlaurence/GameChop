@@ -26,7 +26,7 @@ function Hardware({ hardware }: { hardware: Hardware}) {
         <Text fz='sm'>{hardware.os}</Text>
       </Box>
       <Box>
-        <Text c='dimmed' fz='sm'>Proessor:</Text>
+        <Text c='dimmed' fz='sm'>Processor:</Text>
         <Text fz='sm'>{hardware.cpu}</Text>
       </Box>
       <Box>
