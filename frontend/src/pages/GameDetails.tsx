@@ -6,6 +6,7 @@ import { useState } from 'react';
 import SelectStore from '../components/SelectStore';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { useStore } from '../context/StoreContext';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import GameDetailsSkeleton from './skeletons/GameDetailsSkeleton';
 
@@ -66,6 +67,7 @@ export default function GameDetails() {
 
   const { addItem } = useCart();
   const { user } = useAuth();
+  const { selectedStore } = useStore();
   const queryClient = useQueryClient();
 
   const { data: libraryData } = useQuery({
@@ -193,8 +195,9 @@ export default function GameDetails() {
                 leftSection={<IconShoppingCart stroke='1.5'/>}
                 size='md'
                 p='0px 32px'
+                disabled={(isOwned && orderType === 'digital') || (orderType === 'physical' && !selectedStore)}
               >
-                Add to Cart
+                {isOwned && orderType === 'digital' ? 'Already Owned' : orderType === 'physical' && !selectedStore ? 'Select a Store' : 'Add to Cart'}
               </Button>
               {isOwned
                 ? <Badge size='lg' color='violet' variant='light' radius='md'>Owned</Badge>
