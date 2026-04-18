@@ -124,3 +124,21 @@ export interface GetGameFiltersResult {
   publishers: string[];
   developers: string[];
 }
+
+export interface Order {
+  user_id: number;
+  username: string;
+  order_id: number;
+  order_num: string | null; // nullable in schema
+  ordered_at: string;          
+  copies: number;
+  is_digital: 0 | 1;           
+  game_id: number;
+  game_title: string;
+  thumbnail: string;
+  price: number;
+  store_id: number | null;     
+  store_city: string | null;
+  store_state: string | null;
+  store_address: string | null;
+}
