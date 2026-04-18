@@ -8,6 +8,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import GameDetailsSkeleton from './skeletons/GameDetailsSkeleton';
+import { useStore } from '../context/StoreContext';
 
 const parseDate = (dateStr: string) => {
   const date = new Date(dateStr);
