@@ -3,7 +3,7 @@ import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useStore } from "../context/StoreContext";
-import { Title, Text, Stack, Grid, Paper, Group, Badge, TextInput, Button, Divider, Box, Image} from "@mantine/core";
+import { Title, Text, Stack, Grid, Paper, Group, Badge, TextInput, Button, Divider, Box, Image, Card, alpha} from "@mantine/core";
 import SelectStore from "../components/SelectStore";
 
 
@@ -112,14 +112,14 @@ export default function Checkout() {
         <Grid.Col span = {{base: 12, md: 8}}>
           <Stack gap = "1g">
             {/*ACCOUNT*/}
-            <Paper p = "xl" radius = "md" bg = "dark.7">
+            <Card p = "xl" radius = "md" bg = "dark.7">
               <Title order = {2} mb = "md">Account</Title>
               <Text size="xs" c="dimmed" mb={4}>Username</Text>
               <Text fw={500} mb="md">{user?.username ?? '-'}</Text>
-            </Paper>
+            </Card>
 
             {/*DELIVERY*/}
-            <Paper p="xl" radius="md" bg="dark.7">
+            <Card p="xl" radius="md" bg="dark.7">
               <Title order={2} mb="md">Delivery</Title>
               {/*PHYSICAL PICKUP*/}
               {physicalItem.length > 0 && (
@@ -152,7 +152,7 @@ export default function Checkout() {
                           )}
                         </div>
                       </Group>
-                      <Badge color="dark.4" c="white" variant="filled">Physical</Badge>
+                      <Badge tt='none' color={alpha('var(--mantine-color-violet-9)', 0.2)} c="violet" fw='400' variant="filled">Physical</Badge>
                     </Group>
                   ))}
                 </Stack>
@@ -175,17 +175,17 @@ export default function Checkout() {
                           )}
                         </div>
                       </Group>
-                      <Badge color="dark.4" c="white" variant="filled">Digital</Badge>
+                      <Badge tt='none' color={alpha('var(--mantine-color-violet-9)', 0.2)} c="violet" fw='400' variant="filled">Digital</Badge>
                     </Group>
                   ))}
 
                   <Text size="sm" c="dimmed">Available immediately after purchase in your library</Text>
                 </Stack>
               )}
-            </Paper>
+            </Card>
 
             {/*PAYMENT*/}
-            <Paper p="xl" radius="md" bg="dark.7">
+            <Card p="xl" radius="md" bg="dark.7">
               <Title order={2} mb="md">Payment</Title>
               <Stack gap="md">
                 <TextInput label="Card Number" placeholder="1234 5678 9012 3456" value={cardNumber} onChange={(e) => setCardNumber(e.currentTarget.value)}/>
@@ -195,14 +195,14 @@ export default function Checkout() {
                 </Group>
                 <TextInput label="Name on Card" placeholder="John Doe" value={nameCard} onChange={(e) => setNameCard(e.currentTarget.value)}/>
               </Stack>
-            </Paper>
+            </Card>
           </Stack>
         </Grid.Col>
 
         {/*RIGHT COLUMN ORDER SUMMARY*/}
         <Grid.Col span={{base: 12, md: 4}}>
           <Box style={{position:"sticky", top:"2rem"}}>
-            <Paper p="xl" radius="md" bg="dark.7">
+            <Card p="xl" radius="md" bg="dark.7">
               <Title order={2} mb="md">Order Summary</Title>
               <Stack gap="sm" mb="md">
                 {items.map((item) => (
@@ -211,7 +211,7 @@ export default function Checkout() {
                       <Text fw={600}>{item.title}</Text>
                       <Text>${parseFloat(item.price.toString().replace("$","")).toFixed(2)}</Text>
                     </Group>
-                    <Badge color="dark.4" c="white" variant="filled" size="sm">{item.type ?? "Digital"}</Badge>
+                    <Badge tt='none'  color={alpha('var(--mantine-color-violet-9)', 0.2)} c="violet" fw='400' variant="filled" size="sm">{item.type ?? "Digital"}</Badge>
                   </Box>
                 ))}
               </Stack>
@@ -233,7 +233,7 @@ export default function Checkout() {
               </Group>
 
               <Button fullWidth size="lg" color="violet" radius="md" onClick={handlePlaceOrder}>Place Order</Button>
-            </Paper>
+            </Card>
           </Box>
         </Grid.Col>
       </Grid>

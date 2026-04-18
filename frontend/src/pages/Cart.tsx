@@ -1,3 +1,4 @@
+import { alpha, Badge } from "@mantine/core";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 
@@ -32,7 +33,7 @@ export default function Cart() {
             ) : (
               items.map((item) => 
               (
-                <div key = {item.game_id} style = {{backgroundColor: "#1a1d2e", borderRadius: "12px", padding: "1rem", display: "flex", alignItems: "center", gap: "1rem", position: "relative",}}>
+                <div key = {item.game_id} style = {{backgroundColor: "var(--mantine-color-dark-7)", borderRadius: "12px", border: '1px solid var(--mantine-color-dark-5)', padding: "1rem", display: "flex", alignItems: "center", gap: "1rem", position: "relative",}}>
                   <img src = {item.thumbnail} alt = {item.title} style = {{ width: "80px", height: "80px", borderRadius: "8xp", objectFit: "cover"}}/>
                   <div style = {{flex: 1}}>
                     <h3 style = {{margin: 0}}>{item.title}</h3>
@@ -41,9 +42,9 @@ export default function Cart() {
                       `${item.price} * ${item.quantity} = $${((item.price) * (item.quantity ?? 1)).toFixed(2)}` : item.price}
                     </p>
                     <div style = {{ display: "flex", gap: "0.5rem", alignItems: "center", marginTop: "0.25rem"}}>
-                      <span style = {{backgroundColor: "#2a2d3e", padding: "2px 10px",  borderRadius: "6px", fontSize: "0.8rem"}}>
+                      <Badge tt='none' color={alpha('var(--mantine-color-violet-9)', 0.2)} c="violet" fw='400'>
                         {item.type ?? "Digital"}
-                      </span>
+                      </Badge>
                     </div>
 
                     {item.type === "Physical" && 
@@ -74,7 +75,7 @@ export default function Cart() {
         </div>
 
         {/*Order Summary*/}
-        <div style = {{background: "#1a1d2e", borderRadius: "12px", padding: "1.5rem", width: "300px", flexShrink: 0}}>
+        <div style = {{background: "var(--mantine-color-dark-7)", border: '1px solid var(--mantine-color-dark-5)', borderRadius: "12px", padding: "1.5rem", width: "300px", flexShrink: 0}}>
           <h2 style = {{marginTop: 0}}>Order Summary</h2>
           <div style = {{display: "flex", justifyContent: "space-between", marginBottom: "0.75rem"}}>
             <span style = {{color: "#aaa"}}>Subtotal</span>
@@ -94,7 +95,7 @@ export default function Cart() {
             style={{
               width: "100%",
               padding: "0.9rem",
-              backgroundColor: items.length === 0 ? "#353C50" : "#7c6ff7",
+              backgroundColor: items.length === 0 ? "#353C50" : "var(--mantine-color-violet-6)",
               color: items.length === 0 ? "#585E70" : "white",
               border: "none",
               borderRadius: "8px",
