@@ -115,4 +115,21 @@ router.post('/:id/wishlist', async (req: Request, res: Response) => {
         res.status(500).json({ error: 'Failed to add to wishlist' });
     }
 });
+
+// DELETE /api/users/:id/wishlist/:gameId
+// Removes a game from a user's wishlist.
+router.delete('/:id/wishlist/:gameId', async (req: Request, res: Response) => {
+    const { id, gameId } = req.params;
+    try {
+        await pool.query(
+            `UPDATE user_games SET wishlisted = FALSE WHERE user_id = ? AND game_id = ?`,
+            [id, gameId]
+        );
+        res.json({ message: 'Game removed from wishlist' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to remove from wishlist' });
+    }
+});
+
 export default router;
