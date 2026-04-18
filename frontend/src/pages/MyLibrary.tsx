@@ -3,7 +3,7 @@ import { Box, SimpleGrid, Tabs, Text, Title } from "@mantine/core";
 import { type Game, type GetUserLibraryResult, DEFAULT_FILTERS, type GameFilters } from "../types";
 import GameCard from "../components/GameCard";
 import SearchFilters from "../components/SearchWidget";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../context/AuthContext";
 
 const LIBRARY_SORT_OPTIONS = [
@@ -14,6 +14,7 @@ const LIBRARY_SORT_OPTIONS = [
 
 export default function MyLibrary() {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<string | null>("owned");
   const [filters, setFilters] = useState<GameFilters>(DEFAULT_FILTERS);
 
@@ -44,9 +45,7 @@ export default function MyLibrary() {
     },
   }));
 
-  const [wishlist, setWishlist] = useState<Game[]>([]);
-
-  const serverWishlist: Game[] = (data?.wishlisted ?? []).map((g) => ({
+  const wishlistGames: Game[] = (data?.wishlisted ?? []).map((g) => ({
     game_id: g.game_id,
     title: g.title,
     thumbnail: g.thumbnail,
@@ -55,13 +54,14 @@ export default function MyLibrary() {
   }));
 
   const isWishlist = activeTab === "wishlist";
-  const displayGames = isWishlist
-    ? (wishlist.length > 0 ? wishlist : serverWishlist)
-    : ownedGames;
+  const displayGames = isWishlist ? wishlistGames : ownedGames;
 
-  const handleRemoveFromWishlist = (id: number) => {
-    const base = wishlist.length > 0 ? wishlist : serverWishlist;
-    setWishlist(base.filter((g) => g.game_id !== id));
+  const handleRemoveFromWishlist = async (id: number) => {
+    await fetch(`http://localhost:3000/api/users/${user!.id}/wishlist/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    queryClient.invalidateQueries({ queryKey: ["library", user!.id] });
   };
 
   if (!user) {
