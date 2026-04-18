@@ -119,7 +119,6 @@ function GameCarousel({ games }: { games: GameListing[]}) {
   )
 }
 
-const NUM_FEATURED_PUBLISHERS = 4;
 
 export default function Home() {
   const { data: newReleases, isLoading: newReleasesLoading, error: newReleasesError } = useQuery({
@@ -157,9 +156,7 @@ export default function Home() {
     return <Text>No publishers found?</Text>
   }
 
-  const featuredPublishers = publishersData.sort(
-    (a, b) => b.game_count - a.game_count
-  ).slice(0, NUM_FEATURED_PUBLISHERS);
+  const featuredPublishers = publishersData;
 
   return (
     <Container size="xl">

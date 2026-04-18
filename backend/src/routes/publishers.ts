@@ -36,7 +36,8 @@ router.get('/featured', async (_req: Request, res: Response) => {
              FROM publishers p
              LEFT JOIN publisher_games pg ON p.id = pg.publisher_id
              GROUP BY p.id, p.name, p.logo, p.banner
-             ORDER BY game_count DESC`
+             ORDER BY game_count DESC
+             LIMIT 4`
         );
         res.json(rows);
     } catch (err) {

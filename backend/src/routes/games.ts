@@ -114,15 +114,27 @@ router.get('/', async (req: Request, res: Response) => {
         const params: any[] = [];
 
         if (genre) {
-            baseWhere += ` AND FIND_IN_SET(?, genres)`;
+            baseWhere += ` AND EXISTS (
+                SELECT 1 FROM game_genres gg
+                JOIN genres ge ON gg.genre_id = ge.id
+                WHERE gg.game_id = gl.game_id AND ge.name = ?
+            )`;
             params.push(genre);
         }
         if (publisher) {
-            baseWhere += ` AND FIND_IN_SET(?, publishers)`;
+            baseWhere += ` AND EXISTS (
+                SELECT 1 FROM publisher_games pg
+                JOIN publishers p ON pg.publisher_id = p.id
+                WHERE pg.game_id = gl.game_id AND p.name = ?
+            )`;
             params.push(publisher);
         }
         if (developer) {
-            baseWhere += ` AND FIND_IN_SET(?, developers)`;
+            baseWhere += ` AND EXISTS (
+                SELECT 1 FROM developer_games dg
+                JOIN developers d ON dg.developer_id = d.id
+                WHERE dg.game_id = gl.game_id AND d.name = ?
+            )`;
             params.push(developer);
         }
         if (search) {
@@ -138,13 +150,13 @@ router.get('/', async (req: Request, res: Response) => {
 
         // Total count for pagination metadata
         const [countRows]: any = await pool.query(
-            `SELECT COUNT(*) AS total FROM game_listing ${baseWhere}`,
+            `SELECT COUNT(*) AS total FROM game_listing gl ${baseWhere}`,
             params
         );
         const total = countRows[0].total;
 
         const [rows] = await pool.query<GameListingRow[]>(
-            `SELECT * FROM game_listing ${baseWhere}${orderClause} LIMIT ? OFFSET ?`,
+            `SELECT gl.* FROM game_listing gl ${baseWhere}${orderClause} LIMIT ? OFFSET ?`,
             [...params, limit, offset]
         );
 
