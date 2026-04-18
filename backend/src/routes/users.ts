@@ -44,8 +44,7 @@ router.get('/:id/library', async (req: Request, res: Response) => {
 
         const [rows]: any = await pool.query(query, params);
 
-        // Split owned vs wishlisted so frontend
-        // can render two separate sections easily
+        // Split owned vs wishlisted so frontend can render two separate sections easily
         const owned      = rows.filter((r: any) => r.purchased);
         const wishlisted = rows.filter((r: any) => r.wishlisted && !r.purchased);
 
@@ -102,7 +101,7 @@ router.post('/:id/wishlist', async (req: Request, res: Response) => {
         );
 
         // UPDATE handles the case where the row already existed
-        // (e.g. they own the game but want to re-wishlist it)
+        // (eg they own the game but want to rewishlist it)
         await pool.query(
             `UPDATE user_games SET wishlisted = TRUE
              WHERE user_id = ? AND game_id = ?`,

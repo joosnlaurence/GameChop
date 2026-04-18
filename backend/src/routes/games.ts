@@ -28,8 +28,7 @@ interface GameDetailsRow {
     developers: string | string[];
 }
 
-// reused across routes to split GROUP_CONCAT
-// strings from views into proper arrays
+// reused across routes to split GROUP_CONCAT strings from views into proper arrays
 const parseGameRow = (row: GameListingRow) => ({
     ...row,
     genres:     row.genres?.split(',').map(s => s.trim())     ?? [],
@@ -39,7 +38,6 @@ const parseGameRow = (row: GameListingRow) => ({
 
 // GET /api/games/filters
 // Returns distinct genres, publishers, and developers for populating filter dropdowns.
-// Must be before /:id so it isn't swallowed.
 router.get('/filters', async (_req: Request, res: Response) => {
     try {
         const [genres]     = await pool.query('SELECT DISTINCT name FROM genres ORDER BY name');
@@ -58,7 +56,6 @@ router.get('/filters', async (_req: Request, res: Response) => {
 
 // GET /api/games/new-releases
 // 8 most recently released games.
-// Must be before /:id.
 router.get('/new-releases', async (_req: Request, res: Response) => {
     try {
         const [rows] = await pool.query<GameListingRow[]>(
@@ -75,7 +72,6 @@ router.get('/new-releases', async (_req: Request, res: Response) => {
 
 // GET /api/games/popular
 // Top 8 games ranked by total order count.
-// Must be before /:id.
 router.get('/popular', async (_req: Request, res: Response) => {
     try {
         const [rows] = await pool.query<GameListingRow[]>(
@@ -97,10 +93,7 @@ router.get('/popular', async (_req: Request, res: Response) => {
 });
 
 // GET /api/games
-// Paginated game listing with optional filters and sorting. Query params:
-//   ?genre=RPG&publisher=Nintendo&search=elden
-//   &sortBy=alpha|price_asc|price_desc|newest
-//   &page=1&limit=20
+// Paginated game listing with optional filters and sorting.
 router.get('/', async (req: Request, res: Response) => {
     try {
         const { genre, publisher, developer, search, sortBy } = req.query;
@@ -176,8 +169,7 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 // GET /api/games/:id
-// Full game details — info, publisher, developer,
-// achievements, previews, hardware requirements.
+// Full game details — info, publisher, developer, achievements, previews, hardware requirements.
 router.get('/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     try {

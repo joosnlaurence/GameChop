@@ -70,7 +70,7 @@ router.get('/:id/games', async (req: Request, res: Response) => {
 router.get('/:id/more-games', async (req: Request, res: Response) => {
     const { id } = req.params;
     const excludeId = req.query.excludeId as string;
-    const limit = 4; // Locked at 4 as required
+    const limit = 4; // Locked at 4 
 
     try {
         let query = `
