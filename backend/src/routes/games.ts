@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import pool from '../db';
 import { RowDataPacket } from 'mysql2';
+import jwt from 'jsonwebtoken';
 
 const router = Router();
 
@@ -189,12 +190,27 @@ router.get('/:id', async (req: Request, res: Response) => {
             developers: gameRows[0]?.developers?.split(',') ?? []
         };
 
+        let userId = null;
+        const token = req.cookies?.token;
+        if (token) {
+          try {
+            const payload = jwt.verify(token, process.env.JWT_SECRET!) as { userId: number };
+            userId = payload.userId;
+          } catch {  }
+        }
+
         const [achievements]: any = await pool.query(
-            `SELECT a.id, a.title, a.description
-             FROM achievements a
-             JOIN game_achievements ga ON a.id = ga.achievement_id
-             WHERE ga.game_id = ?`,
-            [id]
+          `SELECT
+            a.id, a.title, a.description,
+            COALESCE(ua.achieved, FALSE) AS achieved
+          FROM achievements a
+          JOIN game_achievements ga ON a.id = ga.achievement_id
+          LEFT JOIN user_achievements ua
+            ON a.id = ua.achievement_id
+            AND ua.game_id = ?
+            AND ua.user_id = ?
+          WHERE ga.game_id = ?`,
+          [id, userId ?? -1, id]
         );
 
         const [previews]: any = await pool.query(
